@@ -10,18 +10,17 @@ import {
 import { firebaseConfig } from "./firebase-config.js";
 
 
-// -----------------------------
+// ==========================================
 // FIREBASE
-// -----------------------------
+// ==========================================
 
 const app = initializeApp(firebaseConfig);
-
 const auth = getAuth(app);
 
 
-// -----------------------------
-// ELEMENTS
-// -----------------------------
+// ==========================================
+// PAGE ELEMENTS
+// ==========================================
 
 const loginScreen = document.getElementById("loginScreen");
 const dashboardScreen = document.getElementById("dashboardScreen");
@@ -33,13 +32,14 @@ const logoutButton = document.getElementById("logoutButton");
 const welcomeMessage = document.getElementById("welcomeMessage");
 
 
-// -----------------------------
+// ==========================================
 // LOGIN
-// -----------------------------
+// ==========================================
 
 loginForm.addEventListener("submit", async function (event) {
 
     event.preventDefault();
+
     console.log("LOGIN BUTTON WORKED");
 
     const email = document.getElementById("email").value;
@@ -49,30 +49,37 @@ loginForm.addEventListener("submit", async function (event) {
 
     try {
 
-    console.log("Starting Firebase login...");
+        console.log("Starting Firebase login...");
 
-    const result = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-    );
+        const result = await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+        );
 
-    console.log("Firebase login successful:", result.user);
+        console.log(
+            "Firebase login successful:",
+            result.user
+        );
 
-} catch (error) {
+    } catch (error) {
 
-    console.error("FIREBASE LOGIN ERROR:", error);
+        console.error(
+            "FIREBASE LOGIN ERROR:",
+            error
+        );
 
-    loginError.textContent =
-        error.code + ": " + error.message;
+        loginError.textContent =
+            error.code + ": " + error.message;
 
-}
+    }
+
 });
 
 
-// -----------------------------
-// AUTH STATE
-// -----------------------------
+// ==========================================
+// AUTHENTICATION STATE
+// ==========================================
 
 onAuthStateChanged(auth, function (user) {
 
@@ -80,7 +87,9 @@ onAuthStateChanged(auth, function (user) {
 
     if (user) {
 
-        console.log("User is logged in.");
+        console.log("USER IS LOGGED IN");
+        console.log("User email:", user.email);
+        console.log("User UID:", user.uid);
 
         loginScreen.classList.add("hidden");
         dashboardScreen.classList.remove("hidden");
@@ -90,7 +99,7 @@ onAuthStateChanged(auth, function (user) {
 
     } else {
 
-        console.log("No user is logged in.");
+        console.log("NO USER IS LOGGED IN");
 
         loginScreen.classList.remove("hidden");
         dashboardScreen.classList.add("hidden");
@@ -100,12 +109,27 @@ onAuthStateChanged(auth, function (user) {
 });
 
 
-// -----------------------------
+// ==========================================
 // LOGOUT
-// -----------------------------
+// ==========================================
 
 logoutButton.addEventListener("click", async function () {
 
-    await signOut(auth);
+    console.log("Signing out...");
+
+    try {
+
+        await signOut(auth);
+
+        console.log("Successfully signed out.");
+
+    } catch (error) {
+
+        console.error(
+            "SIGN OUT ERROR:",
+            error
+        );
+
+    }
 
 });
