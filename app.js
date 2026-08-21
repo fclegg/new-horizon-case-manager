@@ -57,11 +57,11 @@ loginForm.addEventListener("submit", async function (event) {
 
     } catch (error) {
 
-        console.error(error);
+        console.error("FIREBASE LOGIN ERROR:", error);
 
         loginError.textContent =
-            "Invalid email or password.";
-
+            error.code + ": " + error.message;
+        
     }
 
 });
