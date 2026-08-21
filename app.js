@@ -40,6 +40,7 @@ const welcomeMessage = document.getElementById("welcomeMessage");
 loginForm.addEventListener("submit", async function (event) {
 
     event.preventDefault();
+    console.log("LOGIN BUTTON WORKED");
 
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
