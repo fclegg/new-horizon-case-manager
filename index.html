@@ -11,15 +11,80 @@
 
 <body>
 
-    <main>
-        <h1>New Horizon</h1>
-        <p>Case Management System</p>
+    <div id="loginScreen" class="screen">
 
-        <button id="testButton">Test System</button>
+        <div class="login-card">
 
-        <p id="status"></p>
-    </main>
+            <h1>NEW HORIZON</h1>
+
+            <p class="subtitle">
+                Case Management System
+            </p>
+
+            <form id="loginForm">
+
+                <label for="email">
+                    Email
+                </label>
+
+                <input 
+                    type="email"
+                    id="email"
+                    placeholder="Email address"
+                    required
+                >
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input 
+                    type="password"
+                    id="password"
+                    placeholder="Password"
+                    required
+                >
+
+                <button type="submit">
+                    Sign In
+                </button>
+
+                <p id="loginError"></p>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <div id="dashboardScreen" class="screen hidden">
+
+        <header class="topbar">
+
+            <div>
+                <strong>NEW HORIZON</strong>
+                <span>Case Manager</span>
+            </div>
+
+            <button id="logoutButton">
+                Sign Out
+            </button>
+
+        </header>
+
+        <main class="dashboard">
+
+            <h1>Dashboard</h1>
+
+            <p id="welcomeMessage">
+                Welcome.
+            </p>
+
+        </main>
+
+    </div>
 
     <script type="module" src="app.js"></script>
+
 </body>
 </html>
