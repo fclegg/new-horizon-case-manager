@@ -76,7 +76,11 @@ loginForm.addEventListener("submit", async function (event) {
 
 onAuthStateChanged(auth, function (user) {
 
+    console.log("AUTH STATE CHANGED:", user);
+
     if (user) {
+
+        console.log("User is logged in.");
 
         loginScreen.classList.add("hidden");
         dashboardScreen.classList.remove("hidden");
@@ -85,6 +89,8 @@ onAuthStateChanged(auth, function (user) {
             `Welcome, ${user.email}`;
 
     } else {
+
+        console.log("No user is logged in.");
 
         loginScreen.classList.remove("hidden");
         dashboardScreen.classList.add("hidden");
