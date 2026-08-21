@@ -49,21 +49,24 @@ loginForm.addEventListener("submit", async function (event) {
 
     try {
 
-        await signInWithEmailAndPassword(
-            auth,
-            email,
-            password
-        );
+    console.log("Starting Firebase login...");
 
-    } catch (error) {
+    const result = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+    );
 
-        console.error("FIREBASE LOGIN ERROR:", error);
+    console.log("Firebase login successful:", result.user);
 
-        loginError.textContent =
-            error.code + ": " + error.message;
-        
-    }
+} catch (error) {
 
+    console.error("FIREBASE LOGIN ERROR:", error);
+
+    loginError.textContent =
+        error.code + ": " + error.message;
+
+}
 });
 
 
