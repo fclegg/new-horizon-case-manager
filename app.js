@@ -108,6 +108,24 @@ const reportsButton =
 const personnelBackButton =
     document.getElementById("personnelBackButton");
 
+const addPersonnelModal =
+    document.getElementById("addPersonnelModal");
+
+const addPersonnelForm =
+    document.getElementById("addPersonnelForm");
+
+const closePersonnelModal =
+    document.getElementById("closePersonnelModal");
+
+const cancelPersonnelButton =
+    document.getElementById("cancelPersonnelButton");
+
+const modalOverlay =
+    document.getElementById("modalOverlay");
+
+const addPersonnelError =
+    document.getElementById("addPersonnelError");
+
 const addPersonnelButton =
     document.getElementById("addPersonnelButton");
 
