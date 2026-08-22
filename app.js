@@ -630,6 +630,16 @@ async function loadPersonnel() {
                 personnelList.appendChild(
                     row
                 );
+               
+                console.log(
+                    "PERSONNEL ROW ADDED:",
+                    row
+                );
+
+                console.log(
+                    "PERSONNEL LIST HTML:",
+                    personnelList.innerHTML
+                );
 
             }
         );
