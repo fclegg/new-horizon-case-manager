@@ -1,1102 +1,1473 @@
-<!DOCTYPE html>
-<html lang="en">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
-<head>
+import {
+    getAuth,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-    <meta charset="UTF-8">
+import {
+    getFirestore,
+    doc,
+    getDoc,
+    collection,
+    getDocs,
+    setDoc
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>
-        New Horizon Case Manager
-    </title>
-
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
-
-</head>
+import { firebaseConfig } from "./firebase-config.js";
 
 
-<body>
+// ==========================================
+// FIREBASE
+// ==========================================
+
+const app =
+    initializeApp(firebaseConfig);
+
+const auth =
+    getAuth(app);
+
+const db =
+    getFirestore(app);
 
 
-    <!-- ==========================================
-         LOGIN SCREEN
-         ========================================== -->
+// ==========================================
+// PAGE ELEMENTS
+// ==========================================
 
-    <div
-        id="loginScreen"
-        class="screen"
-    >
 
-        <div class="login-card">
+// ==========================================
+// LOGIN
+// ==========================================
 
-            <h1>
-                NEW HORIZON
-            </h1>
+const loginScreen =
+    document.getElementById("loginScreen");
 
-            <p class="subtitle">
-                Case Management System
+const loginForm =
+    document.getElementById("loginForm");
+
+const loginError =
+    document.getElementById("loginError");
+
+
+// ==========================================
+// DASHBOARD
+// ==========================================
+
+const dashboardScreen =
+    document.getElementById("dashboardScreen");
+
+const welcomeMessage =
+    document.getElementById("welcomeMessage");
+
+const userRole =
+    document.getElementById("userRole");
+
+const userTeam =
+    document.getElementById("userTeam");
+
+const topbarUserName =
+    document.getElementById("topbarUserName");
+
+const topbarUserRole =
+    document.getElementById("topbarUserRole");
+
+
+// ==========================================
+// LOGOUT
+// ==========================================
+
+const logoutButton =
+    document.getElementById("logoutButton");
+
+
+// ==========================================
+// DASHBOARD BUTTONS
+// ==========================================
+
+const casesButton =
+    document.getElementById("casesButton");
+
+const newCaseButton =
+    document.getElementById("newCaseButton");
+
+const personnelButton =
+    document.getElementById("personnelButton");
+
+const teamsButton =
+    document.getElementById("teamsButton");
+
+const evidenceButton =
+    document.getElementById("evidenceButton");
+
+const reportsButton =
+    document.getElementById("reportsButton");
+
+
+// ==========================================
+// PERSONNEL SCREEN
+// ==========================================
+
+const personnelScreen =
+    document.getElementById("personnelScreen");
+
+const personnelBackButton =
+    document.getElementById(
+        "personnelBackButton"
+    );
+
+const addPersonnelButton =
+    document.getElementById(
+        "addPersonnelButton"
+    );
+
+const personnelSearch =
+    document.getElementById(
+        "personnelSearch"
+    );
+
+const personnelList =
+    document.getElementById(
+        "personnelList"
+    );
+
+
+// ==========================================
+// ADD PERSONNEL MODAL
+// ==========================================
+
+const addPersonnelModal =
+    document.getElementById(
+        "addPersonnelModal"
+    );
+
+const addPersonnelForm =
+    document.getElementById(
+        "addPersonnelForm"
+    );
+
+const closePersonnelModal =
+    document.getElementById(
+        "closePersonnelModal"
+    );
+
+const cancelPersonnelButton =
+    document.getElementById(
+        "cancelPersonnelButton"
+    );
+
+const modalOverlay =
+    document.getElementById(
+        "modalOverlay"
+    );
+
+const addPersonnelError =
+    document.getElementById(
+        "addPersonnelError"
+    );
+
+
+// ==========================================
+// PERSONNEL FILE
+// ==========================================
+
+const personnelFileScreen =
+    document.getElementById(
+        "personnelFileScreen"
+    );
+
+const personnelFileBackButton =
+    document.getElementById(
+        "personnelFileBackButton"
+    );
+
+const profileName =
+    document.getElementById(
+        "profileName"
+    );
+
+const profileRole =
+    document.getElementById(
+        "profileRole"
+    );
+
+const profileEmail =
+    document.getElementById(
+        "profileEmail"
+    );
+
+const profileRoleField =
+    document.getElementById(
+        "profileRoleField"
+    );
+
+const profileTeam =
+    document.getElementById(
+        "profileTeam"
+    );
+
+const profileStatus =
+    document.getElementById(
+        "profileStatus"
+    );
+
+const profileAccountStatus =
+    document.getElementById(
+        "profileAccountStatus"
+    );
+
+const profileJoined =
+    document.getElementById(
+        "profileJoined"
+    );
+
+const editPersonnelButton =
+    document.getElementById(
+        "editPersonnelButton"
+    );
+
+const disablePersonnelButton =
+    document.getElementById(
+        "disablePersonnelButton"
+    );
+
+
+// ==========================================
+// ROLE PERMISSIONS
+// ==========================================
+
+function getUserPermissions(role) {
+
+    const permissions = {
+
+        Director: {
+            viewAllCases: true,
+            createCases: true,
+            manageUsers: true,
+            manageTeams: true,
+            manageEvidence: true,
+            analyzeEvidence: true,
+            manageResearch: true
+        },
+
+        "Team Lead": {
+            viewAllCases: false,
+            createCases: true,
+            manageUsers: false,
+            manageTeams: false,
+            manageEvidence: true,
+            analyzeEvidence: true,
+            manageResearch: true
+        },
+
+        "Assistant Team Lead": {
+            viewAllCases: false,
+            createCases: false,
+            manageUsers: false,
+            manageTeams: false,
+            manageEvidence: true,
+            analyzeEvidence: true,
+            manageResearch: true
+        },
+
+        Investigator: {
+            viewAllCases: false,
+            createCases: false,
+            manageUsers: false,
+            manageTeams: false,
+            manageEvidence: true,
+            analyzeEvidence: false,
+            manageResearch: false
+        },
+
+        Researcher: {
+            viewAllCases: false,
+            createCases: false,
+            manageUsers: false,
+            manageTeams: false,
+            manageEvidence: false,
+            analyzeEvidence: false,
+            manageResearch: true
+        },
+
+        Analyst: {
+            viewAllCases: false,
+            createCases: false,
+            manageUsers: false,
+            manageTeams: false,
+            manageEvidence: true,
+            analyzeEvidence: true,
+            manageResearch: false
+        },
+
+        "Tech Specialist": {
+            viewAllCases: false,
+            createCases: false,
+            manageUsers: false,
+            manageTeams: false,
+            manageEvidence: false,
+            analyzeEvidence: false,
+            manageResearch: false
+        },
+
+        "AV Specialist": {
+            viewAllCases: false,
+            createCases: false,
+            manageUsers: false,
+            manageTeams: false,
+            manageEvidence: true,
+            analyzeEvidence: true,
+            manageResearch: false
+        }
+
+    };
+
+    return permissions[role] || null;
+}
+
+
+// ==========================================
+// LOGIN
+// ==========================================
+
+loginForm.addEventListener(
+    "submit",
+    async function (event) {
+
+        event.preventDefault();
+
+        console.log(
+            "LOGIN BUTTON WORKED"
+        );
+
+
+        const email =
+            document.getElementById(
+                "email"
+            ).value;
+
+
+        const password =
+            document.getElementById(
+                "password"
+            ).value;
+
+
+        loginError.textContent = "";
+
+
+        try {
+
+            console.log(
+                "Starting Firebase login..."
+            );
+
+
+            const result =
+                await signInWithEmailAndPassword(
+                    auth,
+                    email,
+                    password
+                );
+
+
+            console.log(
+                "Firebase login successful:",
+                result.user
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "FIREBASE LOGIN ERROR:",
+                error
+            );
+
+
+            loginError.textContent =
+                error.code +
+                ": " +
+                error.message;
+
+        }
+
+    }
+);
+
+
+// ==========================================
+// AUTHENTICATION STATE
+// ==========================================
+
+onAuthStateChanged(
+    auth,
+    async function (user) {
+
+        console.log(
+            "AUTH STATE CHANGED:",
+            user
+        );
+
+
+        // ==================================
+        // USER LOGGED IN
+        // ==================================
+
+        if (user) {
+
+            console.log(
+                "USER IS LOGGED IN"
+            );
+
+
+            console.log(
+                "User email:",
+                user.email
+            );
+
+
+            console.log(
+                "User UID:",
+                user.uid
+            );
+
+
+            // ==================================
+            // SHOW DASHBOARD
+            // ==================================
+
+            loginScreen.classList.add(
+                "hidden"
+            );
+
+
+            dashboardScreen.classList.remove(
+                "hidden"
+            );
+
+
+            personnelScreen.classList.add(
+                "hidden"
+            );
+
+
+            personnelFileScreen.classList.add(
+                "hidden"
+            );
+
+
+            // ==================================
+            // TEMPORARY FALLBACK
+            // ==================================
+
+            welcomeMessage.textContent =
+                `Welcome, ${user.email}`;
+
+
+            try {
+
+                // ==================================
+                // GET USER PERSONNEL RECORD
+                // ==================================
+
+                const userRef =
+                    doc(
+                        db,
+                        "users",
+                        user.uid
+                    );
+
+
+                const userSnapshot =
+                    await getDoc(
+                        userRef
+                    );
+
+
+                // ==================================
+                // PERSONNEL RECORD EXISTS
+                // ==================================
+
+                if (
+                    userSnapshot.exists()
+                ) {
+
+                    const userData =
+                        userSnapshot.data();
+
+
+                    console.log(
+                        "NEW HORIZON PERSONNEL RECORD:",
+                        userData
+                    );
+
+
+                    // ==================================
+                    // GET PERMISSIONS
+                    // ==================================
+
+                    const permissions =
+                        getUserPermissions(
+                            userData.role
+                        );
+
+
+                    console.log(
+                        "USER PERMISSIONS:",
+                        permissions
+                    );
+
+
+                    // ==================================
+                    // UPDATE DASHBOARD
+                    // ==================================
+
+                    welcomeMessage.textContent =
+                        `Welcome, ${userData.name}`;
+
+
+                    userRole.textContent =
+                        `Role: ${userData.role}`;
+
+
+                    userTeam.textContent =
+                        `Team: ${userData.team}`;
+
+
+                    topbarUserName.textContent =
+                        userData.name;
+
+
+                    topbarUserRole.textContent =
+                        userData.role;
+
+
+                    console.log(
+                        "Permission system initialized."
+                    );
+
+
+                } else {
+
+                    console.log(
+                        "No New Horizon personnel record found."
+                    );
+
+
+                    welcomeMessage.textContent =
+                        "Welcome";
+
+
+                    userRole.textContent =
+                        "Role: Not Assigned";
+
+
+                    userTeam.textContent =
+                        "Team: Not Assigned";
+
+
+                    topbarUserName.textContent =
+                        user.email;
+
+
+                    topbarUserRole.textContent =
+                        "Unassigned";
+
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    "PERSONNEL LOOKUP ERROR:",
+                    error
+                );
+
+            }
+
+
+        }
+
+
+        // ==================================
+        // NO USER LOGGED IN
+        // ==================================
+
+        else {
+
+            console.log(
+                "NO USER IS LOGGED IN"
+            );
+
+
+            loginScreen.classList.remove(
+                "hidden"
+            );
+
+
+            dashboardScreen.classList.add(
+                "hidden"
+            );
+
+
+            personnelScreen.classList.add(
+                "hidden"
+            );
+
+
+            personnelFileScreen.classList.add(
+                "hidden"
+            );
+
+        }
+
+    }
+);
+
+
+// ==========================================
+// LOGOUT
+// ==========================================
+
+logoutButton.addEventListener(
+    "click",
+    async function () {
+
+        console.log(
+            "Signing out..."
+        );
+
+
+        try {
+
+            await signOut(
+                auth
+            );
+
+
+            console.log(
+                "Successfully signed out."
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "SIGN OUT ERROR:",
+                error
+            );
+
+        }
+
+    }
+);
+
+
+// ==========================================
+// LOAD PERSONNEL
+// ==========================================
+
+async function loadPersonnel() {
+
+    console.log(
+        "LOAD PERSONNEL STARTED"
+    );
+
+
+    console.log(
+        "Personnel list element:",
+        personnelList
+    );
+
+
+    personnelList.innerHTML = `
+        <p class="loading-message">
+            Loading personnel...
+        </p>
+    `;
+
+
+    try {
+
+        const usersCollection =
+            collection(
+                db,
+                "users"
+            );
+
+
+        const snapshot =
+            await getDocs(
+                usersCollection
+            );
+
+
+        console.log(
+            "PERSONNEL DOCUMENT COUNT:",
+            snapshot.size
+        );
+
+
+        personnelList.innerHTML =
+            "";
+
+
+        if (
+            snapshot.empty
+        ) {
+
+            personnelList.innerHTML = `
+                <p class="loading-message">
+                    No personnel records found.
+                </p>
+            `;
+
+            return;
+
+        }
+
+
+        snapshot.forEach(
+            function (userDocument) {
+
+                const person =
+                    userDocument.data();
+
+
+                console.log(
+                    "PERSONNEL RECORD:",
+                    person
+                );
+
+
+                // ==================================
+                // CREATE ROW
+                // ==================================
+
+                const row =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                row.className =
+                    "personnel-row";
+
+
+                // Store Firestore document ID
+                row.dataset.userId =
+                    userDocument.id;
+
+
+                // ==================================
+                // STATUS
+                // ==================================
+
+                const statusClass =
+                    person.active
+                        ? "status-active"
+                        : "status-inactive";
+
+
+                const statusText =
+                    person.active
+                        ? "ACTIVE"
+                        : "INACTIVE";
+
+
+                // ==================================
+                // ROW CONTENT
+                // ==================================
+
+                row.innerHTML = `
+
+                    <div>
+
+                        <div class="personnel-name">
+                            ${person.name || "Unnamed"}
+                        </div>
+
+                        <div class="personnel-email">
+                            ${person.email || ""}
+                        </div>
+
+                    </div>
+
+                    <div class="personnel-role">
+                        ${person.role || "Unassigned"}
+                    </div>
+
+                    <div class="personnel-team">
+                        ${person.team || "Unassigned"}
+                    </div>
+
+                    <div class="personnel-status ${statusClass}">
+                        ${statusText}
+                    </div>
+
+                `;
+
+
+                // ==================================
+                // ADD TO LIST
+                // ==================================
+
+                personnelList.appendChild(
+                    row
+                );
+
+
+                console.log(
+                    "PERSONNEL ROW ADDED:",
+                    row
+                );
+
+
+                // ==================================
+                // CLICK → PERSONNEL FILE
+                // ==================================
+
+                row.addEventListener(
+                    "click",
+                    function () {
+
+                        openPersonnelFile(
+                            userDocument.id
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "PERSONNEL LOAD ERROR:",
+            error
+        );
+
+
+        personnelList.innerHTML = `
+            <p class="loading-message">
+                Unable to load personnel.
             </p>
+        `;
 
+    }
 
-            <form id="loginForm">
+}
 
-                <label for="email">
-                    Email
-                </label>
 
-                <input
-                    type="email"
-                    id="email"
-                    placeholder="Email address"
-                    required
-                >
+// ==========================================
+// OPEN PERSONNEL FILE
+// ==========================================
 
+async function openPersonnelFile(
+    userId
+) {
 
-                <label for="password">
-                    Password
-                </label>
+    console.log(
+        "OPENING PERSONNEL FILE:",
+        userId
+    );
 
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="Password"
-                    required
-                >
 
+    try {
 
-                <button type="submit">
-                    Sign In
-                </button>
+        // ==================================
+        // GET PERSONNEL DOCUMENT
+        // ==================================
 
+        const userRef =
+            doc(
+                db,
+                "users",
+                userId
+            );
 
-                <p id="loginError"></p>
 
-            </form>
+        const userSnapshot =
+            await getDoc(
+                userRef
+            );
 
-        </div>
 
-    </div>
+        if (
+            !userSnapshot.exists()
+        ) {
 
+            console.error(
+                "Personnel record not found."
+            );
 
+            return;
 
-    <!-- ==========================================
-         DASHBOARD SCREEN
-         ========================================== -->
+        }
 
-    <div
-        id="dashboardScreen"
-        class="screen hidden"
-    >
 
+        const person =
+            userSnapshot.data();
 
-        <!-- TOP BAR -->
 
-        <header class="topbar">
+        console.log(
+            "PERSONNEL FILE:",
+            person
+        );
 
-            <div class="brand">
 
-                <div class="brand-name">
-                    NEW HORIZON
-                </div>
+        // ==================================
+        // POPULATE PROFILE
+        // ==================================
 
-                <div class="brand-subtitle">
-                    CASE MANAGEMENT
-                </div>
+        profileName.textContent =
+            person.name ||
+            "Unnamed";
 
-            </div>
 
+        profileRole.textContent =
+            person.role ||
+            "Unassigned";
 
-            <div class="topbar-user">
 
-                <div class="topbar-user-info">
+        profileEmail.textContent =
+            person.email ||
+            "—";
 
-                    <strong id="topbarUserName">
-                        User
-                    </strong>
 
-                    <span id="topbarUserRole">
-                        Role
-                    </span>
+        profileRoleField.textContent =
+            person.role ||
+            "Unassigned";
 
-                </div>
 
+        profileTeam.textContent =
+            person.team ||
+            "Unassigned";
 
-                <button id="logoutButton">
-                    Sign Out
-                </button>
 
-            </div>
+        profileStatus.textContent =
+            person.active
+                ? "ACTIVE"
+                : "INACTIVE";
 
-        </header>
 
+        profileAccountStatus.textContent =
+            person.accountStatus ||
+            "Unknown";
 
 
-        <!-- MAIN DASHBOARD -->
+        // ==================================
+        // FORMAT JOIN DATE
+        // ==================================
 
-        <main class="dashboard">
+        if (
+            person.createdAt
+        ) {
 
+            const date =
+                new Date(
+                    person.createdAt
+                );
 
-            <!-- DASHBOARD HEADER -->
 
-            <section class="dashboard-header">
+            profileJoined.textContent =
+                date.toLocaleDateString();
 
-                <div>
+        } else {
 
-                    <p class="section-label">
-                        COMMAND CENTER
-                    </p>
+            profileJoined.textContent =
+                "Unknown";
 
+        }
 
-                    <h1 id="welcomeMessage">
-                        Welcome
-                    </h1>
 
+        // ==================================
+        // SWITCH SCREENS
+        // ==================================
 
-                    <p id="dashboardSubtitle">
-                        Manage New Horizon investigations and personnel.
-                    </p>
+        personnelScreen.classList.add(
+            "hidden"
+        );
 
-                </div>
 
-            </section>
+        personnelFileScreen.classList.remove(
+            "hidden"
+        );
 
 
+    } catch (error) {
 
-            <!-- ==================================
-                 STATISTICS
-                 ================================== -->
+        console.error(
+            "PERSONNEL FILE ERROR:",
+            error
+        );
 
-            <section class="stats-grid">
+    }
 
+}
 
-                <div class="stat-card">
 
-                    <span class="stat-label">
-                        ACTIVE CASES
-                    </span>
+// ==========================================
+// PERSONNEL SEARCH
+// ==========================================
 
-                    <strong id="activeCaseCount">
-                        0
-                    </strong>
+personnelSearch.addEventListener(
+    "input",
+    function () {
 
-                </div>
+        const searchTerm =
+            personnelSearch.value
+                .toLowerCase()
+                .trim();
 
 
-                <div class="stat-card">
+        const rows =
+            document.querySelectorAll(
+                ".personnel-row"
+            );
 
-                    <span class="stat-label">
-                        SCHEDULED
-                    </span>
 
-                    <strong id="scheduledCaseCount">
-                        0
-                    </strong>
+        rows.forEach(
+            function (row) {
 
-                </div>
+                const text =
+                    row.textContent
+                        .toLowerCase();
 
 
-                <div class="stat-card">
+                if (
+                    text.includes(
+                        searchTerm
+                    )
+                ) {
 
-                    <span class="stat-label">
-                        COMPLETED
-                    </span>
+                    row.style.display =
+                        "grid";
 
-                    <strong id="completedCaseCount">
-                        0
-                    </strong>
+                } else {
 
-                </div>
+                    row.style.display =
+                        "none";
 
+                }
 
-                <div class="stat-card">
+            }
+        );
 
-                    <span class="stat-label">
-                        MY ASSIGNMENTS
-                    </span>
+    }
+);
 
-                    <strong id="assignmentCount">
-                        0
-                    </strong>
 
-                </div>
+// ==========================================
+// DASHBOARD → CASES
+// ==========================================
 
-            </section>
+casesButton.addEventListener(
+    "click",
+    function () {
 
+        alert(
+            "Case Management will be built in Phase 2."
+        );
 
+    }
+);
 
-            <!-- ==================================
-                 CASE MANAGEMENT
-                 ================================== -->
 
-            <section class="dashboard-section">
+// ==========================================
+// DASHBOARD → NEW CASE
+// ==========================================
 
-                <h2>
-                    Case Management
-                </h2>
+newCaseButton.addEventListener(
+    "click",
+    function () {
 
+        alert(
+            "New Case creation will be built in Phase 2."
+        );
 
-                <div class="dashboard-grid">
+    }
+);
 
 
-                    <button
-                        class="dashboard-card"
-                        id="casesButton"
-                    >
+// ==========================================
+// DASHBOARD → PERSONNEL
+// ==========================================
 
-                        <span class="card-icon">
-                            CASES
-                        </span>
+personnelButton.addEventListener(
+    "click",
+    function () {
 
+        dashboardScreen.classList.add(
+            "hidden"
+        );
 
-                        <strong>
-                            Investigations
-                        </strong>
 
+        personnelFileScreen.classList.add(
+            "hidden"
+        );
 
-                        <span>
-                            View and manage investigation cases.
-                        </span>
 
-                    </button>
+        personnelScreen.classList.remove(
+            "hidden"
+        );
 
 
+        loadPersonnel();
 
-                    <button
-                        class="dashboard-card"
-                        id="newCaseButton"
-                    >
+    }
+);
 
-                        <span class="card-icon">
-                            +
-                        </span>
 
+// ==========================================
+// PERSONNEL → DASHBOARD
+// ==========================================
 
-                        <strong>
-                            New Case
-                        </strong>
+personnelBackButton.addEventListener(
+    "click",
+    function () {
 
+        personnelScreen.classList.add(
+            "hidden"
+        );
 
-                        <span>
-                            Create a new investigation case.
-                        </span>
 
-                    </button>
+        dashboardScreen.classList.remove(
+            "hidden"
+        );
 
+    }
+);
 
-                </div>
 
-            </section>
+// ==========================================
+// PERSONNEL FILE → PERSONNEL
+// ==========================================
 
+personnelFileBackButton.addEventListener(
+    "click",
+    function () {
 
+        personnelFileScreen.classList.add(
+            "hidden"
+        );
 
-            <!-- ==================================
-                 ORGANIZATION
-                 ================================== -->
 
-            <section
-                class="dashboard-section"
-                id="organizationSection"
-            >
+        personnelScreen.classList.remove(
+            "hidden"
+        );
 
-                <h2>
-                    Organization
-                </h2>
+    }
+);
 
 
-                <div class="dashboard-grid">
+// ==========================================
+// DASHBOARD → TEAMS
+// ==========================================
 
+teamsButton.addEventListener(
+    "click",
+    function () {
 
-                    <button
-                        class="dashboard-card"
-                        id="personnelButton"
-                    >
+        alert(
+            "Team Management will be built next."
+        );
 
-                        <span class="card-icon">
-                            PEOPLE
-                        </span>
+    }
+);
 
 
-                        <strong>
-                            Personnel
-                        </strong>
+// ==========================================
+// DASHBOARD → EVIDENCE
+// ==========================================
 
+evidenceButton.addEventListener(
+    "click",
+    function () {
 
-                        <span>
-                            Manage New Horizon investigators.
-                        </span>
+        alert(
+            "Evidence Management will be built in Phase 3."
+        );
 
-                    </button>
+    }
+);
 
 
+// ==========================================
+// DASHBOARD → REPORTS
+// ==========================================
 
-                    <button
-                        class="dashboard-card"
-                        id="teamsButton"
-                    >
+reportsButton.addEventListener(
+    "click",
+    function () {
 
-                        <span class="card-icon">
-                            TEAM
-                        </span>
+        alert(
+            "Reports will be built in a later phase."
+        );
 
+    }
+);
 
-                        <strong>
-                            Teams
-                        </strong>
 
+// ==========================================
+// OPEN ADD PERSONNEL MODAL
+// ==========================================
 
-                        <span>
-                            Manage investigation teams.
-                        </span>
+addPersonnelButton.addEventListener(
+    "click",
+    function () {
 
-                    </button>
+        addPersonnelError.textContent =
+            "";
 
 
-                </div>
+        addPersonnelForm.reset();
 
-            </section>
 
+        addPersonnelModal.classList.remove(
+            "hidden"
+        );
 
+    }
+);
 
-            <!-- ==================================
-                 RESEARCH & EVIDENCE
-                 ================================== -->
 
-            <section class="dashboard-section">
+// ==========================================
+// CLOSE ADD PERSONNEL MODAL
+// ==========================================
 
-                <h2>
-                    Research &amp; Evidence
-                </h2>
+function closeAddPersonnelModal() {
 
+    addPersonnelModal.classList.add(
+        "hidden"
+    );
 
-                <div class="dashboard-grid">
 
+    addPersonnelForm.reset();
 
-                    <button
-                        class="dashboard-card"
-                        id="evidenceButton"
-                    >
 
-                        <span class="card-icon">
-                            EVIDENCE
-                        </span>
+    addPersonnelError.textContent =
+        "";
 
+}
 
-                        <strong>
-                            Evidence
-                        </strong>
 
+closePersonnelModal.addEventListener(
+    "click",
+    closeAddPersonnelModal
+);
 
-                        <span>
-                            Review and analyze collected evidence.
-                        </span>
 
-                    </button>
+cancelPersonnelButton.addEventListener(
+    "click",
+    closeAddPersonnelModal
+);
 
 
+modalOverlay.addEventListener(
+    "click",
+    closeAddPersonnelModal
+);
 
-                    <button
-                        class="dashboard-card"
-                        id="reportsButton"
-                    >
 
-                        <span class="card-icon">
-                            REPORTS
-                        </span>
+// ==========================================
+// ADD PERSONNEL
+// ==========================================
 
+addPersonnelForm.addEventListener(
+    "submit",
+    async function (event) {
 
-                        <strong>
-                            Reports
-                        </strong>
+        event.preventDefault();
 
 
-                        <span>
-                            View completed investigation reports.
-                        </span>
+        addPersonnelError.textContent =
+            "";
 
-                    </button>
 
+        // ==================================
+        // GET FORM VALUES
+        // ==================================
 
-                </div>
+        const name =
+            document.getElementById(
+                "personName"
+            ).value.trim();
 
-            </section>
 
+        const email =
+            document.getElementById(
+                "personEmail"
+            ).value
+                .trim()
+                .toLowerCase();
 
 
-            <!-- ==================================
-                 USER INFORMATION
-                 ================================== -->
+        const role =
+            document.getElementById(
+                "personRole"
+            ).value;
 
-            <section class="user-panel">
 
-                <p id="userRole">
-                    Role
-                </p>
+        const team =
+            document.getElementById(
+                "personTeam"
+            ).value.trim();
 
 
-                <p id="userTeam">
-                    Team
-                </p>
+        // ==================================
+        // VALIDATION
+        // ==================================
 
-            </section>
+        if (
+            !name ||
+            !email ||
+            !role ||
+            !team
+        ) {
 
+            addPersonnelError.textContent =
+                "Please complete all fields.";
 
-        </main>
+            return;
 
-    </div>
+        }
 
 
+        try {
 
-    <!-- ==========================================
-         PERSONNEL SCREEN
-         ========================================== -->
+            console.log(
+                "Creating personnel record..."
+            );
 
-    <div
-        id="personnelScreen"
-        class="screen hidden"
-    >
 
+            // ==================================
+            // CREATE DOCUMENT REFERENCE
+            // ==================================
 
-        <!-- PERSONNEL TOP BAR -->
+            const personnelRef =
+                doc(
+                    collection(
+                        db,
+                        "users"
+                    )
+                );
 
-        <header class="topbar">
 
-            <div class="brand">
+            // ==================================
+            // PERSONNEL DATA
+            // ==================================
 
-                <div class="brand-name">
-                    NEW HORIZON
-                </div>
+            const personnelData = {
 
-                <div class="brand-subtitle">
-                    CASE MANAGEMENT
-                </div>
+                name:
+                    name,
 
-            </div>
+                email:
+                    email,
 
+                role:
+                    role,
 
-            <button id="personnelBackButton">
-                ← Dashboard
-            </button>
+                team:
+                    team,
 
-        </header>
+                active:
+                    true,
 
+                accountStatus:
+                    "Pending",
 
+                createdAt:
+                    new Date().toISOString()
 
-        <!-- PERSONNEL MAIN -->
+            };
 
-        <main class="dashboard">
 
+            // ==================================
+            // SAVE TO FIRESTORE
+            // ==================================
 
-            <!-- HEADER -->
+            await setDoc(
+                personnelRef,
+                personnelData
+            );
 
-            <section class="dashboard-header">
 
-                <p class="section-label">
-                    ORGANIZATION
-                </p>
+            console.log(
+                "PERSONNEL CREATED:",
+                personnelRef.id
+            );
 
 
-                <h1>
-                    Personnel
-                </h1>
+            // ==================================
+            // CLOSE MODAL
+            // ==================================
 
+            closeAddPersonnelModal();
 
-                <p>
-                    Manage New Horizon investigators and personnel.
-                </p>
 
-            </section>
+            // ==================================
+            // REFRESH LIST
+            // ==================================
 
+            await loadPersonnel();
 
 
-            <!-- ==================================
-                 PERSONNEL CONTROLS
-                 ================================== -->
+            console.log(
+                "Personnel list refreshed."
+            );
 
-            <section class="personnel-controls">
 
+        } catch (error) {
 
-                <input
-                    type="search"
-                    id="personnelSearch"
-                    placeholder="Search personnel..."
-                >
+            console.error(
+                "ADD PERSONNEL ERROR:",
+                error
+            );
 
 
-                <button id="addPersonnelButton">
-                    + Add Person
-                </button>
+            addPersonnelError.textContent =
+                "Unable to create personnel record.";
 
+        }
 
-            </section>
+    }
+);
 
 
+// ==========================================
+// EDIT PERSONNEL
+// ==========================================
 
-            <!-- ==================================
-                 PERSONNEL LIST
-                 ================================== -->
+editPersonnelButton.addEventListener(
+    "click",
+    function () {
 
-            <section class="personnel-list">
+        alert(
+            "Personnel editing will be built in the next step."
+        );
 
+    }
+);
 
-                <div class="personnel-list-header">
 
-                    <span>
-                        Name
-                    </span>
+// ==========================================
+// DISABLE PERSONNEL
+// ==========================================
 
+disablePersonnelButton.addEventListener(
+    "click",
+    function () {
 
-                    <span>
-                        Role
-                    </span>
+        alert(
+            "Personnel status management will be built in the next step."
+        );
 
-
-                    <span>
-                        Team
-                    </span>
-
-
-                    <span>
-                        Status
-                    </span>
-
-                </div>
-
-
-
-                <div id="personnelList">
-
-                    <p class="loading-message">
-                        Loading personnel...
-                    </p>
-
-                </div>
-
-
-            </section>
-
-
-        </main>
-
-    </div>
-
-
-
-    <!-- ==========================================
-         PERSONNEL FILE SCREEN
-         ========================================== -->
-
-    <div
-        id="personnelFileScreen"
-        class="screen hidden"
-    >
-
-
-        <!-- PERSONNEL FILE TOP BAR -->
-
-        <header class="topbar">
-
-            <div class="brand">
-
-                <div class="brand-name">
-                    NEW HORIZON
-                </div>
-
-                <div class="brand-subtitle">
-                    PERSONNEL FILE
-                </div>
-
-            </div>
-
-
-            <button id="personnelFileBackButton">
-                ← Personnel
-            </button>
-
-        </header>
-
-
-
-        <!-- PERSONNEL FILE MAIN -->
-
-        <main class="dashboard">
-
-
-            <!-- ==================================
-                 PROFILE HEADER
-                 ================================== -->
-
-            <section class="dashboard-header">
-
-                <p class="section-label">
-                    PERSONNEL FILE
-                </p>
-
-
-                <h1 id="profileName">
-                    Personnel
-                </h1>
-
-
-                <p id="profileRole">
-                    Role
-                </p>
-
-            </section>
-
-
-
-            <!-- ==================================
-                 PERSONNEL INFORMATION
-                 ================================== -->
-
-            <section class="profile-section">
-
-                <h2>
-                    Personnel Information
-                </h2>
-
-
-                <div class="profile-grid">
-
-
-                    <div class="profile-field">
-
-                        <span>
-                            EMAIL
-                        </span>
-
-                        <strong id="profileEmail">
-                            —
-                        </strong>
-
-                    </div>
-
-
-                    <div class="profile-field">
-
-                        <span>
-                            ROLE
-                        </span>
-
-                        <strong id="profileRoleField">
-                            —
-                        </strong>
-
-                    </div>
-
-
-                    <div class="profile-field">
-
-                        <span>
-                            TEAM
-                        </span>
-
-                        <strong id="profileTeam">
-                            —
-                        </strong>
-
-                    </div>
-
-
-                    <div class="profile-field">
-
-                        <span>
-                            PERSONNEL STATUS
-                        </span>
-
-                        <strong id="profileStatus">
-                            —
-                        </strong>
-
-                    </div>
-
-
-                    <div class="profile-field">
-
-                        <span>
-                            ACCOUNT STATUS
-                        </span>
-
-                        <strong id="profileAccountStatus">
-                            —
-                        </strong>
-
-                    </div>
-
-
-                    <div class="profile-field">
-
-                        <span>
-                            JOINED
-                        </span>
-
-                        <strong id="profileJoined">
-                            —
-                        </strong>
-
-                    </div>
-
-
-                </div>
-
-            </section>
-
-
-
-            <!-- ==================================
-                 CASE HISTORY
-                 ================================== -->
-
-            <section class="profile-section">
-
-                <h2>
-                    Case History
-                </h2>
-
-
-                <div class="profile-stats">
-
-
-                    <div class="profile-stat">
-
-                        <span>
-                            ASSIGNED CASES
-                        </span>
-
-                        <strong>
-                            0
-                        </strong>
-
-                    </div>
-
-
-                    <div class="profile-stat">
-
-                        <span>
-                            COMPLETED CASES
-                        </span>
-
-                        <strong>
-                            0
-                        </strong>
-
-                    </div>
-
-
-                </div>
-
-            </section>
-
-
-
-            <!-- ==================================
-                 PERSONNEL ACTIONS
-                 ================================== -->
-
-            <section class="profile-section">
-
-                <h2>
-                    Personnel Actions
-                </h2>
-
-
-                <div class="profile-actions">
-
-
-                    <button
-                        id="editPersonnelButton"
-                        class="dashboard-card"
-                    >
-
-                        <span class="card-icon">
-                            EDIT
-                        </span>
-
-
-                        <strong>
-                            Edit Personnel
-                        </strong>
-
-
-                        <span>
-                            Modify this personnel record.
-                        </span>
-
-                    </button>
-
-
-
-                    <button
-                        id="disablePersonnelButton"
-                        class="dashboard-card"
-                    >
-
-                        <span class="card-icon">
-                            STATUS
-                        </span>
-
-
-                        <strong>
-                            Disable Personnel
-                        </strong>
-
-
-                        <span>
-                            Temporarily deactivate this member.
-                        </span>
-
-                    </button>
-
-
-                </div>
-
-            </section>
-
-
-        </main>
-
-    </div>
-
-
-
-    <!-- ==========================================
-         ADD PERSONNEL MODAL
-         ========================================== -->
-
-    <div
-        id="addPersonnelModal"
-        class="modal hidden"
-    >
-
-        <div
-            class="modal-overlay"
-            id="modalOverlay"
-        ></div>
-
-
-        <div class="modal-card">
-
-
-            <!-- MODAL HEADER -->
-
-            <div class="modal-header">
-
-                <div>
-
-                    <p class="section-label">
-                        ORGANIZATION
-                    </p>
-
-
-                    <h2>
-                        Add Personnel
-                    </h2>
-
-                </div>
-
-
-                <button
-                    type="button"
-                    id="closePersonnelModal"
-                    class="modal-close"
-                >
-                    ×
-                </button>
-
-            </div>
-
-
-
-            <!-- ==================================
-                 ADD PERSONNEL FORM
-                 ================================== -->
-
-            <form id="addPersonnelForm">
-
-
-                <!-- NAME -->
-
-                <div class="form-group">
-
-                    <label for="personName">
-                        Full Name
-                    </label>
-
-
-                    <input
-                        type="text"
-                        id="personName"
-                        placeholder="Enter full name"
-                        required
-                    >
-
-                </div>
-
-
-
-                <!-- EMAIL -->
-
-                <div class="form-group">
-
-                    <label for="personEmail">
-                        Email Address
-                    </label>
-
-
-                    <input
-                        type="email"
-                        id="personEmail"
-                        placeholder="Enter email address"
-                        required
-                    >
-
-                </div>
-
-
-
-                <!-- ROLE -->
-
-                <div class="form-group">
-
-                    <label for="personRole">
-                        Role
-                    </label>
-
-
-                    <select
-                        id="personRole"
-                        required
-                    >
-
-                        <option value="">
-                            Select a role
-                        </option>
-
-
-                        <option value="Director">
-                            Director
-                        </option>
-
-
-                        <option value="Team Lead">
-                            Team Lead
-                        </option>
-
-
-                        <option value="Assistant Team Lead">
-                            Assistant Team Lead
-                        </option>
-
-
-                        <option value="Investigator">
-                            Investigator
-                        </option>
-
-
-                        <option value="Researcher">
-                            Researcher
-                        </option>
-
-
-                        <option value="Analyst">
-                            Analyst
-                        </option>
-
-
-                        <option value="Tech Specialist">
-                            Tech Specialist
-                        </option>
-
-
-                        <option value="AV Specialist">
-                            AV Specialist
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-
-                <!-- TEAM -->
-
-                <div class="form-group">
-
-                    <label for="personTeam">
-                        Team
-                    </label>
-
-
-                    <input
-                        type="text"
-                        id="personTeam"
-                        placeholder="Example: Team 1"
-                        required
-                    >
-
-                </div>
-
-
-
-                <!-- FORM ERROR -->
-
-                <p
-                    id="addPersonnelError"
-                    class="form-error"
-                ></p>
-
-
-
-                <!-- FORM BUTTONS -->
-
-                <div class="modal-actions">
-
-
-                    <button
-                        type="button"
-                        id="cancelPersonnelButton"
-                        class="secondary-button"
-                    >
-                        Cancel
-                    </button>
-
-
-                    <button
-                        type="submit"
-                        class="primary-button"
-                    >
-                        Add Person
-                    </button>
-
-
-                </div>
-
-
-            </form>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- ==========================================
-         JAVASCRIPT
-         ========================================== -->
-
-    <script
-        type="module"
-        src="app.js"
-    ></script>
-
-
-</body>
-
-</html>
+    }
+);
