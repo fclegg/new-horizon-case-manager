@@ -128,41 +128,6 @@ const personnelList =
 
 
 // ==========================================
-// ADD PERSONNEL MODAL
-// ==========================================
-
-const addPersonnelModal =
-    document.getElementById(
-        "addPersonnelModal"
-    );
-
-const addPersonnelForm =
-    document.getElementById(
-        "addPersonnelForm"
-    );
-
-const closePersonnelModal =
-    document.getElementById(
-        "closePersonnelModal"
-    );
-
-const cancelPersonnelButton =
-    document.getElementById(
-        "cancelPersonnelButton"
-    );
-
-const modalOverlay =
-    document.getElementById(
-        "modalOverlay"
-    );
-
-const addPersonnelError =
-    document.getElementById(
-        "addPersonnelError"
-    );
-
-
-// ==========================================
 // PERSONNEL FILE
 // ==========================================
 
@@ -228,6 +193,41 @@ const disablePersonnelButton =
 
 
 // ==========================================
+// ADD PERSONNEL MODAL
+// ==========================================
+
+const addPersonnelModal =
+    document.getElementById(
+        "addPersonnelModal"
+    );
+
+const addPersonnelForm =
+    document.getElementById(
+        "addPersonnelForm"
+    );
+
+const closePersonnelModal =
+    document.getElementById(
+        "closePersonnelModal"
+    );
+
+const cancelPersonnelButton =
+    document.getElementById(
+        "cancelPersonnelButton"
+    );
+
+const modalOverlay =
+    document.getElementById(
+        "modalOverlay"
+    );
+
+const addPersonnelError =
+    document.getElementById(
+        "addPersonnelError"
+    );
+
+
+// ==========================================
 // EDIT PERSONNEL MODAL
 // ==========================================
 
@@ -283,10 +283,157 @@ const editPersonTeam =
 
 
 // ==========================================
-// CURRENT PERSONNEL
+// TEAMS
+// ==========================================
+
+const teamsScreen =
+    document.getElementById(
+        "teamsScreen"
+    );
+
+const teamsBackButton =
+    document.getElementById(
+        "teamsBackButton"
+    );
+
+const teamsList =
+    document.getElementById(
+        "teamsList"
+    );
+
+
+// ==========================================
+// TEAM FILE
+// ==========================================
+
+const teamFileScreen =
+    document.getElementById(
+        "teamFileScreen"
+    );
+
+const teamFileBackButton =
+    document.getElementById(
+        "teamFileBackButton"
+    );
+
+const teamProfileName =
+    document.getElementById(
+        "teamProfileName"
+    );
+
+const teamProfileType =
+    document.getElementById(
+        "teamProfileType"
+    );
+
+const teamProfileTypeField =
+    document.getElementById(
+        "teamProfileTypeField"
+    );
+
+const teamProfileStatus =
+    document.getElementById(
+        "teamProfileStatus"
+    );
+
+const teamProfileLead =
+    document.getElementById(
+        "teamProfileLead"
+    );
+
+const teamProfileMemberCount =
+    document.getElementById(
+        "teamProfileMemberCount"
+    );
+
+const teamProfileCreated =
+    document.getElementById(
+        "teamProfileCreated"
+    );
+
+const teamProfileDescription =
+    document.getElementById(
+        "teamProfileDescription"
+    );
+
+const teamMembersList =
+    document.getElementById(
+        "teamMembersList"
+    );
+
+const editTeamButton =
+    document.getElementById(
+        "editTeamButton"
+    );
+
+const teamStatusButton =
+    document.getElementById(
+        "teamStatusButton"
+    );
+
+
+// ==========================================
+// EDIT TEAM MODAL
+// ==========================================
+
+const editTeamModal =
+    document.getElementById(
+        "editTeamModal"
+    );
+
+const editTeamForm =
+    document.getElementById(
+        "editTeamForm"
+    );
+
+const closeEditTeamModal =
+    document.getElementById(
+        "closeEditTeamModal"
+    );
+
+const cancelEditTeamButton =
+    document.getElementById(
+        "cancelEditTeamButton"
+    );
+
+const editTeamModalOverlay =
+    document.getElementById(
+        "editTeamModalOverlay"
+    );
+
+const editTeamError =
+    document.getElementById(
+        "editTeamError"
+    );
+
+const editTeamName =
+    document.getElementById(
+        "editTeamName"
+    );
+
+const editTeamType =
+    document.getElementById(
+        "editTeamType"
+    );
+
+const editTeamLead =
+    document.getElementById(
+        "editTeamLead"
+    );
+
+const editTeamDescription =
+    document.getElementById(
+        "editTeamDescription"
+    );
+
+
+// ==========================================
+// CURRENT RECORDS
 // ==========================================
 
 let currentPersonnelId = null;
+
+let currentTeamId = null;
 
 
 // ==========================================
@@ -387,67 +534,81 @@ function getUserPermissions(role) {
 // SCREEN NAVIGATION
 // ==========================================
 
-function showDashboard() {
+function hideAllScreens() {
 
     loginScreen.classList.add("hidden");
+    dashboardScreen.classList.add("hidden");
     personnelScreen.classList.add("hidden");
     personnelFileScreen.classList.add("hidden");
+    teamsScreen.classList.add("hidden");
+    teamFileScreen.classList.add("hidden");
 
-    dashboardScreen.classList.remove("hidden");
+}
 
-    loginScreen.style.display = "";
-    personnelScreen.style.display = "";
-    personnelFileScreen.style.display = "";
 
-    dashboardScreen.style.display = "block";
+function showDashboard() {
+
+    hideAllScreens();
+
+    dashboardScreen.classList.remove(
+        "hidden"
+    );
+
 }
 
 
 function showPersonnel() {
 
-    dashboardScreen.classList.add("hidden");
-    personnelFileScreen.classList.add("hidden");
-    loginScreen.classList.add("hidden");
+    hideAllScreens();
 
-    personnelScreen.classList.remove("hidden");
+    personnelScreen.classList.remove(
+        "hidden"
+    );
 
-    dashboardScreen.style.display = "none";
-    personnelFileScreen.style.display = "none";
-    loginScreen.style.display = "none";
-
-    personnelScreen.style.display = "block";
 }
 
 
 function showPersonnelFile() {
 
-    dashboardScreen.classList.add("hidden");
-    personnelScreen.classList.add("hidden");
-    loginScreen.classList.add("hidden");
+    hideAllScreens();
 
-    personnelFileScreen.classList.remove("hidden");
+    personnelFileScreen.classList.remove(
+        "hidden"
+    );
 
-    dashboardScreen.style.display = "none";
-    personnelScreen.style.display = "none";
-    loginScreen.style.display = "none";
+}
 
-    personnelFileScreen.style.display = "block";
+
+function showTeams() {
+
+    hideAllScreens();
+
+    teamsScreen.classList.remove(
+        "hidden"
+    );
+
+}
+
+
+function showTeamFile() {
+
+    hideAllScreens();
+
+    teamFileScreen.classList.remove(
+        "hidden"
+    );
+
 }
 
 
 function showLogin() {
 
-    dashboardScreen.classList.add("hidden");
-    personnelScreen.classList.add("hidden");
-    personnelFileScreen.classList.add("hidden");
+    hideAllScreens();
 
-    loginScreen.classList.remove("hidden");
+    loginScreen.classList.remove(
+        "hidden"
+    );
 
-    dashboardScreen.style.display = "none";
-    personnelScreen.style.display = "none";
-    personnelFileScreen.style.display = "none";
-
-    loginScreen.style.display = "block";
 }
 
 
@@ -500,109 +661,92 @@ loginForm.addEventListener(
 
 
 // ==========================================
-// AUTHENTICATION
+// AUTH
 // ==========================================
 
 onAuthStateChanged(
     auth,
     async function (user) {
 
-        if (user) {
+        if (!user) {
 
-            showDashboard();
+            showLogin();
 
-            welcomeMessage.textContent =
-                `Welcome, ${user.email}`;
+            return;
 
-
-            try {
-
-                const userRef =
-                    doc(
-                        db,
-                        "users",
-                        user.uid
-                    );
+        }
 
 
-                const userSnapshot =
-                    await getDoc(
-                        userRef
-                    );
+        showDashboard();
 
 
-                if (
-                    userSnapshot.exists()
-                ) {
-
-                    const userData =
-                        userSnapshot.data();
+        welcomeMessage.textContent =
+            `Welcome, ${user.email}`;
 
 
-                    const permissions =
-                        getUserPermissions(
-                            userData.role
-                        );
+        try {
 
-
-                    console.log(
-                        "USER PERMISSIONS:",
-                        permissions
-                    );
-
-
-                    welcomeMessage.textContent =
-                        `Welcome, ${userData.name}`;
-
-
-                    userRole.textContent =
-                        `Role: ${userData.role}`;
-
-
-                    userTeam.textContent =
-                        `Team: ${userData.team}`;
-
-
-                    topbarUserName.textContent =
-                        userData.name;
-
-
-                    topbarUserRole.textContent =
-                        userData.role;
-
-                } else {
-
-                    welcomeMessage.textContent =
-                        "Welcome";
-
-                    userRole.textContent =
-                        "Role: Not Assigned";
-
-                    userTeam.textContent =
-                        "Team: Not Assigned";
-
-                    topbarUserName.textContent =
-                        user.email;
-
-                    topbarUserRole.textContent =
-                        "Unassigned";
-
-                }
-
-
-            } catch (error) {
-
-                console.error(
-                    "PERSONNEL LOOKUP ERROR:",
-                    error
+            const userRef =
+                doc(
+                    db,
+                    "users",
+                    user.uid
                 );
+
+
+            const snapshot =
+                await getDoc(
+                    userRef
+                );
+
+
+            if (
+                snapshot.exists()
+            ) {
+
+                const userData =
+                    snapshot.data();
+
+
+                const permissions =
+                    getUserPermissions(
+                        userData.role
+                    );
+
+
+                console.log(
+                    "USER PERMISSIONS:",
+                    permissions
+                );
+
+
+                welcomeMessage.textContent =
+                    `Welcome, ${userData.name}`;
+
+
+                userRole.textContent =
+                    `Role: ${userData.role}`;
+
+
+                userTeam.textContent =
+                    `Team: ${userData.team || "Unassigned"}`;
+
+
+                topbarUserName.textContent =
+                    userData.name;
+
+
+                topbarUserRole.textContent =
+                    userData.role;
 
             }
 
+        } catch (error) {
 
-        } else {
-
-            showLogin();
+            console.error(
+                "PERSONNEL LOOKUP ERROR:",
+                error
+            );
 
         }
 
@@ -650,16 +794,12 @@ async function loadPersonnel() {
 
     try {
 
-        const usersCollection =
-            collection(
-                db,
-                "users"
-            );
-
-
         const snapshot =
             await getDocs(
-                usersCollection
+                collection(
+                    db,
+                    "users"
+                )
             );
 
 
@@ -732,7 +872,7 @@ async function loadPersonnel() {
                     </div>
 
                     <div class="personnel-team">
-                        ${person.team || "Unassigned"}
+                        ${getTeamDisplayName(person.team)}
                     </div>
 
                     <div class="personnel-status ${statusClass}">
@@ -782,6 +922,38 @@ async function loadPersonnel() {
 
 
 // ==========================================
+// TEAM DISPLAY NAME
+// ==========================================
+
+function getTeamDisplayName(
+    teamId
+) {
+
+    if (
+        teamId === "administration"
+    ) {
+
+        return "Administration";
+
+    }
+
+
+    if (
+        teamId === "okc-alpha"
+    ) {
+
+        return "OKC Alpha Team";
+
+    }
+
+
+    return teamId ||
+        "Unassigned";
+
+}
+
+
+// ==========================================
 // OPEN PERSONNEL FILE
 // ==========================================
 
@@ -795,40 +967,28 @@ async function openPersonnelFile(
 
     try {
 
-        const userRef =
-            doc(
-                db,
-                "users",
-                userId
-            );
-
-
-        const userSnapshot =
+        const snapshot =
             await getDoc(
-                userRef
+                doc(
+                    db,
+                    "users",
+                    userId
+                )
             );
 
 
         if (
-            !userSnapshot.exists()
+            !snapshot.exists()
         ) {
 
-            console.error(
-                "PERSONNEL RECORD NOT FOUND:",
-                userId
-            );
-
             return;
+
         }
 
 
         const person =
-            userSnapshot.data();
+            snapshot.data();
 
-
-        // ==================================
-        // PROFILE
-        // ==================================
 
         profileName.textContent =
             person.name ||
@@ -851,8 +1011,9 @@ async function openPersonnelFile(
 
 
         profileTeam.textContent =
-            person.team ||
-            "Unassigned";
+            getTeamDisplayName(
+                person.team
+            );
 
 
         profileStatus.textContent =
@@ -866,10 +1027,6 @@ async function openPersonnelFile(
             "Unknown";
 
 
-        // ==================================
-        // JOIN DATE
-        // ==================================
-
         if (
             person.createdAt
         ) {
@@ -880,21 +1037,12 @@ async function openPersonnelFile(
                 );
 
 
-            if (
-                !isNaN(
+            profileJoined.textContent =
+                isNaN(
                     date.getTime()
                 )
-            ) {
-
-                profileJoined.textContent =
-                    date.toLocaleDateString();
-
-            } else {
-
-                profileJoined.textContent =
-                    "Unknown";
-
-            }
+                    ? "Unknown"
+                    : date.toLocaleDateString();
 
         } else {
 
@@ -904,13 +1052,12 @@ async function openPersonnelFile(
         }
 
 
-        // ==================================
-        // UPDATE STATUS BUTTON
-        // ==================================
-
-        updatePersonnelStatusButton(
-            person.active
-        );
+        disablePersonnelButton
+            .querySelector("strong")
+            .textContent =
+                person.active
+                    ? "Disable Personnel"
+                    : "Reactivate Personnel";
 
 
         showPersonnelFile();
@@ -922,31 +1069,6 @@ async function openPersonnelFile(
             "PERSONNEL FILE ERROR:",
             error
         );
-
-    }
-
-}
-
-
-// ==========================================
-// UPDATE STATUS BUTTON
-// ==========================================
-
-function updatePersonnelStatusButton(
-    isActive
-) {
-
-    if (
-        isActive
-    ) {
-
-        disablePersonnelButton.textContent =
-            "Disable Personnel";
-
-    } else {
-
-        disablePersonnelButton.textContent =
-            "Reactivate Personnel";
 
     }
 
@@ -981,21 +1103,12 @@ personnelSearch.addEventListener(
                         .toLowerCase();
 
 
-                if (
+                row.style.display =
                     text.includes(
                         searchTerm
                     )
-                ) {
-
-                    row.style.display =
-                        "grid";
-
-                } else {
-
-                    row.style.display =
-                        "none";
-
-                }
+                        ? "grid"
+                        : "none";
 
             }
         );
@@ -1005,7 +1118,75 @@ personnelSearch.addEventListener(
 
 
 // ==========================================
-// DASHBOARD BUTTONS
+// DASHBOARD NAVIGATION
+// ==========================================
+
+personnelButton.addEventListener(
+    "click",
+    function () {
+
+        showPersonnel();
+
+        loadPersonnel();
+
+    }
+);
+
+
+teamsButton.addEventListener(
+    "click",
+    function () {
+
+        showTeams();
+
+        loadTeams();
+
+    }
+);
+
+
+personnelBackButton.addEventListener(
+    "click",
+    function () {
+
+        showDashboard();
+
+    }
+);
+
+
+personnelFileBackButton.addEventListener(
+    "click",
+    function () {
+
+        showPersonnel();
+
+    }
+);
+
+
+teamsBackButton.addEventListener(
+    "click",
+    function () {
+
+        showDashboard();
+
+    }
+);
+
+
+teamFileBackButton.addEventListener(
+    "click",
+    function () {
+
+        showTeams();
+
+    }
+);
+
+
+// ==========================================
+// OTHER DASHBOARD BUTTONS
 // ==========================================
 
 casesButton.addEventListener(
@@ -1032,50 +1213,6 @@ newCaseButton.addEventListener(
 );
 
 
-personnelButton.addEventListener(
-    "click",
-    function () {
-
-        showPersonnel();
-
-        loadPersonnel();
-
-    }
-);
-
-
-personnelBackButton.addEventListener(
-    "click",
-    function () {
-
-        showDashboard();
-
-    }
-);
-
-
-personnelFileBackButton.addEventListener(
-    "click",
-    function () {
-
-        showPersonnel();
-
-    }
-);
-
-
-teamsButton.addEventListener(
-    "click",
-    function () {
-
-        alert(
-            "Team Management will be built next."
-        );
-
-    }
-);
-
-
 evidenceButton.addEventListener(
     "click",
     function () {
@@ -1093,7 +1230,7 @@ reportsButton.addEventListener(
     function () {
 
         alert(
-            "Reports will be built in a later phase."
+            "Reports will be built later."
         );
 
     }
@@ -1101,7 +1238,7 @@ reportsButton.addEventListener(
 
 
 // ==========================================
-// ADD PERSONNEL MODAL
+// ADD PERSONNEL
 // ==========================================
 
 addPersonnelButton.addEventListener(
@@ -1159,18 +1296,11 @@ modalOverlay.addEventListener(
 );
 
 
-// ==========================================
-// ADD PERSONNEL
-// ==========================================
-
 addPersonnelForm.addEventListener(
     "submit",
     async function (event) {
 
         event.preventDefault();
-
-        addPersonnelError.textContent =
-            "";
 
 
         const name =
@@ -1196,7 +1326,7 @@ addPersonnelForm.addEventListener(
         const team =
             document.getElementById(
                 "personTeam"
-            ).value.trim();
+            ).value;
 
 
         if (
@@ -1210,6 +1340,7 @@ addPersonnelForm.addEventListener(
                 "Please complete all fields.";
 
             return;
+
         }
 
 
@@ -1224,35 +1355,32 @@ addPersonnelForm.addEventListener(
                 );
 
 
-            const personnelData = {
-
-                name:
-                    name,
-
-                email:
-                    email,
-
-                role:
-                    role,
-
-                team:
-                    team,
-
-                active:
-                    true,
-
-                accountStatus:
-                    "Pending",
-
-                createdAt:
-                    new Date().toISOString()
-
-            };
-
-
             await setDoc(
                 personnelRef,
-                personnelData
+                {
+
+                    name:
+                        name,
+
+                    email:
+                        email,
+
+                    role:
+                        role,
+
+                    team:
+                        team,
+
+                    active:
+                        true,
+
+                    accountStatus:
+                        "Pending",
+
+                    createdAt:
+                        new Date().toISOString()
+
+                }
             );
 
 
@@ -1282,9 +1410,6 @@ addPersonnelForm.addEventListener(
 // EDIT PERSONNEL
 // ==========================================
 
-
-// OPEN EDIT MODAL
-
 editPersonnelButton.addEventListener(
     "click",
     async function () {
@@ -1293,27 +1418,20 @@ editPersonnelButton.addEventListener(
             !currentPersonnelId
         ) {
 
-            console.error(
-                "NO PERSONNEL RECORD SELECTED"
-            );
-
             return;
+
         }
 
 
         try {
 
-            const userRef =
-                doc(
-                    db,
-                    "users",
-                    currentPersonnelId
-                );
-
-
             const snapshot =
                 await getDoc(
-                    userRef
+                    doc(
+                        db,
+                        "users",
+                        currentPersonnelId
+                    )
                 );
 
 
@@ -1321,11 +1439,8 @@ editPersonnelButton.addEventListener(
                 !snapshot.exists()
             ) {
 
-                console.error(
-                    "PERSONNEL RECORD NO LONGER EXISTS"
-                );
-
                 return;
+
             }
 
 
@@ -1357,7 +1472,6 @@ editPersonnelButton.addEventListener(
                 "hidden"
             );
 
-
             editPersonnelModal.style.display =
                 "flex";
 
@@ -1374,10 +1488,6 @@ editPersonnelButton.addEventListener(
     }
 );
 
-
-// ==========================================
-// CLOSE EDIT MODAL
-// ==========================================
 
 function closeEditPersonnelModalWindow() {
 
@@ -1414,29 +1524,11 @@ editModalOverlay.addEventListener(
 );
 
 
-// ==========================================
-// SAVE PERSONNEL CHANGES
-// ==========================================
-
 editPersonnelForm.addEventListener(
     "submit",
     async function (event) {
 
         event.preventDefault();
-
-        editPersonnelError.textContent =
-            "";
-
-
-        if (
-            !currentPersonnelId
-        ) {
-
-            editPersonnelError.textContent =
-                "No personnel record selected.";
-
-            return;
-        }
 
 
         const name =
@@ -1454,7 +1546,7 @@ editPersonnelForm.addEventListener(
 
 
         const team =
-            editPersonTeam.value.trim();
+            editPersonTeam.value;
 
 
         if (
@@ -1468,21 +1560,18 @@ editPersonnelForm.addEventListener(
                 "Please complete all fields.";
 
             return;
+
         }
 
 
         try {
 
-            const userRef =
+            await updateDoc(
                 doc(
                     db,
                     "users",
                     currentPersonnelId
-                );
-
-
-            await updateDoc(
-                userRef,
+                ),
                 {
 
                     name:
@@ -1540,27 +1629,16 @@ disablePersonnelButton.addEventListener(
     "click",
     async function () {
 
-        // ==================================
-        // MAKE SURE A PERSON IS SELECTED
-        // ==================================
-
         if (
             !currentPersonnelId
         ) {
 
-            console.error(
-                "NO PERSONNEL RECORD SELECTED"
-            );
-
             return;
+
         }
 
 
         try {
-
-            // ==================================
-            // GET CURRENT RECORD
-            // ==================================
 
             const userRef =
                 doc(
@@ -1580,11 +1658,8 @@ disablePersonnelButton.addEventListener(
                 !snapshot.exists()
             ) {
 
-                console.error(
-                    "PERSONNEL RECORD NOT FOUND"
-                );
-
                 return;
+
             }
 
 
@@ -1592,30 +1667,20 @@ disablePersonnelButton.addEventListener(
                 snapshot.data();
 
 
-            const currentlyActive =
+            const isActive =
                 person.active === true;
 
 
-            // ==================================
-            // CONFIRM ACTION
-            // ==================================
-
-            const action =
-                currentlyActive
-                    ? "disable"
-                    : "reactivate";
-
-
-            const confirmation =
+            const confirmed =
                 confirm(
-                    currentlyActive
+                    isActive
                         ? `Are you sure you want to disable ${person.name}?`
                         : `Are you sure you want to reactivate ${person.name}?`
                 );
 
 
             if (
-                !confirmation
+                !confirmed
             ) {
 
                 return;
@@ -1623,19 +1688,15 @@ disablePersonnelButton.addEventListener(
             }
 
 
-            // ==================================
-            // UPDATE FIRESTORE
-            // ==================================
-
             await updateDoc(
                 userRef,
                 {
 
                     active:
-                        !currentlyActive,
+                        !isActive,
 
                     accountStatus:
-                        currentlyActive
+                        isActive
                             ? "Disabled"
                             : "Active",
 
@@ -1646,24 +1707,10 @@ disablePersonnelButton.addEventListener(
             );
 
 
-            console.log(
-                `PERSONNEL ${action.toUpperCase()}D:`,
-                currentPersonnelId
-            );
-
-
-            // ==================================
-            // REFRESH PERSONNEL FILE
-            // ==================================
-
             await openPersonnelFile(
                 currentPersonnelId
             );
 
-
-            // ==================================
-            // REFRESH PERSONNEL LIST
-            // ==================================
 
             await loadPersonnel();
 
@@ -1675,8 +1722,960 @@ disablePersonnelButton.addEventListener(
                 error
             );
 
+
             alert(
                 "Unable to update personnel status."
+            );
+
+        }
+
+    }
+);
+
+
+// ==========================================
+// LOAD TEAMS
+// ==========================================
+
+async function loadTeams() {
+
+    teamsList.innerHTML = `
+        <p class="loading-message">
+            Loading teams...
+        </p>
+    `;
+
+
+    try {
+
+        const snapshot =
+            await getDocs(
+                collection(
+                    db,
+                    "teams"
+                )
+            );
+
+
+        teamsList.innerHTML = "";
+
+
+        if (
+            snapshot.empty
+        ) {
+
+            teamsList.innerHTML = `
+                <p class="loading-message">
+                    No teams found.
+                </p>
+            `;
+
+            return;
+
+        }
+
+
+        const personnelSnapshot =
+            await getDocs(
+                collection(
+                    db,
+                    "users"
+                )
+            );
+
+
+        const personnel =
+            [];
+
+
+        personnelSnapshot.forEach(
+            function (document) {
+
+                personnel.push({
+
+                    id:
+                        document.id,
+
+                    ...document.data()
+
+                });
+
+            }
+        );
+
+
+        snapshot.forEach(
+            function (teamDocument) {
+
+                const team =
+                    teamDocument.data();
+
+
+                const lead =
+                    personnel.find(
+                        person =>
+                            person.id ===
+                            team.teamLeadId
+                    );
+
+
+                const row =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                row.className =
+                    "personnel-row";
+
+
+                row.innerHTML = `
+
+                    <div>
+
+                        <div class="personnel-name">
+                            ${team.name || "Unnamed Team"}
+                        </div>
+
+                    </div>
+
+                    <div class="personnel-role">
+                        ${team.teamType || "Unknown"}
+                    </div>
+
+                    <div class="personnel-team">
+                        ${lead
+                            ? lead.name
+                            : "Unassigned"}
+                    </div>
+
+                    <div class="personnel-status ${
+                        team.active
+                            ? "status-active"
+                            : "status-inactive"
+                    }">
+
+                        ${
+                            team.active
+                                ? "ACTIVE"
+                                : "INACTIVE"
+                        }
+
+                    </div>
+
+                `;
+
+
+                teamsList.appendChild(
+                    row
+                );
+
+
+                row.addEventListener(
+                    "click",
+                    function () {
+
+                        openTeamFile(
+                            teamDocument.id
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "TEAMS LOAD ERROR:",
+            error
+        );
+
+
+        teamsList.innerHTML = `
+            <p class="loading-message">
+                Unable to load teams.
+            </p>
+        `;
+
+    }
+
+}
+
+
+// ==========================================
+// OPEN TEAM FILE
+// ==========================================
+
+async function openTeamFile(
+    teamId
+) {
+
+    currentTeamId =
+        teamId;
+
+
+    try {
+
+        const snapshot =
+            await getDoc(
+                doc(
+                    db,
+                    "teams",
+                    teamId
+                )
+            );
+
+
+        if (
+            !snapshot.exists()
+        ) {
+
+            console.error(
+                "TEAM NOT FOUND:",
+                teamId
+            );
+
+            return;
+
+        }
+
+
+        const team =
+            snapshot.data();
+
+
+        teamProfileName.textContent =
+            team.name ||
+            "Unnamed Team";
+
+
+        teamProfileType.textContent =
+            team.teamType ||
+            "Team";
+
+
+        teamProfileTypeField.textContent =
+            team.teamType ||
+            "Unknown";
+
+
+        teamProfileStatus.textContent =
+            team.active
+                ? "ACTIVE"
+                : "INACTIVE";
+
+
+        teamProfileDescription.textContent =
+            team.description ||
+            "No description provided.";
+
+
+        if (
+            team.createdAt
+        ) {
+
+            const date =
+                new Date(
+                    team.createdAt
+                );
+
+
+            teamProfileCreated.textContent =
+                isNaN(
+                    date.getTime()
+                )
+                    ? "Unknown"
+                    : date.toLocaleDateString();
+
+        } else {
+
+            teamProfileCreated.textContent =
+                "Unknown";
+
+        }
+
+
+        await loadTeamMembers(
+            team
+        );
+
+
+        await loadTeamLead(
+            team
+        );
+
+
+        teamStatusButton
+            .querySelector("strong")
+            .textContent =
+                team.active
+                    ? "Disable Team"
+                    : "Reactivate Team";
+
+
+        showTeamFile();
+
+
+    } catch (error) {
+
+        console.error(
+            "TEAM FILE ERROR:",
+            error
+        );
+
+    }
+
+}
+
+
+// ==========================================
+// LOAD TEAM LEAD
+// ==========================================
+
+async function loadTeamLead(
+    team
+) {
+
+    if (
+        !team.teamLeadId
+    ) {
+
+        teamProfileLead.textContent =
+            "Unassigned";
+
+        return;
+
+    }
+
+
+    try {
+
+        const snapshot =
+            await getDoc(
+                doc(
+                    db,
+                    "users",
+                    team.teamLeadId
+                )
+            );
+
+
+        if (
+            snapshot.exists()
+        ) {
+
+            const person =
+                snapshot.data();
+
+
+            teamProfileLead.textContent =
+                person.name ||
+                "Unknown";
+
+        } else {
+
+            teamProfileLead.textContent =
+                "Unassigned";
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "TEAM LEAD LOAD ERROR:",
+            error
+        );
+
+        teamProfileLead.textContent =
+            "Unknown";
+
+    }
+
+}
+
+
+// ==========================================
+// LOAD TEAM MEMBERS
+// ==========================================
+
+async function loadTeamMembers(
+    team
+) {
+
+    teamMembersList.innerHTML = `
+        <p class="loading-message">
+            Loading members...
+        </p>
+    `;
+
+
+    try {
+
+        const snapshot =
+            await getDocs(
+                collection(
+                    db,
+                    "users"
+                )
+            );
+
+
+        const members =
+            [];
+
+
+        snapshot.forEach(
+            function (document) {
+
+                const person =
+                    document.data();
+
+
+                if (
+                    person.team ===
+                    currentTeamId
+                ) {
+
+                    members.push({
+
+                        id:
+                            document.id,
+
+                        ...person
+
+                    });
+
+                }
+
+            }
+        );
+
+
+        teamProfileMemberCount.textContent =
+            members.length;
+
+
+        teamMembersList.innerHTML = "";
+
+
+        if (
+            members.length === 0
+        ) {
+
+            teamMembersList.innerHTML = `
+                <p class="loading-message">
+                    No personnel assigned to this team.
+                </p>
+            `;
+
+            return;
+
+        }
+
+
+        members.forEach(
+            function (person) {
+
+                const row =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                row.className =
+                    "personnel-row";
+
+
+                row.innerHTML = `
+
+                    <div>
+
+                        <div class="personnel-name">
+                            ${person.name || "Unnamed"}
+                        </div>
+
+                        <div class="personnel-email">
+                            ${person.email || ""}
+                        </div>
+
+                    </div>
+
+                    <div class="personnel-role">
+                        ${person.role || "Unassigned"}
+                    </div>
+
+                    <div class="personnel-team">
+                        ${person.active
+                            ? "ACTIVE"
+                            : "INACTIVE"}
+                    </div>
+
+                    <div class="personnel-status">
+                        ${person.id === teamLeadIdSafe(team)
+                            ? "TEAM LEAD"
+                            : ""}
+                    </div>
+
+                `;
+
+
+                teamMembersList.appendChild(
+                    row
+                );
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "TEAM MEMBERS LOAD ERROR:",
+            error
+        );
+
+
+        teamMembersList.innerHTML = `
+            <p class="loading-message">
+                Unable to load team members.
+            </p>
+        `;
+
+    }
+
+}
+
+
+// ==========================================
+// TEAM LEAD HELPER
+// ==========================================
+
+function teamLeadIdSafe(
+    team
+) {
+
+    return team.teamLeadId ||
+        null;
+
+}
+
+
+// ==========================================
+// EDIT TEAM
+// ==========================================
+
+editTeamButton.addEventListener(
+    "click",
+    async function () {
+
+        if (
+            !currentTeamId
+        ) {
+
+            return;
+
+        }
+
+
+        try {
+
+            const snapshot =
+                await getDoc(
+                    doc(
+                        db,
+                        "teams",
+                        currentTeamId
+                    )
+                );
+
+
+            if (
+                !snapshot.exists()
+            ) {
+
+                return;
+
+            }
+
+
+            const team =
+                snapshot.data();
+
+
+            editTeamName.value =
+                team.name ||
+                "";
+
+
+            editTeamType.value =
+                team.teamType ||
+                "Investigation";
+
+
+            editTeamDescription.value =
+                team.description ||
+                "";
+
+
+            await loadTeamLeadOptions(
+                team.teamLeadId
+            );
+
+
+            editTeamError.textContent =
+                "";
+
+
+            editTeamModal.classList.remove(
+                "hidden"
+            );
+
+
+            editTeamModal.style.display =
+                "flex";
+
+
+        } catch (error) {
+
+            console.error(
+                "EDIT TEAM LOAD ERROR:",
+                error
+            );
+
+        }
+
+    }
+);
+
+
+// ==========================================
+// LOAD TEAM LEAD OPTIONS
+// ==========================================
+
+async function loadTeamLeadOptions(
+    selectedId
+) {
+
+    editTeamLead.innerHTML = `
+
+        <option value="">
+            Select Team Lead
+        </option>
+
+    `;
+
+
+    try {
+
+        const snapshot =
+            await getDocs(
+                collection(
+                    db,
+                    "users"
+                )
+            );
+
+
+        snapshot.forEach(
+            function (document) {
+
+                const person =
+                    document.data();
+
+
+                if (
+                    !person.active
+                ) {
+
+                    return;
+
+                }
+
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    document.id;
+
+
+                option.textContent =
+                    `${person.name} — ${person.role}`;
+
+
+                if (
+                    document.id ===
+                    selectedId
+                ) {
+
+                    option.selected =
+                        true;
+
+                }
+
+
+                editTeamLead.appendChild(
+                    option
+                );
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "TEAM LEAD OPTIONS ERROR:",
+            error
+        );
+
+    }
+
+}
+
+
+// ==========================================
+// CLOSE EDIT TEAM
+// ==========================================
+
+function closeEditTeamModalWindow() {
+
+    editTeamModal.classList.add(
+        "hidden"
+    );
+
+    editTeamModal.style.display =
+        "";
+
+    editTeamForm.reset();
+
+    editTeamError.textContent =
+        "";
+
+}
+
+
+closeEditTeamModal.addEventListener(
+    "click",
+    closeEditTeamModalWindow
+);
+
+
+cancelEditTeamButton.addEventListener(
+    "click",
+    closeEditTeamModalWindow
+);
+
+
+editTeamModalOverlay.addEventListener(
+    "click",
+    closeEditTeamModalWindow
+);
+
+
+// ==========================================
+// SAVE TEAM
+// ==========================================
+
+editTeamForm.addEventListener(
+    "submit",
+    async function (event) {
+
+        event.preventDefault();
+
+
+        const name =
+            editTeamName.value.trim();
+
+
+        const teamType =
+            editTeamType.value;
+
+
+        const teamLeadId =
+            editTeamLead.value ||
+            null;
+
+
+        const description =
+            editTeamDescription.value.trim();
+
+
+        if (
+            !name ||
+            !teamType
+        ) {
+
+            editTeamError.textContent =
+                "Please complete all required fields.";
+
+            return;
+
+        }
+
+
+        try {
+
+            await updateDoc(
+                doc(
+                    db,
+                    "teams",
+                    currentTeamId
+                ),
+                {
+
+                    name:
+                        name,
+
+                    teamType:
+                        teamType,
+
+                    teamLeadId:
+                        teamLeadId,
+
+                    description:
+                        description,
+
+                    updatedAt:
+                        new Date().toISOString()
+
+                }
+            );
+
+
+            closeEditTeamModalWindow();
+
+
+            await openTeamFile(
+                currentTeamId
+            );
+
+
+            await loadTeams();
+
+
+        } catch (error) {
+
+            console.error(
+                "UPDATE TEAM ERROR:",
+                error
+            );
+
+
+            editTeamError.textContent =
+                "Unable to save team changes.";
+
+        }
+
+    }
+);
+
+
+// ==========================================
+// DISABLE / REACTIVATE TEAM
+// ==========================================
+
+teamStatusButton.addEventListener(
+    "click",
+    async function () {
+
+        if (
+            !currentTeamId
+        ) {
+
+            return;
+
+        }
+
+
+        try {
+
+            const teamRef =
+                doc(
+                    db,
+                    "teams",
+                    currentTeamId
+                );
+
+
+            const snapshot =
+                await getDoc(
+                    teamRef
+                );
+
+
+            if (
+                !snapshot.exists()
+            ) {
+
+                return;
+
+            }
+
+
+            const team =
+                snapshot.data();
+
+
+            const isActive =
+                team.active === true;
+
+
+            const confirmed =
+                confirm(
+                    isActive
+                        ? `Are you sure you want to disable ${team.name}?`
+                        : `Are you sure you want to reactivate ${team.name}?`
+                );
+
+
+            if (
+                !confirmed
+            ) {
+
+                return;
+
+            }
+
+
+            await updateDoc(
+                teamRef,
+                {
+
+                    active:
+                        !isActive,
+
+                    updatedAt:
+                        new Date().toISOString()
+
+                }
+            );
+
+
+            await openTeamFile(
+                currentTeamId
+            );
+
+
+            await loadTeams();
+
+
+        } catch (error) {
+
+            console.error(
+                "TEAM STATUS UPDATE ERROR:",
+                error
+            );
+
+
+            alert(
+                "Unable to update team status."
             );
 
         }
