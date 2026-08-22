@@ -7,6 +7,12 @@ import {
     signOut
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
+import {
+    getFirestore,
+    doc,
+    getDoc
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
 import { firebaseConfig } from "./firebase-config.js";
 
 
@@ -16,6 +22,7 @@ import { firebaseConfig } from "./firebase-config.js";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
 
 // ==========================================
@@ -81,7 +88,7 @@ loginForm.addEventListener("submit", async function (event) {
 // AUTHENTICATION STATE
 // ==========================================
 
-onAuthStateChanged(auth, function (user) {
+onAuthStateChanged(auth, async function (user) {
 
     console.log("AUTH STATE CHANGED:", user);
 
@@ -96,6 +103,41 @@ onAuthStateChanged(auth, function (user) {
 
         welcomeMessage.textContent =
             `Welcome, ${user.email}`;
+
+        try {
+
+            const userRef = doc(db, "users", user.uid);
+
+            const userSnapshot = await getDoc(userRef);
+
+            if (userSnapshot.exists()) {
+
+                const userData = userSnapshot.data();
+
+                console.log(
+                    "NEW HORIZON PERSONNEL RECORD:",
+                    userData
+                );
+
+                welcomeMessage.textContent =
+                    `Welcome, ${userData.name}`;
+
+            } else {
+
+                console.log(
+                    "No New Horizon personnel record found."
+                );
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "PERSONNEL LOOKUP ERROR:",
+                error
+            );
+
+        }
 
     } else {
 
