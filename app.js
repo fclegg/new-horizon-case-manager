@@ -597,15 +597,47 @@ function getUserPermissions(role) {
 
 function hideAllScreens() {
 
-    loginScreen.classList.add("hidden");
-    dashboardScreen.classList.add("hidden");
-    personnelScreen.classList.add("hidden");
-    personnelFileScreen.classList.add("hidden");
-    teamsScreen.classList.add("hidden");
-    teamFileScreen.classList.add("hidden");
+    loginScreen.classList.add(
+        "hidden"
+    );
+
+    dashboardScreen.classList.add(
+        "hidden"
+    );
+
+    personnelScreen.classList.add(
+        "hidden"
+    );
+
+    personnelFileScreen.classList.add(
+        "hidden"
+    );
+
+    teamsScreen.classList.add(
+        "hidden"
+    );
+
+    teamFileScreen.classList.add(
+        "hidden"
+    );
+
+    if (casesScreen) {
+
+        casesScreen.classList.add(
+            "hidden"
+        );
+
+    }
+
+    if (caseFileScreen) {
+
+        caseFileScreen.classList.add(
+            "hidden"
+        );
+
+    }
 
 }
-
 
 function showDashboard() {
 
