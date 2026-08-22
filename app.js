@@ -201,6 +201,14 @@ onAuthStateChanged(auth, async function (user) {
 
             if (userSnapshot.exists()) {
 
+                const permissions =
+                    getUserPermissions(userData.role);
+                
+                console.log(
+                    "USER PERMISSIONS:",
+                    permissions
+                );
+                
                 const userData = userSnapshot.data();
 
                 console.log(
