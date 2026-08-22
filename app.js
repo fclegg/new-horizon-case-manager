@@ -50,7 +50,10 @@ const loginError =
     document.getElementById("loginError");
 
 
-// Dashboard user information
+// ==========================================
+// DASHBOARD USER INFORMATION
+// ==========================================
+
 const welcomeMessage =
     document.getElementById("welcomeMessage");
 
@@ -67,27 +70,18 @@ const topbarUserRole =
     document.getElementById("topbarUserRole");
 
 
-// Logout
+// ==========================================
+// LOGOUT
+// ==========================================
+
 const logoutButton =
     document.getElementById("logoutButton");
 
-const personnelButton =
-    document.getElementById("personnelButton");
 
-const personnelBackButton =
-    document.getElementById("personnelBackButton");
+// ==========================================
+// DASHBOARD BUTTONS
+// ==========================================
 
-const addPersonnelButton =
-    document.getElementById("addPersonnelButton");
-
-const personnelSearch =
-    document.getElementById("personnelSearch");
-
-const personnelList =
-    document.getElementById("personnelList");
-
-
-// Dashboard buttons
 const casesButton =
     document.getElementById("casesButton");
 
@@ -105,6 +99,23 @@ const evidenceButton =
 
 const reportsButton =
     document.getElementById("reportsButton");
+
+
+// ==========================================
+// PERSONNEL PAGE
+// ==========================================
+
+const personnelBackButton =
+    document.getElementById("personnelBackButton");
+
+const addPersonnelButton =
+    document.getElementById("addPersonnelButton");
+
+const personnelSearch =
+    document.getElementById("personnelSearch");
+
+const personnelList =
+    document.getElementById("personnelList");
 
 
 // ==========================================
@@ -376,14 +387,6 @@ onAuthStateChanged(
                         userData.role;
 
 
-                    // ==================================
-                    // FUTURE PERMISSION CONTROL
-                    // ==================================
-
-                    // We will use the permissions object
-                    // to control which dashboard features
-                    // each role can access.
-
                     console.log(
                         "Permission system initialized."
                     );
@@ -399,18 +402,14 @@ onAuthStateChanged(
                     welcomeMessage.textContent =
                         "Welcome";
 
-
                     userRole.textContent =
                         "Role: Not Assigned";
-
 
                     userTeam.textContent =
                         "Team: Not Assigned";
 
-
                     topbarUserName.textContent =
                         user.email;
-
 
                     topbarUserRole.textContent =
                         "Unassigned";
@@ -447,6 +446,10 @@ onAuthStateChanged(
             );
 
             dashboardScreen.classList.add(
+                "hidden"
+            );
+
+            personnelScreen.classList.add(
                 "hidden"
             );
 
@@ -488,6 +491,11 @@ logoutButton.addEventListener(
     }
 );
 
+
+// ==========================================
+// LOAD PERSONNEL
+// ==========================================
+
 async function loadPersonnel() {
 
     personnelList.innerHTML = `
@@ -528,15 +536,18 @@ async function loadPersonnel() {
             row.className =
                 "personnel-row";
 
+
             const statusClass =
                 person.active
                     ? "status-active"
                     : "status-inactive";
 
+
             const statusText =
                 person.active
                     ? "ACTIVE"
                     : "INACTIVE";
+
 
             row.innerHTML = `
 
@@ -566,9 +577,11 @@ async function loadPersonnel() {
 
             `;
 
+
             personnelList.appendChild(row);
 
         });
+
 
     } catch (error) {
 
@@ -587,11 +600,59 @@ async function loadPersonnel() {
 
 }
 
+
 // ==========================================
-// DASHBOARD BUTTONS
+// PERSONNEL SEARCH
 // ==========================================
 
-// CASES
+personnelSearch.addEventListener(
+    "input",
+    function () {
+
+        const searchTerm =
+            personnelSearch.value
+                .toLowerCase()
+                .trim();
+
+
+        const rows =
+            document.querySelectorAll(
+                ".personnel-row"
+            );
+
+
+        rows.forEach(
+            function (row) {
+
+                const text =
+                    row.textContent
+                        .toLowerCase();
+
+
+                if (
+                    text.includes(searchTerm)
+                ) {
+
+                    row.style.display =
+                        "grid";
+
+                } else {
+
+                    row.style.display =
+                        "none";
+
+                }
+
+            }
+        );
+
+    }
+);
+
+
+// ==========================================
+// DASHBOARD → CASES
+// ==========================================
 
 casesButton.addEventListener(
     "click",
@@ -605,7 +666,9 @@ casesButton.addEventListener(
 );
 
 
-// NEW CASE
+// ==========================================
+// DASHBOARD → NEW CASE
+// ==========================================
 
 newCaseButton.addEventListener(
     "click",
@@ -619,21 +682,51 @@ newCaseButton.addEventListener(
 );
 
 
-// PERSONNEL
+// ==========================================
+// DASHBOARD → PERSONNEL
+// ==========================================
 
 personnelButton.addEventListener(
     "click",
     function () {
 
-        alert(
-            "Personnel Management is coming next."
+        dashboardScreen.classList.add(
+            "hidden"
+        );
+
+        personnelScreen.classList.remove(
+            "hidden"
+        );
+
+        loadPersonnel();
+
+    }
+);
+
+
+// ==========================================
+// PERSONNEL → DASHBOARD
+// ==========================================
+
+personnelBackButton.addEventListener(
+    "click",
+    function () {
+
+        personnelScreen.classList.add(
+            "hidden"
+        );
+
+        dashboardScreen.classList.remove(
+            "hidden"
         );
 
     }
 );
 
 
-// TEAMS
+// ==========================================
+// DASHBOARD → TEAMS
+// ==========================================
 
 teamsButton.addEventListener(
     "click",
@@ -647,7 +740,9 @@ teamsButton.addEventListener(
 );
 
 
-// EVIDENCE
+// ==========================================
+// DASHBOARD → EVIDENCE
+// ==========================================
 
 evidenceButton.addEventListener(
     "click",
@@ -661,7 +756,9 @@ evidenceButton.addEventListener(
 );
 
 
-// REPORTS
+// ==========================================
+// DASHBOARD → REPORTS
+// ==========================================
 
 reportsButton.addEventListener(
     "click",
@@ -674,23 +771,18 @@ reportsButton.addEventListener(
     }
 );
 
-personnelButton.addEventListener("click", function () {
 
-    dashboardScreen.classList.add("hidden");
+// ==========================================
+// ADD PERSONNEL
+// ==========================================
 
-    personnelScreen.classList.remove("hidden");
-
-    loadPersonnel();
-
-});
-
-personnelBackButton.addEventListener(
+addPersonnelButton.addEventListener(
     "click",
     function () {
 
-        personnelScreen.classList.add("hidden");
-
-        dashboardScreen.classList.remove("hidden");
+        alert(
+            "Personnel invitation will be built in Step 27."
+        );
 
     }
 );
