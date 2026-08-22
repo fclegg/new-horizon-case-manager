@@ -2268,22 +2268,32 @@ function updateCaseStatistics() {
 
 }
 
-caseSearch.addEventListener(
-    "input",
-    renderCases
-);
+if (caseSearch) {
 
+    caseSearch.addEventListener(
+        "input",
+        renderCases
+    );
+    
+}
 
-caseStatusFilter.addEventListener(
-    "change",
-    renderCases
-);
+if (caseStatusFilter) {
 
+    caseStatusFilter.addEventListener(
+        "change",
+        renderCases
+    );
 
-caseTeamFilter.addEventListener(
-    "change",
-    renderCases
-);
+}
+
+if (caseTeamFilter) {
+
+    caseTeamFilter.addEventListener(
+        "change",
+        renderCases
+    );
+
+}
 
 async function openCaseFile(
     caseId
