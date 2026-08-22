@@ -95,8 +95,6 @@
         class="screen hidden"
     >
 
-        <!-- TOP BAR -->
-
         <header class="topbar">
 
             <div class="brand">
@@ -137,8 +135,6 @@
 
 
 
-        <!-- MAIN DASHBOARD -->
-
         <main class="dashboard">
 
 
@@ -168,9 +164,7 @@
 
 
 
-            <!-- ==================================
-                 STATISTICS
-                 ================================== -->
+            <!-- STATISTICS -->
 
             <section class="stats-grid">
 
@@ -230,9 +224,7 @@
 
 
 
-            <!-- ==================================
-                 CASE MANAGEMENT
-                 ================================== -->
+            <!-- CASE MANAGEMENT -->
 
             <section class="dashboard-section">
 
@@ -295,9 +287,7 @@
 
 
 
-            <!-- ==================================
-                 ORGANIZATION
-                 ================================== -->
+            <!-- ORGANIZATION -->
 
             <section
                 class="dashboard-section"
@@ -363,9 +353,7 @@
 
 
 
-            <!-- ==================================
-                 RESEARCH & EVIDENCE
-                 ================================== -->
+            <!-- RESEARCH & EVIDENCE -->
 
             <section class="dashboard-section">
 
@@ -428,9 +416,7 @@
 
 
 
-            <!-- ==================================
-                 USER INFORMATION
-                 ================================== -->
+            <!-- USER INFORMATION -->
 
             <section class="user-panel">
 
@@ -462,8 +448,6 @@
     >
 
 
-        <!-- TOP BAR -->
-
         <header class="topbar">
 
             <div class="brand">
@@ -487,12 +471,8 @@
 
 
 
-        <!-- MAIN -->
-
         <main class="dashboard">
 
-
-            <!-- HEADER -->
 
             <section class="dashboard-header">
 
@@ -514,9 +494,7 @@
 
 
 
-            <!-- ==================================
-                 PERSONNEL CONTROLS
-                 ================================== -->
+            <!-- PERSONNEL CONTROLS -->
 
             <section class="personnel-controls">
 
@@ -537,9 +515,7 @@
 
 
 
-            <!-- ==================================
-                 PERSONNEL LIST
-                 ================================== -->
+            <!-- PERSONNEL LIST -->
 
             <section class="personnel-list">
 
@@ -589,11 +565,6 @@
 
     <!-- ==========================================
          PERSONNEL FILE SCREEN
-         
-         IMPORTANT:
-         This is a TOP-LEVEL SCREEN.
-         It is NOT inside dashboardScreen
-         or personnelScreen.
          ========================================== -->
 
     <div
@@ -601,8 +572,6 @@
         class="screen hidden"
     >
 
-
-        <!-- TOP BAR -->
 
         <header class="topbar">
 
@@ -627,14 +596,10 @@
 
 
 
-        <!-- MAIN -->
-
         <main class="dashboard">
 
 
-            <!-- ==================================
-                 PROFILE HEADER
-                 ================================== -->
+            <!-- PROFILE HEADER -->
 
             <section class="dashboard-header">
 
@@ -656,9 +621,7 @@
 
 
 
-            <!-- ==================================
-                 PERSONNEL INFORMATION
-                 ================================== -->
+            <!-- PERSONNEL INFORMATION -->
 
             <section class="profile-section">
 
@@ -754,9 +717,7 @@
 
 
 
-            <!-- ==================================
-                 CASE HISTORY
-                 ================================== -->
+            <!-- CASE HISTORY -->
 
             <section class="profile-section">
 
@@ -800,9 +761,7 @@
 
 
 
-            <!-- ==================================
-                 PERSONNEL ACTIONS
-                 ================================== -->
+            <!-- PERSONNEL ACTIONS -->
 
             <section class="profile-section">
 
@@ -872,9 +831,6 @@
 
     <!-- ==========================================
          ADD PERSONNEL MODAL
-         
-         IMPORTANT:
-         This is also a top-level element.
          ========================================== -->
 
     <div
@@ -890,8 +846,6 @@
 
         <div class="modal-card">
 
-
-            <!-- MODAL HEADER -->
 
             <div class="modal-header">
 
@@ -920,10 +874,6 @@
             </div>
 
 
-
-            <!-- ==================================
-                 ADD PERSONNEL FORM
-                 ================================== -->
 
             <form id="addPersonnelForm">
 
@@ -1052,16 +1002,12 @@
 
 
 
-                <!-- FORM ERROR -->
-
                 <p
                     id="addPersonnelError"
                     class="form-error"
                 ></p>
 
 
-
-                <!-- FORM BUTTONS -->
 
                 <div class="modal-actions">
 
@@ -1080,6 +1026,225 @@
                         class="primary-button"
                     >
                         Add Person
+                    </button>
+
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==========================================
+         EDIT PERSONNEL MODAL
+         ========================================== -->
+
+    <div
+        id="editPersonnelModal"
+        class="modal hidden"
+    >
+
+        <div
+            class="modal-overlay"
+            id="editModalOverlay"
+        ></div>
+
+
+        <div class="modal-card">
+
+
+            <!-- HEADER -->
+
+            <div class="modal-header">
+
+                <div>
+
+                    <p class="section-label">
+                        PERSONNEL MANAGEMENT
+                    </p>
+
+
+                    <h2>
+                        Edit Personnel
+                    </h2>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="closeEditPersonnelModal"
+                    class="modal-close"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+
+            <!-- EDIT FORM -->
+
+            <form id="editPersonnelForm">
+
+
+                <!-- NAME -->
+
+                <div class="form-group">
+
+                    <label for="editPersonName">
+                        Full Name
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="editPersonName"
+                        placeholder="Enter full name"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label for="editPersonEmail">
+                        Email Address
+                    </label>
+
+
+                    <input
+                        type="email"
+                        id="editPersonEmail"
+                        placeholder="Enter email address"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- ROLE -->
+
+                <div class="form-group">
+
+                    <label for="editPersonRole">
+                        Role
+                    </label>
+
+
+                    <select
+                        id="editPersonRole"
+                        required
+                    >
+
+                        <option value="">
+                            Select a role
+                        </option>
+
+
+                        <option value="Director">
+                            Director
+                        </option>
+
+
+                        <option value="Team Lead">
+                            Team Lead
+                        </option>
+
+
+                        <option value="Assistant Team Lead">
+                            Assistant Team Lead
+                        </option>
+
+
+                        <option value="Investigator">
+                            Investigator
+                        </option>
+
+
+                        <option value="Researcher">
+                            Researcher
+                        </option>
+
+
+                        <option value="Analyst">
+                            Analyst
+                        </option>
+
+
+                        <option value="Tech Specialist">
+                            Tech Specialist
+                        </option>
+
+
+                        <option value="AV Specialist">
+                            AV Specialist
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- TEAM -->
+
+                <div class="form-group">
+
+                    <label for="editPersonTeam">
+                        Team
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="editPersonTeam"
+                        placeholder="Enter team"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- ERROR -->
+
+                <p
+                    id="editPersonnelError"
+                    class="form-error"
+                ></p>
+
+
+
+                <!-- ACTIONS -->
+
+                <div class="modal-actions">
+
+
+                    <button
+                        type="button"
+                        id="cancelEditPersonnelButton"
+                        class="secondary-button"
+                    >
+                        Cancel
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="primary-button"
+                    >
+                        Save Changes
                     </button>
 
 
