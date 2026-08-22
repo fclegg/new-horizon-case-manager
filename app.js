@@ -1,1064 +1,1102 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+<!DOCTYPE html>
+<html lang="en">
 
-import {
-    getAuth,
-    signInWithEmailAndPassword,
-    onAuthStateChanged,
-    signOut
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+<head>
 
-import {
-    getFirestore,
-    doc,
-    getDoc,
-    collection,
-    getDocs,
-    setDoc
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+    <meta charset="UTF-8">
 
-import { firebaseConfig } from "./firebase-config.js";
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
+    <title>
+        New Horizon Case Manager
+    </title>
 
-// ==========================================
-// FIREBASE
-// ==========================================
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 
-const app = initializeApp(firebaseConfig);
+</head>
 
-const auth = getAuth(app);
 
-const db = getFirestore(app);
+<body>
 
 
-// ==========================================
-// PAGE ELEMENTS
-// ==========================================
+    <!-- ==========================================
+         LOGIN SCREEN
+         ========================================== -->
 
-// Login
-const loginScreen =
-    document.getElementById("loginScreen");
+    <div
+        id="loginScreen"
+        class="screen"
+    >
 
-const dashboardScreen =
-    document.getElementById("dashboardScreen");
+        <div class="login-card">
 
-const personnelScreen =
-    document.getElementById("personnelScreen");
+            <h1>
+                NEW HORIZON
+            </h1>
 
-const loginForm =
-    document.getElementById("loginForm");
-
-const loginError =
-    document.getElementById("loginError");
-
-
-// ==========================================
-// DASHBOARD USER INFORMATION
-// ==========================================
-
-const welcomeMessage =
-    document.getElementById("welcomeMessage");
-
-const userRole =
-    document.getElementById("userRole");
-
-const userTeam =
-    document.getElementById("userTeam");
-
-const topbarUserName =
-    document.getElementById("topbarUserName");
-
-const topbarUserRole =
-    document.getElementById("topbarUserRole");
-
-
-// ==========================================
-// LOGOUT
-// ==========================================
-
-const logoutButton =
-    document.getElementById("logoutButton");
-
-
-// ==========================================
-// DASHBOARD BUTTONS
-// ==========================================
-
-const casesButton =
-    document.getElementById("casesButton");
-
-const newCaseButton =
-    document.getElementById("newCaseButton");
-
-const personnelButton =
-    document.getElementById("personnelButton");
-
-const teamsButton =
-    document.getElementById("teamsButton");
-
-const evidenceButton =
-    document.getElementById("evidenceButton");
-
-const reportsButton =
-    document.getElementById("reportsButton");
-
-
-// ==========================================
-// PERSONNEL PAGE
-// ==========================================
-
-const personnelBackButton =
-    document.getElementById("personnelBackButton");
-
-const addPersonnelModal =
-    document.getElementById("addPersonnelModal");
-
-const addPersonnelForm =
-    document.getElementById("addPersonnelForm");
-
-const closePersonnelModal =
-    document.getElementById("closePersonnelModal");
-
-const cancelPersonnelButton =
-    document.getElementById("cancelPersonnelButton");
-
-const modalOverlay =
-    document.getElementById("modalOverlay");
-
-const addPersonnelError =
-    document.getElementById("addPersonnelError");
-
-const addPersonnelButton =
-    document.getElementById("addPersonnelButton");
-
-const personnelSearch =
-    document.getElementById("personnelSearch");
-
-const personnelList =
-    document.getElementById("personnelList");
-
-
-// ==========================================
-// ROLE PERMISSIONS
-// ==========================================
-
-function getUserPermissions(role) {
-
-    const permissions = {
-
-        Director: {
-            viewAllCases: true,
-            createCases: true,
-            manageUsers: true,
-            manageTeams: true,
-            manageEvidence: true,
-            analyzeEvidence: true,
-            manageResearch: true
-        },
-
-        "Team Lead": {
-            viewAllCases: false,
-            createCases: true,
-            manageUsers: false,
-            manageTeams: false,
-            manageEvidence: true,
-            analyzeEvidence: true,
-            manageResearch: true
-        },
-
-        "Assistant Team Lead": {
-            viewAllCases: false,
-            createCases: false,
-            manageUsers: false,
-            manageTeams: false,
-            manageEvidence: true,
-            analyzeEvidence: true,
-            manageResearch: true
-        },
-
-        Investigator: {
-            viewAllCases: false,
-            createCases: false,
-            manageUsers: false,
-            manageTeams: false,
-            manageEvidence: true,
-            analyzeEvidence: false,
-            manageResearch: false
-        },
-
-        Researcher: {
-            viewAllCases: false,
-            createCases: false,
-            manageUsers: false,
-            manageTeams: false,
-            manageEvidence: false,
-            analyzeEvidence: false,
-            manageResearch: true
-        },
-
-        Analyst: {
-            viewAllCases: false,
-            createCases: false,
-            manageUsers: false,
-            manageTeams: false,
-            manageEvidence: true,
-            analyzeEvidence: true,
-            manageResearch: false
-        },
-
-        "Tech Specialist": {
-            viewAllCases: false,
-            createCases: false,
-            manageUsers: false,
-            manageTeams: false,
-            manageEvidence: false,
-            analyzeEvidence: false,
-            manageResearch: false
-        },
-
-        "AV Specialist": {
-            viewAllCases: false,
-            createCases: false,
-            manageUsers: false,
-            manageTeams: false,
-            manageEvidence: true,
-            analyzeEvidence: true,
-            manageResearch: false
-        }
-
-    };
-
-    return permissions[role] || null;
-}
-
-
-// ==========================================
-// LOGIN
-// ==========================================
-
-loginForm.addEventListener(
-    "submit",
-    async function (event) {
-
-        event.preventDefault();
-
-        console.log("LOGIN BUTTON WORKED");
-
-        const email =
-            document.getElementById("email").value;
-
-        const password =
-            document.getElementById("password").value;
-
-        loginError.textContent = "";
-
-        try {
-
-            console.log(
-                "Starting Firebase login..."
-            );
-
-            const result =
-                await signInWithEmailAndPassword(
-                    auth,
-                    email,
-                    password
-                );
-
-            console.log(
-                "Firebase login successful:",
-                result.user
-            );
-
-        } catch (error) {
-
-            console.error(
-                "FIREBASE LOGIN ERROR:",
-                error
-            );
-
-            loginError.textContent =
-                error.code +
-                ": " +
-                error.message;
-
-        }
-
-    }
-);
-
-
-// ==========================================
-// AUTHENTICATION STATE
-// ==========================================
-
-onAuthStateChanged(
-    auth,
-    async function (user) {
-
-        console.log(
-            "AUTH STATE CHANGED:",
-            user
-        );
-
-
-        // ==================================
-        // USER IS LOGGED IN
-        // ==================================
-
-        if (user) {
-
-            console.log(
-                "USER IS LOGGED IN"
-            );
-
-            console.log(
-                "User email:",
-                user.email
-            );
-
-            console.log(
-                "User UID:",
-                user.uid
-            );
-
-
-            // Show dashboard
-            loginScreen.classList.add(
-                "hidden"
-            );
-
-            dashboardScreen.classList.remove(
-                "hidden"
-            );
-
-
-            // Temporary fallback
-            welcomeMessage.textContent =
-                `Welcome, ${user.email}`;
-
-
-            try {
-
-                // ==================================
-                // GET PERSONNEL RECORD
-                // ==================================
-
-                const userRef =
-                    doc(
-                        db,
-                        "users",
-                        user.uid
-                    );
-
-                const userSnapshot =
-                    await getDoc(userRef);
-
-
-                // ==================================
-                // PERSONNEL RECORD EXISTS
-                // ==================================
-
-                if (userSnapshot.exists()) {
-
-                    const userData =
-                        userSnapshot.data();
-
-
-                    console.log(
-                        "NEW HORIZON PERSONNEL RECORD:",
-                        userData
-                    );
-
-
-                    // ==================================
-                    // GET ROLE PERMISSIONS
-                    // ==================================
-
-                    const permissions =
-                        getUserPermissions(
-                            userData.role
-                        );
-
-
-                    console.log(
-                        "USER PERMISSIONS:",
-                        permissions
-                    );
-
-
-                    // ==================================
-                    // UPDATE USER INFORMATION
-                    // ==================================
-
-                    welcomeMessage.textContent =
-                        `Welcome, ${userData.name}`;
-
-                    userRole.textContent =
-                        `Role: ${userData.role}`;
-
-                    userTeam.textContent =
-                        `Team: ${userData.team}`;
-
-                    topbarUserName.textContent =
-                        userData.name;
-
-                    topbarUserRole.textContent =
-                        userData.role;
-
-
-                    console.log(
-                        "Permission system initialized."
-                    );
-
-
-                } else {
-
-                    console.log(
-                        "No New Horizon personnel record found."
-                    );
-
-
-                    welcomeMessage.textContent =
-                        "Welcome";
-
-                    userRole.textContent =
-                        "Role: Not Assigned";
-
-                    userTeam.textContent =
-                        "Team: Not Assigned";
-
-                    topbarUserName.textContent =
-                        user.email;
-
-                    topbarUserRole.textContent =
-                        "Unassigned";
-
-                }
-
-
-            } catch (error) {
-
-                console.error(
-                    "PERSONNEL LOOKUP ERROR:",
-                    error
-                );
-
-            }
-
-
-        }
-
-
-        // ==================================
-        // NO USER LOGGED IN
-        // ==================================
-
-        else {
-
-            console.log(
-                "NO USER IS LOGGED IN"
-            );
-
-
-            loginScreen.classList.remove(
-                "hidden"
-            );
-
-            dashboardScreen.classList.add(
-                "hidden"
-            );
-
-            personnelScreen.classList.add(
-                "hidden"
-            );
-
-        }
-
-    }
-);
-
-
-// ==========================================
-// LOGOUT
-// ==========================================
-
-logoutButton.addEventListener(
-    "click",
-    async function () {
-
-        console.log(
-            "Signing out..."
-        );
-
-        try {
-
-            await signOut(auth);
-
-            console.log(
-                "Successfully signed out."
-            );
-
-        } catch (error) {
-
-            console.error(
-                "SIGN OUT ERROR:",
-                error
-            );
-
-        }
-
-    }
-);
-
-
-// ==========================================
-// LOAD PERSONNEL
-// ==========================================
-
-async function loadPersonnel() {
-
-    // ==================================
-    // DIAGNOSTIC #1
-    // ==================================
-
-    console.log(
-        "LOAD PERSONNEL STARTED"
-    );
-
-    console.log(
-        "Personnel list element:",
-        personnelList
-    );
-
-
-    personnelList.innerHTML = `
-        <p class="loading-message">
-            Loading personnel...
-        </p>
-    `;
-
-
-    try {
-
-        const usersCollection =
-            collection(
-                db,
-                "users"
-            );
-
-
-        const snapshot =
-            await getDocs(
-                usersCollection
-            );
-
-
-        // ==================================
-        // DIAGNOSTIC #2
-        // ==================================
-
-        console.log(
-            "PERSONNEL DOCUMENT COUNT:",
-            snapshot.size
-        );
-
-
-        personnelList.innerHTML = "";
-
-
-        if (snapshot.empty) {
-
-            personnelList.innerHTML = `
-                <p class="loading-message">
-                    No personnel records found.
-                </p>
-            `;
-
-            return;
-        }
-
-
-        snapshot.forEach(
-            function (userDocument) {
-
-                // ==================================
-                // DIAGNOSTIC #3
-                // ==================================
-
-                console.log(
-                    "PERSONNEL RECORD:",
-                    userDocument.data()
-                );
-
-
-                const person =
-                    userDocument.data();
-
-
-                const row =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                row.className =
-                    "personnel-row";
-
-
-                const statusClass =
-                    person.active
-                        ? "status-active"
-                        : "status-inactive";
-
-
-                const statusText =
-                    person.active
-                        ? "ACTIVE"
-                        : "INACTIVE";
-
-
-                row.innerHTML = `
-
-                    <div>
-
-                        <div class="personnel-name">
-                            ${person.name || "Unnamed"}
-                        </div>
-
-                        <div class="personnel-email">
-                            ${person.email || ""}
-                        </div>
-
-                    </div>
-
-                    <div class="personnel-role">
-                        ${person.role || "Unassigned"}
-                    </div>
-
-                    <div class="personnel-team">
-                        ${person.team || "Unassigned"}
-                    </div>
-
-                    <div class="personnel-status ${statusClass}">
-                        ${statusText}
-                    </div>
-
-                `;
-
-
-                personnelList.appendChild(
-                    row
-                );
-               
-                console.log(
-                    "PERSONNEL ROW ADDED:",
-                    row
-                );
-
-                console.log(
-                    "PERSONNEL LIST HTML:",
-                    personnelList.innerHTML
-                );
-
-            }
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "PERSONNEL LOAD ERROR:",
-            error
-        );
-
-
-        personnelList.innerHTML = `
-            <p class="loading-message">
-                Unable to load personnel.
+            <p class="subtitle">
+                Case Management System
             </p>
-        `;
 
-    }
 
-}
+            <form id="loginForm">
 
+                <label for="email">
+                    Email
+                </label>
 
-// ==========================================
-// PERSONNEL SEARCH
-// ==========================================
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Email address"
+                    required
+                >
 
-personnelSearch.addEventListener(
-    "input",
-    function () {
 
-        const searchTerm =
-            personnelSearch.value
-                .toLowerCase()
-                .trim();
+                <label for="password">
+                    Password
+                </label>
 
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Password"
+                    required
+                >
 
-        const rows =
-            document.querySelectorAll(
-                ".personnel-row"
-            );
 
+                <button type="submit">
+                    Sign In
+                </button>
 
-        rows.forEach(
-            function (row) {
 
-                const text =
-                    row.textContent
-                        .toLowerCase();
+                <p id="loginError"></p>
 
+            </form>
 
-                if (
-                    text.includes(searchTerm)
-                ) {
+        </div>
 
-                    row.style.display =
-                        "grid";
+    </div>
 
-                } else {
 
-                    row.style.display =
-                        "none";
 
-                }
+    <!-- ==========================================
+         DASHBOARD SCREEN
+         ========================================== -->
 
-            }
-        );
+    <div
+        id="dashboardScreen"
+        class="screen hidden"
+    >
 
-    }
-);
 
+        <!-- TOP BAR -->
 
-// ==========================================
-// DASHBOARD → CASES
-// ==========================================
+        <header class="topbar">
 
-casesButton.addEventListener(
-    "click",
-    function () {
+            <div class="brand">
 
-        alert(
-            "Case Management will be built in Phase 2."
-        );
+                <div class="brand-name">
+                    NEW HORIZON
+                </div>
 
-    }
-);
+                <div class="brand-subtitle">
+                    CASE MANAGEMENT
+                </div>
 
+            </div>
 
-// ==========================================
-// DASHBOARD → NEW CASE
-// ==========================================
 
-newCaseButton.addEventListener(
-    "click",
-    function () {
+            <div class="topbar-user">
 
-        alert(
-            "New Case creation will be built in Phase 2."
-        );
+                <div class="topbar-user-info">
 
-    }
-);
+                    <strong id="topbarUserName">
+                        User
+                    </strong>
 
+                    <span id="topbarUserRole">
+                        Role
+                    </span>
 
-// ==========================================
-// DASHBOARD → PERSONNEL
-// ==========================================
+                </div>
 
-personnelButton.addEventListener(
-    "click",
-    function () {
 
-        dashboardScreen.classList.add(
-            "hidden"
-        );
+                <button id="logoutButton">
+                    Sign Out
+                </button>
 
-        personnelScreen.classList.remove(
-            "hidden"
-        );
+            </div>
 
-        loadPersonnel();
+        </header>
 
-    }
-);
 
 
-// ==========================================
-// PERSONNEL → DASHBOARD
-// ==========================================
+        <!-- MAIN DASHBOARD -->
 
-personnelBackButton.addEventListener(
-    "click",
-    function () {
+        <main class="dashboard">
 
-        personnelScreen.classList.add(
-            "hidden"
-        );
 
-        dashboardScreen.classList.remove(
-            "hidden"
-        );
+            <!-- DASHBOARD HEADER -->
 
-    }
-);
+            <section class="dashboard-header">
 
+                <div>
 
-// ==========================================
-// DASHBOARD → TEAMS
-// ==========================================
+                    <p class="section-label">
+                        COMMAND CENTER
+                    </p>
 
-teamsButton.addEventListener(
-    "click",
-    function () {
 
-        alert(
-            "Team Management will be built next."
-        );
+                    <h1 id="welcomeMessage">
+                        Welcome
+                    </h1>
 
-    }
-);
 
+                    <p id="dashboardSubtitle">
+                        Manage New Horizon investigations and personnel.
+                    </p>
 
-// ==========================================
-// DASHBOARD → EVIDENCE
-// ==========================================
+                </div>
 
-evidenceButton.addEventListener(
-    "click",
-    function () {
+            </section>
 
-        alert(
-            "Evidence Management will be built in Phase 3."
-        );
 
-    }
-);
 
+            <!-- ==================================
+                 STATISTICS
+                 ================================== -->
 
-// ==========================================
-// DASHBOARD → REPORTS
-// ==========================================
+            <section class="stats-grid">
 
-reportsButton.addEventListener(
-    "click",
-    function () {
 
-        alert(
-            "Reports will be built in a later phase."
-        );
+                <div class="stat-card">
 
-    }
-);
+                    <span class="stat-label">
+                        ACTIVE CASES
+                    </span>
 
-// ==========================================
-// OPEN ADD PERSONNEL MODAL
-// ==========================================
+                    <strong id="activeCaseCount">
+                        0
+                    </strong>
 
-addPersonnelButton.addEventListener(
-    "click",
-    function () {
+                </div>
 
-        addPersonnelError.textContent = "";
 
-        addPersonnelForm.reset();
+                <div class="stat-card">
 
-        addPersonnelModal.classList.remove(
-            "hidden"
-        );
+                    <span class="stat-label">
+                        SCHEDULED
+                    </span>
 
-    }
-);
+                    <strong id="scheduledCaseCount">
+                        0
+                    </strong>
 
-// ==========================================
-// CLOSE ADD PERSONNEL MODAL
-// ==========================================
+                </div>
 
-function closeAddPersonnelModal() {
 
-    addPersonnelModal.classList.add(
-        "hidden"
-    );
+                <div class="stat-card">
 
-    addPersonnelForm.reset();
+                    <span class="stat-label">
+                        COMPLETED
+                    </span>
 
-    addPersonnelError.textContent = "";
+                    <strong id="completedCaseCount">
+                        0
+                    </strong>
 
-}
+                </div>
 
 
-closePersonnelModal.addEventListener(
-    "click",
-    closeAddPersonnelModal
-);
+                <div class="stat-card">
 
+                    <span class="stat-label">
+                        MY ASSIGNMENTS
+                    </span>
 
-cancelPersonnelButton.addEventListener(
-    "click",
-    closeAddPersonnelModal
-);
+                    <strong id="assignmentCount">
+                        0
+                    </strong>
 
+                </div>
 
-modalOverlay.addEventListener(
-    "click",
-    closeAddPersonnelModal
-);
+            </section>
 
-// ==========================================
-// ADD PERSONNEL
-// ==========================================
 
-addPersonnelForm.addEventListener(
-    "submit",
-    async function (event) {
 
-        event.preventDefault();
+            <!-- ==================================
+                 CASE MANAGEMENT
+                 ================================== -->
 
+            <section class="dashboard-section">
 
-        addPersonnelError.textContent = "";
+                <h2>
+                    Case Management
+                </h2>
 
 
-        // ==================================
-        // GET FORM VALUES
-        // ==================================
+                <div class="dashboard-grid">
 
-        const name =
-            document.getElementById(
-                "personName"
-            ).value.trim();
 
+                    <button
+                        class="dashboard-card"
+                        id="casesButton"
+                    >
 
-        const email =
-            document.getElementById(
-                "personEmail"
-            ).value.trim()
-                .toLowerCase();
+                        <span class="card-icon">
+                            CASES
+                        </span>
 
 
-        const role =
-            document.getElementById(
-                "personRole"
-            ).value;
+                        <strong>
+                            Investigations
+                        </strong>
 
 
-        const team =
-            document.getElementById(
-                "personTeam"
-            ).value.trim();
+                        <span>
+                            View and manage investigation cases.
+                        </span>
 
+                    </button>
 
-        // ==================================
-        // BASIC VALIDATION
-        // ==================================
 
-        if (
-            !name ||
-            !email ||
-            !role ||
-            !team
-        ) {
 
-            addPersonnelError.textContent =
-                "Please complete all fields.";
+                    <button
+                        class="dashboard-card"
+                        id="newCaseButton"
+                    >
 
-            return;
+                        <span class="card-icon">
+                            +
+                        </span>
 
-        }
 
+                        <strong>
+                            New Case
+                        </strong>
 
-        try {
 
-            console.log(
-                "Creating personnel record..."
-            );
+                        <span>
+                            Create a new investigation case.
+                        </span>
 
+                    </button>
 
-            // ==================================
-            // CREATE A FIRESTORE DOCUMENT ID
-            // ==================================
 
-            const personnelRef =
-                doc(
-                    collection(
-                        db,
-                        "users"
-                    )
-                );
+                </div>
 
+            </section>
 
-            // ==================================
-            // PERSONNEL DATA
-            // ==================================
 
-            const personnelData = {
 
-                name: name,
+            <!-- ==================================
+                 ORGANIZATION
+                 ================================== -->
 
-                email: email,
+            <section
+                class="dashboard-section"
+                id="organizationSection"
+            >
 
-                role: role,
+                <h2>
+                    Organization
+                </h2>
 
-                team: team,
 
-                active: true,
+                <div class="dashboard-grid">
 
-                accountStatus: "Pending",
 
-                createdAt:
-                    new Date().toISOString()
+                    <button
+                        class="dashboard-card"
+                        id="personnelButton"
+                    >
 
-            };
+                        <span class="card-icon">
+                            PEOPLE
+                        </span>
 
 
-            // ==================================
-            // SAVE TO FIRESTORE
-            // ==================================
+                        <strong>
+                            Personnel
+                        </strong>
 
-            await setDoc(
-                personnelRef,
-                personnelData
-            );
 
+                        <span>
+                            Manage New Horizon investigators.
+                        </span>
 
-            console.log(
-                "PERSONNEL CREATED:",
-                personnelRef.id
-            );
+                    </button>
 
 
-            // ==================================
-            // CLOSE MODAL
-            // ==================================
 
-            closeAddPersonnelModal();
+                    <button
+                        class="dashboard-card"
+                        id="teamsButton"
+                    >
 
+                        <span class="card-icon">
+                            TEAM
+                        </span>
 
-            // ==================================
-            // REFRESH PERSONNEL LIST
-            // ==================================
 
-            await loadPersonnel();
+                        <strong>
+                            Teams
+                        </strong>
 
 
-            console.log(
-                "Personnel list refreshed."
-            );
+                        <span>
+                            Manage investigation teams.
+                        </span>
 
+                    </button>
 
-        } catch (error) {
 
-            console.error(
-                "ADD PERSONNEL ERROR:",
-                error
-            );
+                </div>
 
+            </section>
 
-            addPersonnelError.textContent =
-                "Unable to create personnel record.";
 
-        }
 
-    }
-);
+            <!-- ==================================
+                 RESEARCH & EVIDENCE
+                 ================================== -->
+
+            <section class="dashboard-section">
+
+                <h2>
+                    Research &amp; Evidence
+                </h2>
+
+
+                <div class="dashboard-grid">
+
+
+                    <button
+                        class="dashboard-card"
+                        id="evidenceButton"
+                    >
+
+                        <span class="card-icon">
+                            EVIDENCE
+                        </span>
+
+
+                        <strong>
+                            Evidence
+                        </strong>
+
+
+                        <span>
+                            Review and analyze collected evidence.
+                        </span>
+
+                    </button>
+
+
+
+                    <button
+                        class="dashboard-card"
+                        id="reportsButton"
+                    >
+
+                        <span class="card-icon">
+                            REPORTS
+                        </span>
+
+
+                        <strong>
+                            Reports
+                        </strong>
+
+
+                        <span>
+                            View completed investigation reports.
+                        </span>
+
+                    </button>
+
+
+                </div>
+
+            </section>
+
+
+
+            <!-- ==================================
+                 USER INFORMATION
+                 ================================== -->
+
+            <section class="user-panel">
+
+                <p id="userRole">
+                    Role
+                </p>
+
+
+                <p id="userTeam">
+                    Team
+                </p>
+
+            </section>
+
+
+        </main>
+
+    </div>
+
+
+
+    <!-- ==========================================
+         PERSONNEL SCREEN
+         ========================================== -->
+
+    <div
+        id="personnelScreen"
+        class="screen hidden"
+    >
+
+
+        <!-- PERSONNEL TOP BAR -->
+
+        <header class="topbar">
+
+            <div class="brand">
+
+                <div class="brand-name">
+                    NEW HORIZON
+                </div>
+
+                <div class="brand-subtitle">
+                    CASE MANAGEMENT
+                </div>
+
+            </div>
+
+
+            <button id="personnelBackButton">
+                ← Dashboard
+            </button>
+
+        </header>
+
+
+
+        <!-- PERSONNEL MAIN -->
+
+        <main class="dashboard">
+
+
+            <!-- HEADER -->
+
+            <section class="dashboard-header">
+
+                <p class="section-label">
+                    ORGANIZATION
+                </p>
+
+
+                <h1>
+                    Personnel
+                </h1>
+
+
+                <p>
+                    Manage New Horizon investigators and personnel.
+                </p>
+
+            </section>
+
+
+
+            <!-- ==================================
+                 PERSONNEL CONTROLS
+                 ================================== -->
+
+            <section class="personnel-controls">
+
+
+                <input
+                    type="search"
+                    id="personnelSearch"
+                    placeholder="Search personnel..."
+                >
+
+
+                <button id="addPersonnelButton">
+                    + Add Person
+                </button>
+
+
+            </section>
+
+
+
+            <!-- ==================================
+                 PERSONNEL LIST
+                 ================================== -->
+
+            <section class="personnel-list">
+
+
+                <div class="personnel-list-header">
+
+                    <span>
+                        Name
+                    </span>
+
+
+                    <span>
+                        Role
+                    </span>
+
+
+                    <span>
+                        Team
+                    </span>
+
+
+                    <span>
+                        Status
+                    </span>
+
+                </div>
+
+
+
+                <div id="personnelList">
+
+                    <p class="loading-message">
+                        Loading personnel...
+                    </p>
+
+                </div>
+
+
+            </section>
+
+
+        </main>
+
+    </div>
+
+
+
+    <!-- ==========================================
+         PERSONNEL FILE SCREEN
+         ========================================== -->
+
+    <div
+        id="personnelFileScreen"
+        class="screen hidden"
+    >
+
+
+        <!-- PERSONNEL FILE TOP BAR -->
+
+        <header class="topbar">
+
+            <div class="brand">
+
+                <div class="brand-name">
+                    NEW HORIZON
+                </div>
+
+                <div class="brand-subtitle">
+                    PERSONNEL FILE
+                </div>
+
+            </div>
+
+
+            <button id="personnelFileBackButton">
+                ← Personnel
+            </button>
+
+        </header>
+
+
+
+        <!-- PERSONNEL FILE MAIN -->
+
+        <main class="dashboard">
+
+
+            <!-- ==================================
+                 PROFILE HEADER
+                 ================================== -->
+
+            <section class="dashboard-header">
+
+                <p class="section-label">
+                    PERSONNEL FILE
+                </p>
+
+
+                <h1 id="profileName">
+                    Personnel
+                </h1>
+
+
+                <p id="profileRole">
+                    Role
+                </p>
+
+            </section>
+
+
+
+            <!-- ==================================
+                 PERSONNEL INFORMATION
+                 ================================== -->
+
+            <section class="profile-section">
+
+                <h2>
+                    Personnel Information
+                </h2>
+
+
+                <div class="profile-grid">
+
+
+                    <div class="profile-field">
+
+                        <span>
+                            EMAIL
+                        </span>
+
+                        <strong id="profileEmail">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-field">
+
+                        <span>
+                            ROLE
+                        </span>
+
+                        <strong id="profileRoleField">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-field">
+
+                        <span>
+                            TEAM
+                        </span>
+
+                        <strong id="profileTeam">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-field">
+
+                        <span>
+                            PERSONNEL STATUS
+                        </span>
+
+                        <strong id="profileStatus">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-field">
+
+                        <span>
+                            ACCOUNT STATUS
+                        </span>
+
+                        <strong id="profileAccountStatus">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-field">
+
+                        <span>
+                            JOINED
+                        </span>
+
+                        <strong id="profileJoined">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+
+            <!-- ==================================
+                 CASE HISTORY
+                 ================================== -->
+
+            <section class="profile-section">
+
+                <h2>
+                    Case History
+                </h2>
+
+
+                <div class="profile-stats">
+
+
+                    <div class="profile-stat">
+
+                        <span>
+                            ASSIGNED CASES
+                        </span>
+
+                        <strong>
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-stat">
+
+                        <span>
+                            COMPLETED CASES
+                        </span>
+
+                        <strong>
+                            0
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+
+            <!-- ==================================
+                 PERSONNEL ACTIONS
+                 ================================== -->
+
+            <section class="profile-section">
+
+                <h2>
+                    Personnel Actions
+                </h2>
+
+
+                <div class="profile-actions">
+
+
+                    <button
+                        id="editPersonnelButton"
+                        class="dashboard-card"
+                    >
+
+                        <span class="card-icon">
+                            EDIT
+                        </span>
+
+
+                        <strong>
+                            Edit Personnel
+                        </strong>
+
+
+                        <span>
+                            Modify this personnel record.
+                        </span>
+
+                    </button>
+
+
+
+                    <button
+                        id="disablePersonnelButton"
+                        class="dashboard-card"
+                    >
+
+                        <span class="card-icon">
+                            STATUS
+                        </span>
+
+
+                        <strong>
+                            Disable Personnel
+                        </strong>
+
+
+                        <span>
+                            Temporarily deactivate this member.
+                        </span>
+
+                    </button>
+
+
+                </div>
+
+            </section>
+
+
+        </main>
+
+    </div>
+
+
+
+    <!-- ==========================================
+         ADD PERSONNEL MODAL
+         ========================================== -->
+
+    <div
+        id="addPersonnelModal"
+        class="modal hidden"
+    >
+
+        <div
+            class="modal-overlay"
+            id="modalOverlay"
+        ></div>
+
+
+        <div class="modal-card">
+
+
+            <!-- MODAL HEADER -->
+
+            <div class="modal-header">
+
+                <div>
+
+                    <p class="section-label">
+                        ORGANIZATION
+                    </p>
+
+
+                    <h2>
+                        Add Personnel
+                    </h2>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="closePersonnelModal"
+                    class="modal-close"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+
+            <!-- ==================================
+                 ADD PERSONNEL FORM
+                 ================================== -->
+
+            <form id="addPersonnelForm">
+
+
+                <!-- NAME -->
+
+                <div class="form-group">
+
+                    <label for="personName">
+                        Full Name
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="personName"
+                        placeholder="Enter full name"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label for="personEmail">
+                        Email Address
+                    </label>
+
+
+                    <input
+                        type="email"
+                        id="personEmail"
+                        placeholder="Enter email address"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- ROLE -->
+
+                <div class="form-group">
+
+                    <label for="personRole">
+                        Role
+                    </label>
+
+
+                    <select
+                        id="personRole"
+                        required
+                    >
+
+                        <option value="">
+                            Select a role
+                        </option>
+
+
+                        <option value="Director">
+                            Director
+                        </option>
+
+
+                        <option value="Team Lead">
+                            Team Lead
+                        </option>
+
+
+                        <option value="Assistant Team Lead">
+                            Assistant Team Lead
+                        </option>
+
+
+                        <option value="Investigator">
+                            Investigator
+                        </option>
+
+
+                        <option value="Researcher">
+                            Researcher
+                        </option>
+
+
+                        <option value="Analyst">
+                            Analyst
+                        </option>
+
+
+                        <option value="Tech Specialist">
+                            Tech Specialist
+                        </option>
+
+
+                        <option value="AV Specialist">
+                            AV Specialist
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- TEAM -->
+
+                <div class="form-group">
+
+                    <label for="personTeam">
+                        Team
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="personTeam"
+                        placeholder="Example: Team 1"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- FORM ERROR -->
+
+                <p
+                    id="addPersonnelError"
+                    class="form-error"
+                ></p>
+
+
+
+                <!-- FORM BUTTONS -->
+
+                <div class="modal-actions">
+
+
+                    <button
+                        type="button"
+                        id="cancelPersonnelButton"
+                        class="secondary-button"
+                    >
+                        Cancel
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="primary-button"
+                    >
+                        Add Person
+                    </button>
+
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==========================================
+         JAVASCRIPT
+         ========================================== -->
+
+    <script
+        type="module"
+        src="app.js"
+    ></script>
+
+
+</body>
+
+</html>
