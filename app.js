@@ -10,7 +10,9 @@ import {
 import {
     getFirestore,
     doc,
-    getDoc
+    getDoc,
+    collection,
+    getDocs
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 import { firebaseConfig } from "./firebase-config.js";
@@ -486,6 +488,104 @@ logoutButton.addEventListener(
     }
 );
 
+async function loadPersonnel() {
+
+    personnelList.innerHTML = `
+        <p class="loading-message">
+            Loading personnel...
+        </p>
+    `;
+
+    try {
+
+        const usersCollection =
+            collection(db, "users");
+
+        const snapshot =
+            await getDocs(usersCollection);
+
+        personnelList.innerHTML = "";
+
+        if (snapshot.empty) {
+
+            personnelList.innerHTML = `
+                <p class="loading-message">
+                    No personnel records found.
+                </p>
+            `;
+
+            return;
+        }
+
+        snapshot.forEach(function (document) {
+
+            const person =
+                document.data();
+
+            const row =
+                document.createElement("div");
+
+            row.className =
+                "personnel-row";
+
+            const statusClass =
+                person.active
+                    ? "status-active"
+                    : "status-inactive";
+
+            const statusText =
+                person.active
+                    ? "ACTIVE"
+                    : "INACTIVE";
+
+            row.innerHTML = `
+
+                <div>
+
+                    <div class="personnel-name">
+                        ${person.name || "Unnamed"}
+                    </div>
+
+                    <div class="personnel-email">
+                        ${person.email || ""}
+                    </div>
+
+                </div>
+
+                <div class="personnel-role">
+                    ${person.role || "Unassigned"}
+                </div>
+
+                <div class="personnel-team">
+                    ${person.team || "Unassigned"}
+                </div>
+
+                <div class="personnel-status ${statusClass}">
+                    ${statusText}
+                </div>
+
+            `;
+
+            personnelList.appendChild(row);
+
+        });
+
+    } catch (error) {
+
+        console.error(
+            "PERSONNEL LOAD ERROR:",
+            error
+        );
+
+        personnelList.innerHTML = `
+            <p class="loading-message">
+                Unable to load personnel.
+            </p>
+        `;
+
+    }
+
+}
 
 // ==========================================
 // DASHBOARD BUTTONS
