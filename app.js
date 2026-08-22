@@ -498,21 +498,54 @@ logoutButton.addEventListener(
 
 async function loadPersonnel() {
 
+    // ==================================
+    // DIAGNOSTIC #1
+    // ==================================
+
+    console.log(
+        "LOAD PERSONNEL STARTED"
+    );
+
+    console.log(
+        "Personnel list element:",
+        personnelList
+    );
+
+
     personnelList.innerHTML = `
         <p class="loading-message">
             Loading personnel...
         </p>
     `;
 
+
     try {
 
         const usersCollection =
-            collection(db, "users");
+            collection(
+                db,
+                "users"
+            );
+
 
         const snapshot =
-            await getDocs(usersCollection);
+            await getDocs(
+                usersCollection
+            );
+
+
+        // ==================================
+        // DIAGNOSTIC #2
+        // ==================================
+
+        console.log(
+            "PERSONNEL DOCUMENT COUNT:",
+            snapshot.size
+        );
+
 
         personnelList.innerHTML = "";
+
 
         if (snapshot.empty) {
 
@@ -525,62 +558,81 @@ async function loadPersonnel() {
             return;
         }
 
-         snapshot.forEach(function (userDocument) {
-            
-            const person =
-                userDocument.data();
 
-            const row =
-                document.createElement("div");
+        snapshot.forEach(
+            function (userDocument) {
 
-            row.className =
-                "personnel-row";
+                // ==================================
+                // DIAGNOSTIC #3
+                // ==================================
 
-
-            const statusClass =
-                person.active
-                    ? "status-active"
-                    : "status-inactive";
+                console.log(
+                    "PERSONNEL RECORD:",
+                    userDocument.data()
+                );
 
 
-            const statusText =
-                person.active
-                    ? "ACTIVE"
-                    : "INACTIVE";
+                const person =
+                    userDocument.data();
 
 
-            row.innerHTML = `
+                const row =
+                    document.createElement(
+                        "div"
+                    );
 
-                <div>
 
-                    <div class="personnel-name">
-                        ${person.name || "Unnamed"}
+                row.className =
+                    "personnel-row";
+
+
+                const statusClass =
+                    person.active
+                        ? "status-active"
+                        : "status-inactive";
+
+
+                const statusText =
+                    person.active
+                        ? "ACTIVE"
+                        : "INACTIVE";
+
+
+                row.innerHTML = `
+
+                    <div>
+
+                        <div class="personnel-name">
+                            ${person.name || "Unnamed"}
+                        </div>
+
+                        <div class="personnel-email">
+                            ${person.email || ""}
+                        </div>
+
                     </div>
 
-                    <div class="personnel-email">
-                        ${person.email || ""}
+                    <div class="personnel-role">
+                        ${person.role || "Unassigned"}
                     </div>
 
-                </div>
+                    <div class="personnel-team">
+                        ${person.team || "Unassigned"}
+                    </div>
 
-                <div class="personnel-role">
-                    ${person.role || "Unassigned"}
-                </div>
+                    <div class="personnel-status ${statusClass}">
+                        ${statusText}
+                    </div>
 
-                <div class="personnel-team">
-                    ${person.team || "Unassigned"}
-                </div>
-
-                <div class="personnel-status ${statusClass}">
-                    ${statusText}
-                </div>
-
-            `;
+                `;
 
 
-            personnelList.appendChild(row);
+                personnelList.appendChild(
+                    row
+                );
 
-        });
+            }
+        );
 
 
     } catch (error) {
@@ -589,6 +641,7 @@ async function loadPersonnel() {
             "PERSONNEL LOAD ERROR:",
             error
         );
+
 
         personnelList.innerHTML = `
             <p class="loading-message">
