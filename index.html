@@ -1,470 +1,608 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>New Horizon Case Manager</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <link rel="stylesheet" href="style.css">
+    <title>
+        New Horizon Case Manager
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
 </head>
+
 
 <body>
 
-    <div id="loginScreen" class="screen">
-    
+
+    <!-- ==========================================
+         LOGIN SCREEN
+         ========================================== -->
+
+    <div
+        id="loginScreen"
+        class="screen"
+    >
+
         <div class="login-card">
-    
-            <h1>NEW HORIZON</h1>
-    
+
+            <h1>
+                NEW HORIZON
+            </h1>
+
             <p class="subtitle">
                 Case Management System
             </p>
-    
+
+
             <form id="loginForm">
-    
+
                 <label for="email">
                     Email
                 </label>
-    
+
                 <input
                     type="email"
                     id="email"
                     placeholder="Email address"
                     required
                 >
-    
+
+
                 <label for="password">
                     Password
                 </label>
-    
+
                 <input
                     type="password"
                     id="password"
                     placeholder="Password"
                     required
                 >
-    
+
+
                 <button type="submit">
                     Sign In
                 </button>
-    
+
+
                 <p id="loginError"></p>
-    
+
             </form>
-    
+
         </div>
-    
+
     </div>
-    
-    
-    <div id="dashboardScreen" class="screen hidden">
-    
+
+
+
+    <!-- ==========================================
+         DASHBOARD SCREEN
+         ========================================== -->
+
+    <div
+        id="dashboardScreen"
+        class="screen hidden"
+    >
+
+
         <!-- TOP BAR -->
-    
+
         <header class="topbar">
-    
+
             <div class="brand">
-    
+
                 <div class="brand-name">
                     NEW HORIZON
                 </div>
-    
+
                 <div class="brand-subtitle">
                     CASE MANAGEMENT
                 </div>
-    
+
             </div>
-    
+
+
             <div class="topbar-user">
-    
+
                 <div class="topbar-user-info">
+
                     <strong id="topbarUserName">
                         User
                     </strong>
-    
+
                     <span id="topbarUserRole">
                         Role
                     </span>
+
                 </div>
-    
+
+
                 <button id="logoutButton">
                     Sign Out
                 </button>
-    
+
             </div>
-    
+
         </header>
-    
-    
-        <!-- ==========================================
-     PERSONNEL SCREEN
-     ========================================== -->
-
-<div id="personnelScreen" class="screen hidden">
-
-    <header class="topbar">
-
-        <div class="brand">
-
-            <div class="brand-name">
-                NEW HORIZON
-            </div>
-
-            <div class="brand-subtitle">
-                CASE MANAGEMENT
-            </div>
-
-        </div>
-
-        <button id="personnelBackButton">
-            ← Dashboard
-        </button>
-
-    </header>
 
 
-    <main class="dashboard">
 
-        <section class="dashboard-header">
-
-            <p class="section-label">
-                ORGANIZATION
-            </p>
-
-            <h1>
-                Personnel
-            </h1>
-
-            <p>
-                Manage New Horizon investigators and personnel.
-            </p>
-
-        </section>
-
-
-        <!-- PERSONNEL CONTROLS -->
-
-        <section class="personnel-controls">
-
-            <input
-                type="search"
-                id="personnelSearch"
-                placeholder="Search personnel..."
-            >
-
-            <button id="addPersonnelButton">
-                + Add Person
-            </button>
-
-        </section>
-
-
-        <!-- PERSONNEL LIST -->
-
-        <section class="personnel-list">
-
-            <div class="personnel-list-header">
-
-                <span>
-                    Name
-                </span>
-
-                <span>
-                    Role
-                </span>
-
-                <span>
-                    Team
-                </span>
-
-                <span>
-                    Status
-                </span>
-
-            </div>
-
-
-            <div id="personnelList">
-
-                <p class="loading-message">
-                    Loading personnel...
-                </p>
-
-            </div>
-
-        </section>
-
-    </main>
-
-</div>
         <!-- MAIN DASHBOARD -->
-    
+
         <main class="dashboard">
-    
+
+
+            <!-- DASHBOARD HEADER -->
+
             <section class="dashboard-header">
-    
+
                 <div>
-    
+
                     <p class="section-label">
                         COMMAND CENTER
                     </p>
-    
+
+
                     <h1 id="welcomeMessage">
                         Welcome
                     </h1>
-    
+
+
                     <p id="dashboardSubtitle">
                         Manage New Horizon investigations and personnel.
                     </p>
-    
+
                 </div>
-    
+
             </section>
-    
-    
-            <!-- STATISTICS -->
-    
+
+
+
+            <!-- ==================================
+                 STATISTICS
+                 ================================== -->
+
             <section class="stats-grid">
-    
+
+
                 <div class="stat-card">
-    
+
                     <span class="stat-label">
                         ACTIVE CASES
                     </span>
-    
+
                     <strong id="activeCaseCount">
                         0
                     </strong>
-    
+
                 </div>
-    
-    
+
+
                 <div class="stat-card">
-    
+
                     <span class="stat-label">
                         SCHEDULED
                     </span>
-    
+
                     <strong id="scheduledCaseCount">
                         0
                     </strong>
-    
+
                 </div>
-    
-    
+
+
                 <div class="stat-card">
-    
+
                     <span class="stat-label">
                         COMPLETED
                     </span>
-    
+
                     <strong id="completedCaseCount">
                         0
                     </strong>
-    
+
                 </div>
-    
-    
+
+
                 <div class="stat-card">
-    
+
                     <span class="stat-label">
                         MY ASSIGNMENTS
                     </span>
-    
+
                     <strong id="assignmentCount">
                         0
                     </strong>
-    
+
                 </div>
-    
+
             </section>
-    
-    
-            <!-- CASE MANAGEMENT -->
-    
+
+
+
+            <!-- ==================================
+                 CASE MANAGEMENT
+                 ================================== -->
+
             <section class="dashboard-section">
-    
+
                 <h2>
                     Case Management
                 </h2>
-    
+
+
                 <div class="dashboard-grid">
-    
+
+
                     <button
                         class="dashboard-card"
                         id="casesButton"
                     >
-    
+
                         <span class="card-icon">
                             CASES
                         </span>
-    
+
+
                         <strong>
                             Investigations
                         </strong>
-    
+
+
                         <span>
                             View and manage investigation cases.
                         </span>
-    
+
                     </button>
-    
-    
+
+
+
                     <button
                         class="dashboard-card"
                         id="newCaseButton"
                     >
-    
+
                         <span class="card-icon">
                             +
                         </span>
-    
+
+
                         <strong>
                             New Case
                         </strong>
-    
+
+
                         <span>
                             Create a new investigation case.
                         </span>
-    
+
                     </button>
-    
+
+
                 </div>
-    
+
             </section>
-    
-    
-            <!-- ORGANIZATION -->
-    
+
+
+
+            <!-- ==================================
+                 ORGANIZATION
+                 ================================== -->
+
             <section
                 class="dashboard-section"
                 id="organizationSection"
             >
-    
+
                 <h2>
                     Organization
                 </h2>
-    
+
+
                 <div class="dashboard-grid">
-    
+
+
                     <button
                         class="dashboard-card"
                         id="personnelButton"
                     >
-    
+
                         <span class="card-icon">
                             PEOPLE
                         </span>
-    
+
+
                         <strong>
                             Personnel
                         </strong>
-    
+
+
                         <span>
                             Manage New Horizon investigators.
                         </span>
-    
+
                     </button>
-    
-    
+
+
+
                     <button
                         class="dashboard-card"
                         id="teamsButton"
                     >
-    
+
                         <span class="card-icon">
                             TEAM
                         </span>
-    
+
+
                         <strong>
                             Teams
                         </strong>
-    
+
+
                         <span>
                             Manage investigation teams.
                         </span>
-    
+
                     </button>
-    
+
+
                 </div>
-    
+
             </section>
-    
-    
-            <!-- RESEARCH AND EVIDENCE -->
-    
+
+
+
+            <!-- ==================================
+                 RESEARCH & EVIDENCE
+                 ================================== -->
+
             <section class="dashboard-section">
-    
+
                 <h2>
-                    Research & Evidence
+                    Research &amp; Evidence
                 </h2>
-    
+
+
                 <div class="dashboard-grid">
-    
+
+
                     <button
                         class="dashboard-card"
                         id="evidenceButton"
                     >
-    
+
                         <span class="card-icon">
                             EVIDENCE
                         </span>
-    
+
+
                         <strong>
                             Evidence
                         </strong>
-    
+
+
                         <span>
                             Review and analyze collected evidence.
                         </span>
-    
+
                     </button>
-    
-    
+
+
+
                     <button
                         class="dashboard-card"
                         id="reportsButton"
                     >
-    
+
                         <span class="card-icon">
                             REPORTS
                         </span>
-    
+
+
                         <strong>
                             Reports
                         </strong>
-    
+
+
                         <span>
                             View completed investigation reports.
                         </span>
-    
+
                     </button>
-    
+
+
                 </div>
-    
+
             </section>
-    
-    
-            <!-- USER INFORMATION -->
-    
+
+
+
+            <!-- ==================================
+                 USER INFORMATION
+                 ================================== -->
+
             <section class="user-panel">
-    
+
                 <p id="userRole">
                     Role
                 </p>
-    
+
+
                 <p id="userTeam">
                     Team
                 </p>
-    
+
             </section>
-    
+
+
         </main>
-    
+
     </div>
-    
-    <script type="module" src="app.js"></script>
-    
+
+
+
+    <!-- ==========================================
+         PERSONNEL SCREEN
+         ========================================== -->
+
+    <div
+        id="personnelScreen"
+        class="screen hidden"
+    >
+
+
+        <!-- PERSONNEL TOP BAR -->
+
+        <header class="topbar">
+
+            <div class="brand">
+
+                <div class="brand-name">
+                    NEW HORIZON
+                </div>
+
+                <div class="brand-subtitle">
+                    CASE MANAGEMENT
+                </div>
+
+            </div>
+
+
+            <button id="personnelBackButton">
+                ← Dashboard
+            </button>
+
+        </header>
+
+
+
+        <!-- PERSONNEL MAIN -->
+
+        <main class="dashboard">
+
+
+            <!-- HEADER -->
+
+            <section class="dashboard-header">
+
+                <p class="section-label">
+                    ORGANIZATION
+                </p>
+
+
+                <h1>
+                    Personnel
+                </h1>
+
+
+                <p>
+                    Manage New Horizon investigators and personnel.
+                </p>
+
+            </section>
+
+
+
+            <!-- ==================================
+                 PERSONNEL CONTROLS
+                 ================================== -->
+
+            <section class="personnel-controls">
+
+
+                <input
+                    type="search"
+                    id="personnelSearch"
+                    placeholder="Search personnel..."
+                >
+
+
+                <button id="addPersonnelButton">
+                    + Add Person
+                </button>
+
+
+            </section>
+
+
+
+            <!-- ==================================
+                 PERSONNEL LIST
+                 ================================== -->
+
+            <section class="personnel-list">
+
+
+                <!-- COLUMN HEADERS -->
+
+                <div class="personnel-list-header">
+
+                    <span>
+                        Name
+                    </span>
+
+
+                    <span>
+                        Role
+                    </span>
+
+
+                    <span>
+                        Team
+                    </span>
+
+
+                    <span>
+                        Status
+                    </span>
+
+                </div>
+
+
+
+                <!-- FIRESTORE PERSONNEL RECORDS
+                     ARE INSERTED HERE -->
+
+                <div id="personnelList">
+
+                    <p class="loading-message">
+                        Loading personnel...
+                    </p>
+
+                </div>
+
+
+            </section>
+
+
+        </main>
+
+    </div>
+
+
+
+    <!-- ==========================================
+         JAVASCRIPT
+         ========================================== -->
+
+    <script
+        type="module"
+        src="app.js"
+    ></script>
+
+
 </body>
+
 </html>
