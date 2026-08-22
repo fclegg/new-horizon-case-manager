@@ -631,13 +631,58 @@ function hideAllScreens() {
 
 }
 
+// ==========================================
+// SCREEN NAVIGATION
+// ==========================================
+
+function hideAllScreens() {
+
+    if (loginScreen) {
+        loginScreen.classList.add("hidden");
+    }
+
+    if (dashboardScreen) {
+        dashboardScreen.classList.add("hidden");
+    }
+
+    if (personnelScreen) {
+        personnelScreen.classList.add("hidden");
+    }
+
+    if (personnelFileScreen) {
+        personnelFileScreen.classList.add("hidden");
+    }
+
+    if (teamsScreen) {
+        teamsScreen.classList.add("hidden");
+    }
+
+    if (teamFileScreen) {
+        teamFileScreen.classList.add("hidden");
+    }
+
+    if (casesScreen) {
+        casesScreen.classList.add("hidden");
+    }
+
+    if (caseFileScreen) {
+        caseFileScreen.classList.add("hidden");
+    }
+
+}
+
+
 function showDashboard() {
 
     hideAllScreens();
 
-    dashboardScreen.classList.remove(
-        "hidden"
-    );
+    if (dashboardScreen) {
+
+        dashboardScreen.classList.remove(
+            "hidden"
+        );
+
+    }
 
 }
 
@@ -646,9 +691,13 @@ function showPersonnel() {
 
     hideAllScreens();
 
-    personnelScreen.classList.remove(
-        "hidden"
-    );
+    if (personnelScreen) {
+
+        personnelScreen.classList.remove(
+            "hidden"
+        );
+
+    }
 
 }
 
@@ -657,9 +706,13 @@ function showPersonnelFile() {
 
     hideAllScreens();
 
-    personnelFileScreen.classList.remove(
-        "hidden"
-    );
+    if (personnelFileScreen) {
+
+        personnelFileScreen.classList.remove(
+            "hidden"
+        );
+
+    }
 
 }
 
@@ -668,9 +721,13 @@ function showTeams() {
 
     hideAllScreens();
 
-    teamsScreen.classList.remove(
-        "hidden"
-    );
+    if (teamsScreen) {
+
+        teamsScreen.classList.remove(
+            "hidden"
+        );
+
+    }
 
 }
 
@@ -679,9 +736,57 @@ function showTeamFile() {
 
     hideAllScreens();
 
-    teamFileScreen.classList.remove(
-        "hidden"
-    );
+    if (teamFileScreen) {
+
+        teamFileScreen.classList.remove(
+            "hidden"
+        );
+
+    }
+
+}
+
+
+function showCases() {
+
+    hideAllScreens();
+
+    if (casesScreen) {
+
+        casesScreen.classList.remove(
+            "hidden"
+        );
+
+        loadCases();
+
+    } else {
+
+        console.error(
+            "CASES SCREEN NOT FOUND: #casesScreen"
+        );
+
+    }
+
+}
+
+
+function showCaseFile() {
+
+    hideAllScreens();
+
+    if (caseFileScreen) {
+
+        caseFileScreen.classList.remove(
+            "hidden"
+        );
+
+    } else {
+
+        console.error(
+            "CASE FILE SCREEN NOT FOUND: #caseFileScreen"
+        );
+
+    }
 
 }
 
@@ -690,12 +795,15 @@ function showLogin() {
 
     hideAllScreens();
 
-    loginScreen.classList.remove(
-        "hidden"
-    );
+    if (loginScreen) {
+
+        loginScreen.classList.remove(
+            "hidden"
+        );
+
+    }
 
 }
-
 
 // ==========================================
 // LOGIN
