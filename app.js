@@ -1261,7 +1261,7 @@ personnelFileBackButton.addEventListener(
 );
 
 
-teamsBackButton.addEventListener(
+teamsBackButton?.addEventListener(
     "click",
     function () {
 
@@ -1271,7 +1271,7 @@ teamsBackButton.addEventListener(
 );
 
 
-teamFileBackButton.addEventListener(
+teamFileBackButton?.addEventListener(
     "click",
     function () {
 
@@ -1858,7 +1858,7 @@ if (newCaseForm) {
 }
 
 
-evidenceButton.addEventListener(
+evidenceButton?.addEventListener(
     "click",
     function () {
 
@@ -1869,7 +1869,7 @@ evidenceButton.addEventListener(
     }
 );
 
-casesBackButton.addEventListener(
+casesBackButton?.addEventListener(
     "click",
     function () {
 
@@ -1879,7 +1879,7 @@ casesBackButton.addEventListener(
 );
 
 
-caseFileBackButton.addEventListener(
+caseFileBackButton?.addEventListener(
     "click",
     function () {
 
@@ -2644,25 +2644,25 @@ function closeEditPersonnelModalWindow() {
 }
 
 
-closeEditPersonnelModal.addEventListener(
+closeEditPersonnelModal?.addEventListener(
     "click",
     closeEditPersonnelModalWindow
 );
 
 
-cancelEditPersonnelButton.addEventListener(
+cancelEditPersonnelButton?.addEventListener(
     "click",
     closeEditPersonnelModalWindow
 );
 
 
-editModalOverlay.addEventListener(
+editModalOverlay?.addEventListener(
     "click",
     closeEditPersonnelModalWindow
 );
 
 
-editPersonnelForm.addEventListener(
+editPersonnelForm?.addEventListener(
     "submit",
     async function (event) {
 
@@ -3405,7 +3405,7 @@ function teamLeadIdSafe(
 // EDIT TEAM
 // ==========================================
 
-editTeamButton.addEventListener(
+editTeamButton?.addEventListener(
     "click",
     async function () {
 
@@ -3599,19 +3599,19 @@ function closeEditTeamModalWindow() {
 }
 
 
-closeEditTeamModal.addEventListener(
+closeEditTeamModal?.addEventListener(
     "click",
     closeEditTeamModalWindow
 );
 
 
-cancelEditTeamButton.addEventListener(
+cancelEditTeamButton?.addEventListener(
     "click",
     closeEditTeamModalWindow
 );
 
 
-editTeamModalOverlay.addEventListener(
+editTeamModalOverlay?.addEventListener(
     "click",
     closeEditTeamModalWindow
 );
@@ -3621,7 +3621,7 @@ editTeamModalOverlay.addEventListener(
 // SAVE TEAM
 // ==========================================
 
-editTeamForm.addEventListener(
+editTeamForm?.addEventListener(
     "submit",
     async function (event) {
 
@@ -3719,7 +3719,7 @@ editTeamForm.addEventListener(
 // DISABLE / REACTIVATE TEAM
 // ==========================================
 
-teamStatusButton.addEventListener(
+teamStatusButton?.addEventListener(
     "click",
     async function () {
 
