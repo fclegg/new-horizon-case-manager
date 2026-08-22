@@ -134,31 +134,24 @@
         </header>
 
 
-
         <main class="dashboard">
 
 
-            <!-- DASHBOARD HEADER -->
-
             <section class="dashboard-header">
 
-                <div>
-
-                    <p class="section-label">
-                        COMMAND CENTER
-                    </p>
+                <p class="section-label">
+                    COMMAND CENTER
+                </p>
 
 
-                    <h1 id="welcomeMessage">
-                        Welcome
-                    </h1>
+                <h1 id="welcomeMessage">
+                    Welcome
+                </h1>
 
 
-                    <p id="dashboardSubtitle">
-                        Manage New Horizon investigations and personnel.
-                    </p>
-
-                </div>
+                <p>
+                    Manage New Horizon investigations and personnel.
+                </p>
 
             </section>
 
@@ -175,7 +168,7 @@
                         ACTIVE CASES
                     </span>
 
-                    <strong id="activeCaseCount">
+                    <strong>
                         0
                     </strong>
 
@@ -188,7 +181,7 @@
                         SCHEDULED
                     </span>
 
-                    <strong id="scheduledCaseCount">
+                    <strong>
                         0
                     </strong>
 
@@ -201,7 +194,7 @@
                         COMPLETED
                     </span>
 
-                    <strong id="completedCaseCount">
+                    <strong>
                         0
                     </strong>
 
@@ -214,7 +207,7 @@
                         MY ASSIGNMENTS
                     </span>
 
-                    <strong id="assignmentCount">
+                    <strong>
                         0
                     </strong>
 
@@ -289,10 +282,7 @@
 
             <!-- ORGANIZATION -->
 
-            <section
-                class="dashboard-section"
-                id="organizationSection"
-            >
+            <section class="dashboard-section">
 
                 <h2>
                     Organization
@@ -353,7 +343,7 @@
 
 
 
-            <!-- RESEARCH & EVIDENCE -->
+            <!-- EVIDENCE -->
 
             <section class="dashboard-section">
 
@@ -416,7 +406,7 @@
 
 
 
-            <!-- USER INFORMATION -->
+            <!-- USER PANEL -->
 
             <section class="user-panel">
 
@@ -447,7 +437,6 @@
         class="screen hidden"
     >
 
-
         <header class="topbar">
 
             <div class="brand">
@@ -468,7 +457,6 @@
             </button>
 
         </header>
-
 
 
         <main class="dashboard">
@@ -494,8 +482,6 @@
 
 
 
-            <!-- PERSONNEL CONTROLS -->
-
             <section class="personnel-controls">
 
 
@@ -515,8 +501,6 @@
 
 
 
-            <!-- PERSONNEL LIST -->
-
             <section class="personnel-list">
 
 
@@ -526,23 +510,19 @@
                         Name
                     </span>
 
-
                     <span>
                         Role
                     </span>
 
-
                     <span>
                         Team
                     </span>
-
 
                     <span>
                         Status
                     </span>
 
                 </div>
-
 
 
                 <div id="personnelList">
@@ -564,14 +544,13 @@
 
 
     <!-- ==========================================
-         PERSONNEL FILE SCREEN
+         PERSONNEL FILE
          ========================================== -->
 
     <div
         id="personnelFileScreen"
         class="screen hidden"
     >
-
 
         <header class="topbar">
 
@@ -595,11 +574,10 @@
         </header>
 
 
-
         <main class="dashboard">
 
 
-            <!-- PROFILE HEADER -->
+            <!-- HEADER -->
 
             <section class="dashboard-header">
 
@@ -621,7 +599,7 @@
 
 
 
-            <!-- PERSONNEL INFORMATION -->
+            <!-- INFORMATION -->
 
             <section class="profile-section">
 
@@ -761,7 +739,7 @@
 
 
 
-            <!-- PERSONNEL ACTIONS -->
+            <!-- ACTIONS -->
 
             <section class="profile-section">
 
@@ -812,7 +790,7 @@
 
 
                         <span>
-                            Temporarily deactivate this member.
+                            Change this member's active status.
                         </span>
 
                     </button>
@@ -878,14 +856,11 @@
             <form id="addPersonnelForm">
 
 
-                <!-- NAME -->
-
                 <div class="form-group">
 
                     <label for="personName">
                         Full Name
                     </label>
-
 
                     <input
                         type="text"
@@ -897,15 +872,11 @@
                 </div>
 
 
-
-                <!-- EMAIL -->
-
                 <div class="form-group">
 
                     <label for="personEmail">
                         Email Address
                     </label>
-
 
                     <input
                         type="email"
@@ -917,15 +888,11 @@
                 </div>
 
 
-
-                <!-- ROLE -->
-
                 <div class="form-group">
 
                     <label for="personRole">
                         Role
                     </label>
-
 
                     <select
                         id="personRole"
@@ -936,41 +903,33 @@
                             Select a role
                         </option>
 
-
                         <option value="Director">
                             Director
                         </option>
-
 
                         <option value="Team Lead">
                             Team Lead
                         </option>
 
-
                         <option value="Assistant Team Lead">
                             Assistant Team Lead
                         </option>
-
 
                         <option value="Investigator">
                             Investigator
                         </option>
 
-
                         <option value="Researcher">
                             Researcher
                         </option>
-
 
                         <option value="Analyst">
                             Analyst
                         </option>
 
-
                         <option value="Tech Specialist">
                             Tech Specialist
                         </option>
-
 
                         <option value="AV Specialist">
                             AV Specialist
@@ -981,15 +940,11 @@
                 </div>
 
 
-
-                <!-- TEAM -->
-
                 <div class="form-group">
 
                     <label for="personTeam">
                         Team
                     </label>
-
 
                     <input
                         type="text"
@@ -1001,16 +956,13 @@
                 </div>
 
 
-
                 <p
                     id="addPersonnelError"
                     class="form-error"
                 ></p>
 
 
-
                 <div class="modal-actions">
-
 
                     <button
                         type="button"
@@ -1027,7 +979,6 @@
                     >
                         Add Person
                     </button>
-
 
                 </div>
 
@@ -1058,8 +1009,6 @@
         <div class="modal-card">
 
 
-            <!-- HEADER -->
-
             <div class="modal-header">
 
                 <div>
@@ -1088,12 +1037,8 @@
 
 
 
-            <!-- EDIT FORM -->
-
             <form id="editPersonnelForm">
 
-
-                <!-- NAME -->
 
                 <div class="form-group">
 
@@ -1101,19 +1046,14 @@
                         Full Name
                     </label>
 
-
                     <input
                         type="text"
                         id="editPersonName"
-                        placeholder="Enter full name"
                         required
                     >
 
                 </div>
 
-
-
-                <!-- EMAIL -->
 
                 <div class="form-group">
 
@@ -1121,26 +1061,20 @@
                         Email Address
                     </label>
 
-
                     <input
                         type="email"
                         id="editPersonEmail"
-                        placeholder="Enter email address"
                         required
                     >
 
                 </div>
 
 
-
-                <!-- ROLE -->
-
                 <div class="form-group">
 
                     <label for="editPersonRole">
                         Role
                     </label>
-
 
                     <select
                         id="editPersonRole"
@@ -1151,41 +1085,33 @@
                             Select a role
                         </option>
 
-
                         <option value="Director">
                             Director
                         </option>
-
 
                         <option value="Team Lead">
                             Team Lead
                         </option>
 
-
                         <option value="Assistant Team Lead">
                             Assistant Team Lead
                         </option>
-
 
                         <option value="Investigator">
                             Investigator
                         </option>
 
-
                         <option value="Researcher">
                             Researcher
                         </option>
-
 
                         <option value="Analyst">
                             Analyst
                         </option>
 
-
                         <option value="Tech Specialist">
                             Tech Specialist
                         </option>
-
 
                         <option value="AV Specialist">
                             AV Specialist
@@ -1196,28 +1122,20 @@
                 </div>
 
 
-
-                <!-- TEAM -->
-
                 <div class="form-group">
 
                     <label for="editPersonTeam">
                         Team
                     </label>
 
-
                     <input
                         type="text"
                         id="editPersonTeam"
-                        placeholder="Enter team"
                         required
                     >
 
                 </div>
 
-
-
-                <!-- ERROR -->
 
                 <p
                     id="editPersonnelError"
@@ -1225,11 +1143,7 @@
                 ></p>
 
 
-
-                <!-- ACTIONS -->
-
                 <div class="modal-actions">
-
 
                     <button
                         type="button"
@@ -1246,7 +1160,6 @@
                     >
                         Save Changes
                     </button>
-
 
                 </div>
 
