@@ -1515,16 +1515,94 @@ addPersonnelForm.addEventListener(
 
 
 // ==========================================
-// EDIT PERSONNEL
+// OPEN EDIT PERSONNEL MODAL
 // ==========================================
 
 editPersonnelButton.addEventListener(
     "click",
-    function () {
+    async function () {
 
-        alert(
-            "Personnel editing will be built in the next step."
-        );
+        if (!currentPersonnelId) {
+
+            console.error(
+                "No personnel record selected."
+            );
+
+            return;
+
+        }
+
+
+        try {
+
+            const userRef =
+                doc(
+                    db,
+                    "users",
+                    currentPersonnelId
+                );
+
+
+            const snapshot =
+                await getDoc(
+                    userRef
+                );
+
+
+            if (!snapshot.exists()) {
+
+                console.error(
+                    "Personnel record no longer exists."
+                );
+
+                return;
+
+            }
+
+
+            const person =
+                snapshot.data();
+
+
+            // Fill form
+
+            editPersonName.value =
+                person.name || "";
+
+
+            editPersonEmail.value =
+                person.email || "";
+
+
+            editPersonRole.value =
+                person.role || "";
+
+
+            editPersonTeam.value =
+                person.team || "";
+
+
+            editPersonnelError.textContent =
+                "";
+
+
+            editPersonnelModal.classList.remove(
+                "hidden"
+            );
+
+
+            editPersonnelModal.style.display =
+                "flex";
+
+
+        } catch (error) {
+
+            console.error(
+                "EDIT PERSONNEL LOAD ERROR:",
+                error
+            );
+
+        }
 
     }
 );
