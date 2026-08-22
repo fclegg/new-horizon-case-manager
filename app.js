@@ -709,27 +709,6 @@ function showCases() {
 }
 
 
-function showCaseFile() {
-
-    hideAllScreens();
-
-    if (caseFileScreen) {
-
-        caseFileScreen.classList.remove(
-            "hidden"
-        );
-
-    } else {
-
-        console.error(
-            "CASE FILE SCREEN NOT FOUND: #caseFileScreen"
-        );
-
-    }
-
-}
-
-
 function showLogin() {
 
     hideAllScreens();
