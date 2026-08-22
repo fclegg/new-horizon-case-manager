@@ -141,17 +141,6 @@ let currentCaseId = null;
 
 let allCases = [];
 
-function showCases() {
-
-    hideAllScreens();
-
-    casesScreen.classList.remove("hidden");
-
-    loadCases();
-
-}
-
-
 function showCaseFile() {
 
     hideAllScreens();
