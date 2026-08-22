@@ -121,6 +121,12 @@ onAuthStateChanged(auth, async function (user) {
 
                 welcomeMessage.textContent =
                     `Welcome, ${userData.name}`;
+                
+                userRole.textContent =
+                    `Role: ${userData.role}`;
+                
+                userTeam.textContent =
+                    `Team: ${userData.team}`;
 
             } else {
 
