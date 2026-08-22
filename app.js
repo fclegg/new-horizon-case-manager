@@ -100,6 +100,66 @@ const reportsButton =
 
 
 // ==========================================
+// CASE MANAGEMENT
+// ==========================================
+
+const casesScreen =
+    document.getElementById("casesScreen");
+
+const caseFileScreen =
+    document.getElementById("caseFileScreen");
+
+const casesBackButton =
+    document.getElementById("casesBackButton");
+
+const caseFileBackButton =
+    document.getElementById("caseFileBackButton");
+
+const casesList =
+    document.getElementById("casesList");
+
+const caseSearch =
+    document.getElementById("caseSearch");
+
+const caseStatusFilter =
+    document.getElementById("caseStatusFilter");
+
+const caseTeamFilter =
+    document.getElementById("caseTeamFilter");
+
+const newCaseListButton =
+    document.getElementById("newCaseListButton");
+
+const activeCaseCount =
+    document.getElementById("activeCaseCount");
+
+const completedCaseCount =
+    document.getElementById("completedCaseCount");
+
+let currentCaseId = null;
+
+let allCases = [];
+
+function showCases() {
+
+    hideAllScreens();
+
+    casesScreen.classList.remove("hidden");
+
+    loadCases();
+
+}
+
+
+function showCaseFile() {
+
+    hideAllScreens();
+
+    caseFileScreen.classList.remove("hidden");
+
+}
+
+// ==========================================
 // PERSONNEL SCREEN
 // ==========================================
 
