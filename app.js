@@ -187,28 +187,36 @@ onAuthStateChanged(auth, async function (user) {
         console.log("User email:", user.email);
         console.log("User UID:", user.uid);
 
+        // Show dashboard
         loginScreen.classList.add("hidden");
         dashboardScreen.classList.remove("hidden");
 
+        // Temporary welcome message while we load the profile
         welcomeMessage.textContent =
             `Welcome, ${user.email}`;
 
         try {
 
-            const userRef = doc(db, "users", user.uid);
+            // ------------------------------------------
+            // FIND NEW HORIZON PERSONNEL RECORD
+            // ------------------------------------------
+
+            const userRef = doc(
+                db,
+                "users",
+                user.uid
+            );
 
             const userSnapshot = await getDoc(userRef);
 
+
+            // ------------------------------------------
+            // PERSONNEL RECORD FOUND
+            // ------------------------------------------
+
             if (userSnapshot.exists()) {
 
-                const permissions =
-                    getUserPermissions(userData.role);
-                
-                console.log(
-                    "USER PERMISSIONS:",
-                    permissions
-                );
-                
+                // Get the personnel data FIRST
                 const userData = userSnapshot.data();
 
                 console.log(
@@ -216,20 +224,48 @@ onAuthStateChanged(auth, async function (user) {
                     userData
                 );
 
+
+                // ------------------------------------------
+                // GET ROLE PERMISSIONS
+                // ------------------------------------------
+
+                const permissions =
+                    getUserPermissions(userData.role);
+
+                console.log(
+                    "USER PERMISSIONS:",
+                    permissions
+                );
+
+
+                // ------------------------------------------
+                // DISPLAY PERSONNEL INFORMATION
+                // ------------------------------------------
+
                 welcomeMessage.textContent =
                     `Welcome, ${userData.name}`;
-                
+
                 userRole.textContent =
                     `Role: ${userData.role}`;
-                
+
                 userTeam.textContent =
                     `Team: ${userData.team}`;
+
 
             } else {
 
                 console.log(
                     "No New Horizon personnel record found."
                 );
+
+                welcomeMessage.textContent =
+                    `Welcome, ${user.email}`;
+
+                userRole.textContent =
+                    "Role: Not Assigned";
+
+                userTeam.textContent =
+                    "Team: Not Assigned";
 
             }
 
