@@ -1260,29 +1260,521 @@ casesButton.addEventListener(
 );
 
 
-newCaseButton.addEventListener(
-    "click",
-    function () {
+// ==========================================
+// NEW CASE CREATION
+// ==========================================
 
-        showCases();
+const newCaseModal =
+    document.getElementById(
+        "newCaseModal"
+    );
 
-        alert(
-            "New Case creation is the next step."
+const newCaseForm =
+    document.getElementById(
+        "newCaseForm"
+    );
+
+const closeNewCaseModal =
+    document.getElementById(
+        "closeNewCaseModal"
+    );
+
+const cancelNewCaseButton =
+    document.getElementById(
+        "cancelNewCaseButton"
+    );
+
+const newCaseModalOverlay =
+    document.getElementById(
+        "newCaseModalOverlay"
+    );
+
+const newCaseError =
+    document.getElementById(
+        "newCaseError"
+    );
+
+const saveNewCaseButton =
+    document.getElementById(
+        "saveNewCaseButton"
+    );
+
+const newCaseName =
+    document.getElementById(
+        "newCaseName"
+    );
+
+const newCaseType =
+    document.getElementById(
+        "newCaseType"
+    );
+
+const newCasePriority =
+    document.getElementById(
+        "newCasePriority"
+    );
+
+const newCaseClient =
+    document.getElementById(
+        "newCaseClient"
+    );
+
+const newCaseLocation =
+    document.getElementById(
+        "newCaseLocation"
+    );
+
+const newCaseTeam =
+    document.getElementById(
+        "newCaseTeam"
+    );
+
+const newCaseInvestigationDate =
+    document.getElementById(
+        "newCaseInvestigationDate"
+    );
+
+const newCaseDescription =
+    document.getElementById(
+        "newCaseDescription"
+    );
+
+
+function openNewCaseModal() {
+
+    if (!newCaseModal) {
+
+        console.error(
+            "NEW CASE MODAL NOT FOUND"
         );
 
+        return;
+
     }
-);
 
-newCaseListButton.addEventListener(
-    "click",
-    function () {
+    if (newCaseForm) {
 
-        alert(
-            "New Case creation is the next step."
+        newCaseForm.reset();
+
+    }
+
+    if (newCasePriority) {
+
+        newCasePriority.value =
+            "Normal";
+
+    }
+
+    if (newCaseError) {
+
+        newCaseError.textContent =
+            "";
+
+    }
+
+    newCaseModal.classList.remove(
+        "hidden"
+    );
+
+    newCaseModal.style.display =
+        "flex";
+
+    if (newCaseName) {
+
+        newCaseName.focus();
+
+    }
+
+}
+
+
+function closeNewCaseModalFunction() {
+
+    if (newCaseModal) {
+
+        newCaseModal.classList.add(
+            "hidden"
         );
 
+        newCaseModal.style.display =
+            "";
+
     }
-);
+
+    if (newCaseError) {
+
+        newCaseError.textContent =
+            "";
+
+    }
+
+}
+
+
+if (closeNewCaseModal) {
+
+    closeNewCaseModal.addEventListener(
+        "click",
+        closeNewCaseModalFunction
+    );
+
+}
+
+
+if (cancelNewCaseButton) {
+
+    cancelNewCaseButton.addEventListener(
+        "click",
+        closeNewCaseModalFunction
+    );
+
+}
+
+
+if (newCaseModalOverlay) {
+
+    newCaseModalOverlay.addEventListener(
+        "click",
+        closeNewCaseModalFunction
+    );
+
+}
+
+
+if (newCaseButton) {
+
+    newCaseButton.addEventListener(
+        "click",
+        function () {
+
+            showCases();
+
+            openNewCaseModal();
+
+        }
+    );
+
+}
+
+
+if (newCaseListButton) {
+
+    newCaseListButton.addEventListener(
+        "click",
+        function () {
+
+            openNewCaseModal();
+
+        }
+    );
+
+}
+
+
+async function generateNextCaseNumber() {
+
+    const year =
+        new Date().getFullYear();
+
+    const prefix =
+        `NH-${year}-`;
+
+    const snapshot =
+        await getDocs(
+            collection(
+                db,
+                "cases"
+            )
+        );
+
+    let highestNumber =
+        0;
+
+    snapshot.forEach(
+        function (caseDocument) {
+
+            const caseData =
+                caseDocument.data();
+
+            const caseNumber =
+                String(
+                    caseData.caseNumber || ""
+                );
+
+            if (
+                caseNumber.startsWith(
+                    prefix
+                )
+            ) {
+
+                const number =
+                    parseInt(
+                        caseNumber.substring(
+                            prefix.length
+                        ),
+                        10
+                    );
+
+                if (
+                    !isNaN(number) &&
+                    number > highestNumber
+                ) {
+
+                    highestNumber =
+                        number;
+
+                }
+
+            }
+
+        }
+    );
+
+    return (
+        prefix +
+        String(
+            highestNumber + 1
+        ).padStart(
+            3,
+            "0"
+        )
+    );
+
+}
+
+
+async function createNewCase() {
+
+    if (!newCaseForm) {
+
+        return;
+
+    }
+
+    if (
+        !newCaseForm.checkValidity()
+    ) {
+
+        newCaseForm.reportValidity();
+
+        return;
+
+    }
+
+    if (newCaseError) {
+
+        newCaseError.textContent =
+            "";
+
+    }
+
+    saveNewCaseButton.disabled =
+        true;
+
+    saveNewCaseButton.textContent =
+        "Creating Case...";
+
+
+    try {
+
+        const user =
+            auth.currentUser;
+
+
+        if (!user) {
+
+            throw new Error(
+                "You must be signed in to create a case."
+            );
+
+        }
+
+
+        // ==================================
+        // GET CREATOR
+        // ==================================
+
+        const userSnapshot =
+            await getDoc(
+                doc(
+                    db,
+                    "users",
+                    user.uid
+                )
+            );
+
+
+        if (
+            !userSnapshot.exists()
+        ) {
+
+            throw new Error(
+                "Your personnel record could not be found."
+            );
+
+        }
+
+
+        const userData =
+            userSnapshot.data();
+
+
+        const permissions =
+            getUserPermissions(
+                userData.role
+            );
+
+
+        if (
+            !permissions ||
+            !permissions.createCases
+        ) {
+
+            throw new Error(
+                "You do not have permission to create cases."
+            );
+
+        }
+
+
+        // ==================================
+        // GENERATE CASE NUMBER
+        // ==================================
+
+        const caseNumber =
+            await generateNextCaseNumber();
+
+
+        // ==================================
+        // CREATE CASE DOCUMENT
+        // ==================================
+
+        const caseReference =
+            doc(
+                collection(
+                    db,
+                    "cases"
+                )
+            );
+
+
+        await setDoc(
+            caseReference,
+            {
+
+                caseNumber:
+                    caseNumber,
+
+                caseName:
+                    newCaseName.value.trim(),
+
+                caseType:
+                    newCaseType.value,
+
+                priority:
+                    newCasePriority.value,
+
+                status:
+                    "Active",
+
+                client:
+                    newCaseClient.value.trim(),
+
+                location:
+                    newCaseLocation.value.trim(),
+
+                assignedTeamId:
+                    newCaseTeam.value,
+
+                investigationDate:
+                    newCaseInvestigationDate.value,
+
+                description:
+                    newCaseDescription.value.trim(),
+
+                createdBy:
+                    user.uid,
+
+                createdByName:
+                    userData.name ||
+                    user.email,
+
+                createdByRole:
+                    userData.role,
+
+                dateOpened:
+                    new Date().toISOString(),
+
+                createdAt:
+                    serverTimestamp(),
+
+                updatedAt:
+                    serverTimestamp()
+
+            }
+        );
+
+
+        console.log(
+            "CASE CREATED:",
+            caseNumber
+        );
+
+
+        closeNewCaseModalFunction();
+
+
+        await loadCases();
+
+
+        openCaseFile(
+            caseReference.id
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "NEW CASE CREATION ERROR:",
+            error
+        );
+
+
+        if (newCaseError) {
+
+            newCaseError.textContent =
+                error.message ||
+                "Unable to create case.";
+
+        }
+
+    } finally {
+
+        saveNewCaseButton.disabled =
+            false;
+
+        saveNewCaseButton.textContent =
+            "Create Case";
+
+    }
+
+}
+
+
+if (newCaseForm) {
+
+    newCaseForm.addEventListener(
+        "submit",
+        async function (event) {
+
+            event.preventDefault();
+
+            await createNewCase();
+
+        }
+    );
+
+}
 
 
 evidenceButton.addEventListener(
