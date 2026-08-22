@@ -36,8 +36,8 @@ const loginForm = document.getElementById("loginForm");
 const loginError = document.getElementById("loginError");
 
 const logoutButton = document.getElementById("logoutButton");
-const welcomeMessage = document.getElementById("welcomeMessage");
-
+const userRole = document.getElementById("userRole");
+const userTeam = document.getElementById("userTeam");
 
 // ==========================================
 // LOGIN
