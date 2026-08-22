@@ -590,47 +590,6 @@ function getUserPermissions(role) {
     return permissions[role] || null;
 }
 
-
-// ==========================================
-// SCREEN NAVIGATION
-// ==========================================
-
-function hideAllScreens() {
-
-    if (loginScreen) {
-        loginScreen.classList.add("hidden");
-    }
-
-    if (dashboardScreen) {
-        dashboardScreen.classList.add("hidden");
-    }
-
-    if (personnelScreen) {
-        personnelScreen.classList.add("hidden");
-    }
-
-    if (personnelFileScreen) {
-        personnelFileScreen.classList.add("hidden");
-    }
-
-    if (teamsScreen) {
-        teamsScreen.classList.add("hidden");
-    }
-
-    if (teamFileScreen) {
-        teamFileScreen.classList.add("hidden");
-    }
-
-    if (casesScreen) {
-        casesScreen.classList.add("hidden");
-    }
-
-    if (caseFileScreen) {
-        caseFileScreen.classList.add("hidden");
-    }
-
-}
-
 // ==========================================
 // SCREEN NAVIGATION
 // ==========================================
@@ -677,11 +636,7 @@ function showDashboard() {
     hideAllScreens();
 
     if (dashboardScreen) {
-
-        dashboardScreen.classList.remove(
-            "hidden"
-        );
-
+        dashboardScreen.classList.remove("hidden");
     }
 
 }
@@ -692,11 +647,7 @@ function showPersonnel() {
     hideAllScreens();
 
     if (personnelScreen) {
-
-        personnelScreen.classList.remove(
-            "hidden"
-        );
-
+        personnelScreen.classList.remove("hidden");
     }
 
 }
@@ -707,11 +658,7 @@ function showPersonnelFile() {
     hideAllScreens();
 
     if (personnelFileScreen) {
-
-        personnelFileScreen.classList.remove(
-            "hidden"
-        );
-
+        personnelFileScreen.classList.remove("hidden");
     }
 
 }
@@ -722,11 +669,7 @@ function showTeams() {
     hideAllScreens();
 
     if (teamsScreen) {
-
-        teamsScreen.classList.remove(
-            "hidden"
-        );
-
+        teamsScreen.classList.remove("hidden");
     }
 
 }
@@ -737,11 +680,7 @@ function showTeamFile() {
     hideAllScreens();
 
     if (teamFileScreen) {
-
-        teamFileScreen.classList.remove(
-            "hidden"
-        );
-
+        teamFileScreen.classList.remove("hidden");
     }
 
 }
@@ -796,11 +735,7 @@ function showLogin() {
     hideAllScreens();
 
     if (loginScreen) {
-
-        loginScreen.classList.remove(
-            "hidden"
-        );
-
+        loginScreen.classList.remove("hidden");
     }
 
 }
