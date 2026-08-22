@@ -525,10 +525,10 @@ async function loadPersonnel() {
             return;
         }
 
-        snapshot.forEach(function (document) {
-
+         snapshot.forEach(function (userDocument) {
+            
             const person =
-                document.data();
+                userDocument.data();
 
             const row =
                 document.createElement("div");
