@@ -87,7 +87,7 @@
 
 
     <!-- ==========================================
-         DASHBOARD SCREEN
+         DASHBOARD
          ========================================== -->
 
     <div
@@ -160,7 +160,6 @@
             <!-- STATISTICS -->
 
             <section class="stats-grid">
-
 
                 <div class="stat-card">
 
@@ -331,7 +330,7 @@
 
 
                         <span>
-                            Manage investigation teams.
+                            Manage New Horizon teams.
                         </span>
 
                     </button>
@@ -343,7 +342,7 @@
 
 
 
-            <!-- EVIDENCE -->
+            <!-- RESEARCH & EVIDENCE -->
 
             <section class="dashboard-section">
 
@@ -405,8 +404,6 @@
             </section>
 
 
-
-            <!-- USER PANEL -->
 
             <section class="user-panel">
 
@@ -484,7 +481,6 @@
 
             <section class="personnel-controls">
 
-
                 <input
                     type="search"
                     id="personnelSearch"
@@ -496,13 +492,11 @@
                     + Add Person
                 </button>
 
-
             </section>
 
 
 
             <section class="personnel-list">
-
 
                 <div class="personnel-list-header">
 
@@ -532,7 +526,6 @@
                     </p>
 
                 </div>
-
 
             </section>
 
@@ -577,8 +570,6 @@
         <main class="dashboard">
 
 
-            <!-- HEADER -->
-
             <section class="dashboard-header">
 
                 <p class="section-label">
@@ -598,8 +589,6 @@
             </section>
 
 
-
-            <!-- INFORMATION -->
 
             <section class="profile-section">
 
@@ -688,14 +677,11 @@
 
                     </div>
 
-
                 </div>
 
             </section>
 
 
-
-            <!-- CASE HISTORY -->
 
             <section class="profile-section">
 
@@ -732,14 +718,11 @@
 
                     </div>
 
-
                 </div>
 
             </section>
 
 
-
-            <!-- ACTIONS -->
 
             <section class="profile-section">
 
@@ -791,6 +774,342 @@
 
                         <span>
                             Change this member's active status.
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </section>
+
+
+        </main>
+
+    </div>
+
+
+
+    <!-- ==========================================
+         TEAMS SCREEN
+         ========================================== -->
+
+    <div
+        id="teamsScreen"
+        class="screen hidden"
+    >
+
+        <header class="topbar">
+
+            <div class="brand">
+
+                <div class="brand-name">
+                    NEW HORIZON
+                </div>
+
+                <div class="brand-subtitle">
+                    TEAM MANAGEMENT
+                </div>
+
+            </div>
+
+
+            <button id="teamsBackButton">
+                ← Dashboard
+            </button>
+
+        </header>
+
+
+        <main class="dashboard">
+
+
+            <section class="dashboard-header">
+
+                <p class="section-label">
+                    ORGANIZATION
+                </p>
+
+
+                <h1>
+                    Teams
+                </h1>
+
+
+                <p>
+                    Manage New Horizon's administrative and investigation teams.
+                </p>
+
+            </section>
+
+
+
+            <section class="personnel-list">
+
+
+                <div class="personnel-list-header">
+
+                    <span>
+                        Team
+                    </span>
+
+                    <span>
+                        Type
+                    </span>
+
+                    <span>
+                        Team Lead
+                    </span>
+
+                    <span>
+                        Status
+                    </span>
+
+                </div>
+
+
+                <div id="teamsList">
+
+                    <p class="loading-message">
+                        Loading teams...
+                    </p>
+
+                </div>
+
+
+            </section>
+
+
+        </main>
+
+    </div>
+
+
+
+    <!-- ==========================================
+         TEAM FILE
+         ========================================== -->
+
+    <div
+        id="teamFileScreen"
+        class="screen hidden"
+    >
+
+        <header class="topbar">
+
+            <div class="brand">
+
+                <div class="brand-name">
+                    NEW HORIZON
+                </div>
+
+                <div class="brand-subtitle">
+                    TEAM FILE
+                </div>
+
+            </div>
+
+
+            <button id="teamFileBackButton">
+                ← Teams
+            </button>
+
+        </header>
+
+
+        <main class="dashboard">
+
+
+            <section class="dashboard-header">
+
+                <p class="section-label">
+                    TEAM FILE
+                </p>
+
+
+                <h1 id="teamProfileName">
+                    Team
+                </h1>
+
+
+                <p id="teamProfileType">
+                    Team Type
+                </p>
+
+            </section>
+
+
+
+            <!-- TEAM INFORMATION -->
+
+            <section class="profile-section">
+
+                <h2>
+                    Team Information
+                </h2>
+
+
+                <div class="profile-grid">
+
+
+                    <div class="profile-field">
+
+                        <span>
+                            TEAM TYPE
+                        </span>
+
+                        <strong id="teamProfileTypeField">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-field">
+
+                        <span>
+                            STATUS
+                        </span>
+
+                        <strong id="teamProfileStatus">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-field">
+
+                        <span>
+                            TEAM LEAD
+                        </span>
+
+                        <strong id="teamProfileLead">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-field">
+
+                        <span>
+                            MEMBER COUNT
+                        </span>
+
+                        <strong id="teamProfileMemberCount">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-field">
+
+                        <span>
+                            CREATED
+                        </span>
+
+                        <strong id="teamProfileCreated">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-field">
+
+                        <span>
+                            DESCRIPTION
+                        </span>
+
+                        <strong id="teamProfileDescription">
+                            —
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- TEAM MEMBERS -->
+
+            <section class="profile-section">
+
+                <h2>
+                    Team Members
+                </h2>
+
+
+                <div
+                    class="personnel-list"
+                    id="teamMembersList"
+                >
+
+                    <p class="loading-message">
+                        Loading members...
+                    </p>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- TEAM ACTIONS -->
+
+            <section class="profile-section">
+
+                <h2>
+                    Team Actions
+                </h2>
+
+
+                <div class="profile-actions">
+
+
+                    <button
+                        id="editTeamButton"
+                        class="dashboard-card"
+                    >
+
+                        <span class="card-icon">
+                            EDIT
+                        </span>
+
+
+                        <strong>
+                            Edit Team
+                        </strong>
+
+
+                        <span>
+                            Modify team information.
+                        </span>
+
+                    </button>
+
+
+
+                    <button
+                        id="teamStatusButton"
+                        class="dashboard-card"
+                    >
+
+                        <span class="card-icon">
+                            STATUS
+                        </span>
+
+
+                        <strong>
+                            Disable Team
+                        </strong>
+
+
+                        <span>
+                            Change this team's active status.
                         </span>
 
                     </button>
@@ -865,7 +1184,6 @@
                     <input
                         type="text"
                         id="personName"
-                        placeholder="Enter full name"
                         required
                     >
 
@@ -881,7 +1199,6 @@
                     <input
                         type="email"
                         id="personEmail"
-                        placeholder="Enter email address"
                         required
                     >
 
@@ -946,12 +1263,24 @@
                         Team
                     </label>
 
-                    <input
-                        type="text"
+                    <select
                         id="personTeam"
-                        placeholder="Example: Team 1"
                         required
                     >
+
+                        <option value="">
+                            Select a team
+                        </option>
+
+                        <option value="administration">
+                            Administration
+                        </option>
+
+                        <option value="okc-alpha">
+                            OKC Alpha Team
+                        </option>
+
+                    </select>
 
                 </div>
 
@@ -1128,11 +1457,24 @@
                         Team
                     </label>
 
-                    <input
-                        type="text"
+                    <select
                         id="editPersonTeam"
                         required
                     >
+
+                        <option value="">
+                            Select a team
+                        </option>
+
+                        <option value="administration">
+                            Administration
+                        </option>
+
+                        <option value="okc-alpha">
+                            OKC Alpha Team
+                        </option>
+
+                    </select>
 
                 </div>
 
@@ -1173,8 +1515,162 @@
 
 
     <!-- ==========================================
-         JAVASCRIPT
+         EDIT TEAM MODAL
          ========================================== -->
+
+    <div
+        id="editTeamModal"
+        class="modal hidden"
+    >
+
+        <div
+            class="modal-overlay"
+            id="editTeamModalOverlay"
+        ></div>
+
+
+        <div class="modal-card">
+
+
+            <div class="modal-header">
+
+                <div>
+
+                    <p class="section-label">
+                        TEAM MANAGEMENT
+                    </p>
+
+
+                    <h2>
+                        Edit Team
+                    </h2>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="closeEditTeamModal"
+                    class="modal-close"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+
+            <form id="editTeamForm">
+
+
+                <div class="form-group">
+
+                    <label for="editTeamName">
+                        Team Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="editTeamName"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="editTeamType">
+                        Team Type
+                    </label>
+
+                    <select
+                        id="editTeamType"
+                        required
+                    >
+
+                        <option value="Administrative">
+                            Administrative
+                        </option>
+
+                        <option value="Investigation">
+                            Investigation
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="editTeamLead">
+                        Team Lead
+                    </label>
+
+                    <select
+                        id="editTeamLead"
+                        required
+                    >
+
+                        <option value="">
+                            Select Team Lead
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="editTeamDescription">
+                        Description
+                    </label>
+
+                    <textarea
+                        id="editTeamDescription"
+                        rows="5"
+                        style="width:100%;padding:12px 14px;border:1px solid #444;border-radius:5px;background:#111;color:white;font-size:14px;resize:vertical;"
+                    ></textarea>
+
+                </div>
+
+
+                <p
+                    id="editTeamError"
+                    class="form-error"
+                ></p>
+
+
+                <div class="modal-actions">
+
+                    <button
+                        type="button"
+                        id="cancelEditTeamButton"
+                        class="secondary-button"
+                    >
+                        Cancel
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="primary-button"
+                    >
+                        Save Changes
+                    </button>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+
 
     <script
         type="module"
