@@ -32,11 +32,6 @@ const db = getFirestore(app);
 
 
 // ==========================================
-// PAGE ELEMENTS
-// ==========================================
-
-
-// ==========================================
 // LOGIN
 // ==========================================
 
@@ -288,7 +283,7 @@ const editPersonTeam =
 
 
 // ==========================================
-// CURRENT PERSONNEL RECORD
+// CURRENT PERSONNEL
 // ==========================================
 
 let currentPersonnelId = null;
@@ -437,13 +432,6 @@ function showPersonnelFile() {
     loginScreen.style.display = "none";
 
     personnelFileScreen.style.display = "block";
-
-    console.log(
-        "PERSONNEL FILE SCREEN IS NOW:",
-        getComputedStyle(
-            personnelFileScreen
-        ).display
-    );
 }
 
 
@@ -473,10 +461,6 @@ loginForm.addEventListener(
 
         event.preventDefault();
 
-        console.log(
-            "LOGIN BUTTON WORKED"
-        );
-
         const email =
             document.getElementById(
                 "email"
@@ -491,20 +475,10 @@ loginForm.addEventListener(
 
         try {
 
-            console.log(
-                "Starting Firebase login..."
-            );
-
-            const result =
-                await signInWithEmailAndPassword(
-                    auth,
-                    email,
-                    password
-                );
-
-            console.log(
-                "Firebase login successful:",
-                result.user
+            await signInWithEmailAndPassword(
+                auth,
+                email,
+                password
             );
 
         } catch (error) {
@@ -526,38 +500,16 @@ loginForm.addEventListener(
 
 
 // ==========================================
-// AUTHENTICATION STATE
+// AUTHENTICATION
 // ==========================================
 
 onAuthStateChanged(
     auth,
     async function (user) {
 
-        console.log(
-            "AUTH STATE CHANGED:",
-            user
-        );
-
-
         if (user) {
 
-            console.log(
-                "USER IS LOGGED IN"
-            );
-
-            console.log(
-                "User email:",
-                user.email
-            );
-
-            console.log(
-                "User UID:",
-                user.uid
-            );
-
-
             showDashboard();
-
 
             welcomeMessage.textContent =
                 `Welcome, ${user.email}`;
@@ -585,12 +537,6 @@ onAuthStateChanged(
 
                     const userData =
                         userSnapshot.data();
-
-
-                    console.log(
-                        "NEW HORIZON PERSONNEL RECORD:",
-                        userData
-                    );
 
 
                     const permissions =
@@ -624,34 +570,19 @@ onAuthStateChanged(
                     topbarUserRole.textContent =
                         userData.role;
 
-
-                    console.log(
-                        "Permission system initialized."
-                    );
-
-
                 } else {
-
-                    console.log(
-                        "No New Horizon personnel record found."
-                    );
-
 
                     welcomeMessage.textContent =
                         "Welcome";
 
-
                     userRole.textContent =
                         "Role: Not Assigned";
-
 
                     userTeam.textContent =
                         "Team: Not Assigned";
 
-
                     topbarUserName.textContent =
                         user.email;
-
 
                     topbarUserRole.textContent =
                         "Unassigned";
@@ -671,10 +602,6 @@ onAuthStateChanged(
 
         } else {
 
-            console.log(
-                "NO USER IS LOGGED IN"
-            );
-
             showLogin();
 
         }
@@ -691,22 +618,9 @@ logoutButton.addEventListener(
     "click",
     async function () {
 
-        console.log(
-            "Signing out..."
-        );
-
-
         try {
 
-            await signOut(
-                auth
-            );
-
-
-            console.log(
-                "Successfully signed out."
-            );
-
+            await signOut(auth);
 
         } catch (error) {
 
@@ -726,11 +640,6 @@ logoutButton.addEventListener(
 // ==========================================
 
 async function loadPersonnel() {
-
-    console.log(
-        "LOAD PERSONNEL STARTED"
-    );
-
 
     personnelList.innerHTML = `
         <p class="loading-message">
@@ -752,12 +661,6 @@ async function loadPersonnel() {
             await getDocs(
                 usersCollection
             );
-
-
-        console.log(
-            "PERSONNEL DOCUMENT COUNT:",
-            snapshot.size
-        );
 
 
         personnelList.innerHTML = "";
@@ -890,12 +793,6 @@ async function openPersonnelFile(
         userId;
 
 
-    console.log(
-        "OPENING PERSONNEL FILE:",
-        userId
-    );
-
-
     try {
 
         const userRef =
@@ -929,11 +826,9 @@ async function openPersonnelFile(
             userSnapshot.data();
 
 
-        console.log(
-            "PERSONNEL FILE:",
-            person
-        );
-
+        // ==================================
+        // PROFILE
+        // ==================================
 
         profileName.textContent =
             person.name ||
@@ -971,6 +866,10 @@ async function openPersonnelFile(
             "Unknown";
 
 
+        // ==================================
+        // JOIN DATE
+        // ==================================
+
         if (
             person.createdAt
         ) {
@@ -1005,6 +904,15 @@ async function openPersonnelFile(
         }
 
 
+        // ==================================
+        // UPDATE STATUS BUTTON
+        // ==================================
+
+        updatePersonnelStatusButton(
+            person.active
+        );
+
+
         showPersonnelFile();
 
 
@@ -1014,6 +922,31 @@ async function openPersonnelFile(
             "PERSONNEL FILE ERROR:",
             error
         );
+
+    }
+
+}
+
+
+// ==========================================
+// UPDATE STATUS BUTTON
+// ==========================================
+
+function updatePersonnelStatusButton(
+    isActive
+) {
+
+    if (
+        isActive
+    ) {
+
+        disablePersonnelButton.textContent =
+            "Disable Personnel";
+
+    } else {
+
+        disablePersonnelButton.textContent =
+            "Reactivate Personnel";
 
     }
 
@@ -1178,14 +1111,11 @@ addPersonnelButton.addEventListener(
         addPersonnelError.textContent =
             "";
 
-
         addPersonnelForm.reset();
-
 
         addPersonnelModal.classList.remove(
             "hidden"
         );
-
 
         addPersonnelModal.style.display =
             "flex";
@@ -1200,13 +1130,10 @@ function closeAddPersonnelModal() {
         "hidden"
     );
 
-
     addPersonnelModal.style.display =
         "";
 
-
     addPersonnelForm.reset();
-
 
     addPersonnelError.textContent =
         "";
@@ -1241,7 +1168,6 @@ addPersonnelForm.addEventListener(
     async function (event) {
 
         event.preventDefault();
-
 
         addPersonnelError.textContent =
             "";
@@ -1289,11 +1215,6 @@ addPersonnelForm.addEventListener(
 
         try {
 
-            console.log(
-                "Creating personnel record..."
-            );
-
-
             const personnelRef =
                 doc(
                     collection(
@@ -1335,21 +1256,9 @@ addPersonnelForm.addEventListener(
             );
 
 
-            console.log(
-                "PERSONNEL CREATED:",
-                personnelRef.id
-            );
-
-
             closeAddPersonnelModal();
 
-
             await loadPersonnel();
-
-
-            console.log(
-                "Personnel list refreshed."
-            );
 
 
         } catch (error) {
@@ -1467,7 +1376,7 @@ editPersonnelButton.addEventListener(
 
 
 // ==========================================
-// CLOSE EDIT PERSONNEL MODAL
+// CLOSE EDIT MODAL
 // ==========================================
 
 function closeEditPersonnelModalWindow() {
@@ -1476,13 +1385,10 @@ function closeEditPersonnelModalWindow() {
         "hidden"
     );
 
-
     editPersonnelModal.style.display =
         "";
 
-
     editPersonnelForm.reset();
-
 
     editPersonnelError.textContent =
         "";
@@ -1517,7 +1423,6 @@ editPersonnelForm.addEventListener(
     async function (event) {
 
         event.preventDefault();
-
 
         editPersonnelError.textContent =
             "";
@@ -1568,12 +1473,6 @@ editPersonnelForm.addEventListener(
 
         try {
 
-            console.log(
-                "UPDATING PERSONNEL:",
-                currentPersonnelId
-            );
-
-
             const userRef =
                 doc(
                     db,
@@ -1605,30 +1504,13 @@ editPersonnelForm.addEventListener(
             );
 
 
-            console.log(
-                "PERSONNEL UPDATED SUCCESSFULLY"
-            );
-
-
-            // ==================================
-            // CLOSE MODAL
-            // ==================================
-
             closeEditPersonnelModalWindow();
 
-
-            // ==================================
-            // REFRESH PERSONNEL FILE
-            // ==================================
 
             await openPersonnelFile(
                 currentPersonnelId
             );
 
-
-            // ==================================
-            // REFRESH PERSONNEL LIST
-            // ==================================
 
             await loadPersonnel();
 
@@ -1651,16 +1533,153 @@ editPersonnelForm.addEventListener(
 
 
 // ==========================================
-// DISABLE PERSONNEL
+// DISABLE / REACTIVATE PERSONNEL
 // ==========================================
 
 disablePersonnelButton.addEventListener(
     "click",
-    function () {
+    async function () {
 
-        alert(
-            "Personnel status management will be built in the next step."
-        );
+        // ==================================
+        // MAKE SURE A PERSON IS SELECTED
+        // ==================================
+
+        if (
+            !currentPersonnelId
+        ) {
+
+            console.error(
+                "NO PERSONNEL RECORD SELECTED"
+            );
+
+            return;
+        }
+
+
+        try {
+
+            // ==================================
+            // GET CURRENT RECORD
+            // ==================================
+
+            const userRef =
+                doc(
+                    db,
+                    "users",
+                    currentPersonnelId
+                );
+
+
+            const snapshot =
+                await getDoc(
+                    userRef
+                );
+
+
+            if (
+                !snapshot.exists()
+            ) {
+
+                console.error(
+                    "PERSONNEL RECORD NOT FOUND"
+                );
+
+                return;
+            }
+
+
+            const person =
+                snapshot.data();
+
+
+            const currentlyActive =
+                person.active === true;
+
+
+            // ==================================
+            // CONFIRM ACTION
+            // ==================================
+
+            const action =
+                currentlyActive
+                    ? "disable"
+                    : "reactivate";
+
+
+            const confirmation =
+                confirm(
+                    currentlyActive
+                        ? `Are you sure you want to disable ${person.name}?`
+                        : `Are you sure you want to reactivate ${person.name}?`
+                );
+
+
+            if (
+                !confirmation
+            ) {
+
+                return;
+
+            }
+
+
+            // ==================================
+            // UPDATE FIRESTORE
+            // ==================================
+
+            await updateDoc(
+                userRef,
+                {
+
+                    active:
+                        !currentlyActive,
+
+                    accountStatus:
+                        currentlyActive
+                            ? "Disabled"
+                            : "Active",
+
+                    statusUpdatedAt:
+                        new Date().toISOString()
+
+                }
+            );
+
+
+            console.log(
+                `PERSONNEL ${action.toUpperCase()}D:`,
+                currentPersonnelId
+            );
+
+
+            // ==================================
+            // REFRESH PERSONNEL FILE
+            // ==================================
+
+            await openPersonnelFile(
+                currentPersonnelId
+            );
+
+
+            // ==================================
+            // REFRESH PERSONNEL LIST
+            // ==================================
+
+            await loadPersonnel();
+
+
+        } catch (error) {
+
+            console.error(
+                "PERSONNEL STATUS UPDATE ERROR:",
+                error
+            );
+
+            alert(
+                "Unable to update personnel status."
+            );
+
+        }
 
     }
 );
