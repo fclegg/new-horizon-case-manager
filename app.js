@@ -284,6 +284,8 @@ const editPersonTeam =
         "editPersonTeam"
     );
 
+let currentPersonnelId = null;
+
 // ==========================================
 // ROLE PERMISSIONS
 // ==========================================
