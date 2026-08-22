@@ -813,3 +813,146 @@ body {
     }
 
 }
+
+/* ==========================================
+   PERSONNEL FILE
+   ========================================== */
+
+.profile-section {
+    margin-bottom: 40px;
+}
+
+.profile-section h2 {
+    margin: 0 0 15px;
+
+    font-size: 18px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+}
+
+
+/* PROFILE INFORMATION */
+
+.profile-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 15px;
+}
+
+
+.profile-field {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+    padding: 20px;
+
+    background: #1b1b1b;
+
+    border: 1px solid #333;
+
+    border-radius: 8px;
+}
+
+
+.profile-field span {
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 1.5px;
+
+    color: #777;
+}
+
+
+.profile-field strong {
+    font-size: 15px;
+
+    color: #ddd;
+
+    word-break: break-word;
+}
+
+
+/* PROFILE STATS */
+
+.profile-stats {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 15px;
+}
+
+
+.profile-stat {
+    padding: 25px;
+
+    background: #1b1b1b;
+
+    border: 1px solid #333;
+
+    border-radius: 8px;
+}
+
+
+.profile-stat span {
+    display: block;
+
+    margin-bottom: 10px;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 1.5px;
+
+    color: #777;
+}
+
+
+.profile-stat strong {
+    font-size: 32px;
+}
+
+
+/* ACTIONS */
+
+.profile-actions {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 15px;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+    .profile-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .profile-stats {
+        grid-template-columns: 1fr;
+    }
+
+
+    .profile-actions {
+        grid-template-columns: 1fr;
+    }
+
+}
