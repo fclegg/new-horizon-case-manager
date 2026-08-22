@@ -1253,9 +1253,7 @@ casesButton.addEventListener(
     "click",
     function () {
 
-        alert(
-            "Case Management will be built in Phase 2."
-        );
+        showCases();
 
     }
 );
@@ -1265,8 +1263,21 @@ newCaseButton.addEventListener(
     "click",
     function () {
 
+        showCases();
+
         alert(
-            "New Case creation will be built in Phase 2."
+            "New Case creation is the next step."
+        );
+
+    }
+);
+
+newCaseListButton.addEventListener(
+    "click",
+    function () {
+
+        alert(
+            "New Case creation is the next step."
         );
 
     }
@@ -1284,6 +1295,25 @@ evidenceButton.addEventListener(
     }
 );
 
+casesBackButton.addEventListener(
+    "click",
+    function () {
+
+        showDashboard();
+
+    }
+);
+
+
+caseFileBackButton.addEventListener(
+    "click",
+    function () {
+
+        showCases();
+
+    }
+);
+
 
 reportsButton.addEventListener(
     "click",
@@ -1296,6 +1326,470 @@ reportsButton.addEventListener(
     }
 );
 
+async function loadCases() {
+
+    casesList.innerHTML = `
+        <p class="loading-message">
+            Loading cases...
+        </p>
+    `;
+
+
+    try {
+
+        const snapshot =
+            await getDocs(
+                collection(
+                    db,
+                    "cases"
+                )
+            );
+
+
+        allCases = [];
+
+
+        snapshot.forEach(
+            function (caseDocument) {
+
+                allCases.push({
+
+                    id:
+                        caseDocument.id,
+
+                    ...caseDocument.data()
+
+                });
+
+            }
+        );
+
+
+        updateCaseStatistics();
+
+        renderCases();
+
+
+    } catch (error) {
+
+        console.error(
+            "CASES LOAD ERROR:",
+            error
+        );
+
+
+        casesList.innerHTML = `
+            <p class="loading-message">
+                Unable to load cases.
+            </p>
+        `;
+
+    }
+
+}
+
+function renderCases() {
+
+    const searchTerm =
+        caseSearch.value
+            .toLowerCase()
+            .trim();
+
+
+    const status =
+        caseStatusFilter.value;
+
+
+    const team =
+        caseTeamFilter.value;
+
+
+    const filteredCases =
+        allCases.filter(
+            function (caseData) {
+
+                const matchesSearch =
+
+                    !searchTerm ||
+
+                    (
+                        String(
+                            caseData.caseNumber || ""
+                        )
+                        .toLowerCase()
+                        .includes(searchTerm)
+                    ) ||
+
+                    (
+                        String(
+                            caseData.caseName || ""
+                        )
+                        .toLowerCase()
+                        .includes(searchTerm)
+                    ) ||
+
+                    (
+                        String(
+                            caseData.client || ""
+                        )
+                        .toLowerCase()
+                        .includes(searchTerm)
+                    ) ||
+
+                    (
+                        String(
+                            caseData.location || ""
+                        )
+                        .toLowerCase()
+                        .includes(searchTerm)
+                    );
+
+
+                const matchesStatus =
+                    status === "all" ||
+                    caseData.status === status;
+
+
+                const matchesTeam =
+                    team === "all" ||
+                    caseData.assignedTeamId === team;
+
+
+                return (
+                    matchesSearch &&
+                    matchesStatus &&
+                    matchesTeam
+                );
+
+            }
+        );
+
+
+    casesList.innerHTML = "";
+
+
+    if (
+        filteredCases.length === 0
+    ) {
+
+        casesList.innerHTML = `
+            <p class="loading-message">
+                No cases found.
+            </p>
+        `;
+
+        return;
+
+    }
+
+
+    filteredCases.forEach(
+        function (caseData) {
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+
+            row.className =
+                "personnel-row";
+
+
+            row.style.gridTemplateColumns =
+                "1fr 2fr 1.2fr 1.2fr 1.2fr";
+
+
+            row.innerHTML = `
+
+                <div>
+
+                    <div class="personnel-name">
+                        ${caseData.caseNumber || "—"}
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <div class="personnel-name">
+                        ${caseData.caseName || "Unnamed Case"}
+                    </div>
+
+                    <div class="personnel-email">
+                        ${caseData.client || "No client listed"}
+                    </div>
+
+                </div>
+
+
+                <div class="personnel-status">
+
+                    ${caseData.status || "Unknown"}
+
+                </div>
+
+
+                <div class="personnel-team">
+
+                    ${getTeamDisplayName(
+                        caseData.assignedTeamId
+                    )}
+
+                </div>
+
+
+                <div class="personnel-team">
+
+                    ${formatDate(
+                        caseData.investigationDate
+                    )}
+
+                </div>
+
+            `;
+
+
+            casesList.appendChild(
+                row
+            );
+
+
+            row.addEventListener(
+                "click",
+                function () {
+
+                    openCaseFile(
+                        caseData.id
+                    );
+
+                }
+            );
+
+        }
+    );
+
+}
+
+function updateCaseStatistics() {
+
+    const active =
+        allCases.filter(
+            caseData =>
+                caseData.status === "Active"
+        ).length;
+
+
+    const completed =
+        allCases.filter(
+            caseData =>
+                caseData.status === "Completed"
+        ).length;
+
+
+    activeCaseCount.textContent =
+        active;
+
+
+    completedCaseCount.textContent =
+        completed;
+
+}
+
+caseSearch.addEventListener(
+    "input",
+    renderCases
+);
+
+
+caseStatusFilter.addEventListener(
+    "change",
+    renderCases
+);
+
+
+caseTeamFilter.addEventListener(
+    "change",
+    renderCases
+);
+
+async function openCaseFile(
+    caseId
+) {
+
+    currentCaseId =
+        caseId;
+
+
+    try {
+
+        const snapshot =
+            await getDoc(
+                doc(
+                    db,
+                    "cases",
+                    caseId
+                )
+            );
+
+
+        if (
+            !snapshot.exists()
+        ) {
+
+            console.error(
+                "CASE NOT FOUND:",
+                caseId
+            );
+
+            return;
+
+        }
+
+
+        const caseData =
+            snapshot.data();
+
+
+        document.getElementById(
+            "caseProfileNumber"
+        ).textContent =
+            caseData.caseNumber ||
+            "CASE";
+
+
+        document.getElementById(
+            "caseProfileName"
+        ).textContent =
+            caseData.caseName ||
+            "Investigation";
+
+
+        document.getElementById(
+            "caseFieldNumber"
+        ).textContent =
+            caseData.caseNumber ||
+            "—";
+
+
+        document.getElementById(
+            "caseFieldStatus"
+        ).textContent =
+            caseData.status ||
+            "—";
+
+
+        document.getElementById(
+            "caseFieldPriority"
+        ).textContent =
+            caseData.priority ||
+            "—";
+
+
+        document.getElementById(
+            "caseFieldType"
+        ).textContent =
+            caseData.caseType ||
+            "—";
+
+
+        document.getElementById(
+            "caseFieldClient"
+        ).textContent =
+            caseData.client ||
+            "—";
+
+
+        document.getElementById(
+            "caseFieldLocation"
+        ).textContent =
+            caseData.location ||
+            "—";
+
+
+        document.getElementById(
+            "caseFieldTeam"
+        ).textContent =
+            getTeamDisplayName(
+                caseData.assignedTeamId
+            );
+
+
+        document.getElementById(
+            "caseFieldInvestigationDate"
+        ).textContent =
+            formatDate(
+                caseData.investigationDate
+            );
+
+
+        document.getElementById(
+            "caseFieldOpened"
+        ).textContent =
+            formatDate(
+                caseData.dateOpened
+            );
+
+
+        document.getElementById(
+            "caseFieldCreatedBy"
+        ).textContent =
+            caseData.createdByName ||
+            caseData.createdBy ||
+            "—";
+
+
+        document.getElementById(
+            "caseFieldDescription"
+        ).textContent =
+            caseData.description ||
+            "No description provided.";
+
+
+        showCaseFile();
+
+
+    } catch (error) {
+
+        console.error(
+            "CASE FILE ERROR:",
+            error
+        );
+
+    }
+
+}
+
+function formatDate(
+    value
+) {
+
+    if (!value) {
+
+        return "—";
+
+    }
+
+
+    const date =
+        new Date(value);
+
+
+    if (
+        isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return value;
+
+    }
+
+
+    return date.toLocaleDateString();
+
+}
 
 // ==========================================
 // ADD PERSONNEL
