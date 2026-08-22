@@ -95,7 +95,6 @@
         class="screen hidden"
     >
 
-
         <!-- TOP BAR -->
 
         <header class="topbar">
@@ -463,7 +462,7 @@
     >
 
 
-        <!-- PERSONNEL TOP BAR -->
+        <!-- TOP BAR -->
 
         <header class="topbar">
 
@@ -488,7 +487,7 @@
 
 
 
-        <!-- PERSONNEL MAIN -->
+        <!-- MAIN -->
 
         <main class="dashboard">
 
@@ -513,257 +512,7 @@
 
             </section>
 
-<!-- ==========================================
-     PERSONNEL FILE SCREEN
-     ========================================== -->
 
-<div
-    id="personnelFileScreen"
-    class="screen hidden"
->
-
-    <!-- TOP BAR -->
-
-    <header class="topbar">
-
-        <div class="brand">
-
-            <div class="brand-name">
-                NEW HORIZON
-            </div>
-
-            <div class="brand-subtitle">
-                PERSONNEL FILE
-            </div>
-
-        </div>
-
-
-        <button id="personnelFileBackButton">
-            ← Personnel
-        </button>
-
-    </header>
-
-
-    <!-- MAIN -->
-
-    <main class="dashboard">
-
-        <!-- HEADER -->
-
-        <section class="dashboard-header">
-
-            <p class="section-label">
-                PERSONNEL FILE
-            </p>
-
-            <h1 id="profileName">
-                Personnel
-            </h1>
-
-            <p id="profileRole">
-                Role
-            </p>
-
-        </section>
-
-
-        <!-- PERSONNEL INFORMATION -->
-
-        <section class="profile-section">
-
-            <h2>
-                Personnel Information
-            </h2>
-
-
-            <div class="profile-grid">
-
-
-                <div class="profile-field">
-
-                    <span>
-                        EMAIL
-                    </span>
-
-                    <strong id="profileEmail">
-                        —
-                    </strong>
-
-                </div>
-
-
-                <div class="profile-field">
-
-                    <span>
-                        ROLE
-                    </span>
-
-                    <strong id="profileRoleField">
-                        —
-                    </strong>
-
-                </div>
-
-
-                <div class="profile-field">
-
-                    <span>
-                        TEAM
-                    </span>
-
-                    <strong id="profileTeam">
-                        —
-                    </strong>
-
-                </div>
-
-
-                <div class="profile-field">
-
-                    <span>
-                        PERSONNEL STATUS
-                    </span>
-
-                    <strong id="profileStatus">
-                        —
-                    </strong>
-
-                </div>
-
-
-                <div class="profile-field">
-
-                    <span>
-                        ACCOUNT STATUS
-                    </span>
-
-                    <strong id="profileAccountStatus">
-                        —
-                    </strong>
-
-                </div>
-
-
-                <div class="profile-field">
-
-                    <span>
-                        JOINED
-                    </span>
-
-                    <strong id="profileJoined">
-                        —
-                    </strong>
-
-                </div>
-
-
-            </div>
-
-        </section>
-
-
-        <!-- CASE HISTORY -->
-
-        <section class="profile-section">
-
-            <h2>
-                Case History
-            </h2>
-
-
-            <div class="profile-stats">
-
-
-                <div class="profile-stat">
-
-                    <span>
-                        ASSIGNED CASES
-                    </span>
-
-                    <strong>
-                        0
-                    </strong>
-
-                </div>
-
-
-                <div class="profile-stat">
-
-                    <span>
-                        COMPLETED CASES
-                    </span>
-
-                    <strong>
-                        0
-                    </strong>
-
-                </div>
-
-
-            </div>
-
-        </section>
-
-
-        <!-- ACTIONS -->
-
-        <section class="profile-section">
-
-            <h2>
-                Personnel Actions
-            </h2>
-
-
-            <div class="profile-actions">
-
-                <button
-                    id="editPersonnelButton"
-                    class="dashboard-card"
-                >
-
-                    <span class="card-icon">
-                        EDIT
-                    </span>
-
-                    <strong>
-                        Edit Personnel
-                    </strong>
-
-                    <span>
-                        Modify this personnel record.
-                    </span>
-
-                </button>
-
-
-                <button
-                    id="disablePersonnelButton"
-                    class="dashboard-card"
-                >
-
-                    <span class="card-icon">
-                        STATUS
-                    </span>
-
-                    <strong>
-                        Disable Personnel
-                    </strong>
-
-                    <span>
-                        Temporarily deactivate this member.
-                    </span>
-
-                </button>
-
-            </div>
-
-        </section>
-
-    </main>
-
-</div>
 
             <!-- ==================================
                  PERSONNEL CONTROLS
@@ -795,8 +544,6 @@
             <section class="personnel-list">
 
 
-                <!-- COLUMN HEADERS -->
-
                 <div class="personnel-list-header">
 
                     <span>
@@ -822,9 +569,6 @@
 
 
 
-                <!-- FIRESTORE PERSONNEL RECORDS
-                     ARE INSERTED HERE -->
-
                 <div id="personnelList">
 
                     <p class="loading-message">
@@ -841,195 +585,519 @@
 
     </div>
 
-<!-- ==========================================
-     ADD PERSONNEL MODAL
-     ========================================== -->
-
-<div
-    id="addPersonnelModal"
-    class="modal hidden"
->
-
-    <div class="modal-overlay" id="modalOverlay"></div>
 
 
-    <div class="modal-card">
+    <!-- ==========================================
+         PERSONNEL FILE SCREEN
+         
+         IMPORTANT:
+         This is a TOP-LEVEL SCREEN.
+         It is NOT inside dashboardScreen
+         or personnelScreen.
+         ========================================== -->
 
-        <div class="modal-header">
+    <div
+        id="personnelFileScreen"
+        class="screen hidden"
+    >
 
-            <div>
 
-                <p class="section-label">
-                    ORGANIZATION
-                </p>
+        <!-- TOP BAR -->
 
-                <h2>
-                    Add Personnel
-                </h2>
+        <header class="topbar">
+
+            <div class="brand">
+
+                <div class="brand-name">
+                    NEW HORIZON
+                </div>
+
+                <div class="brand-subtitle">
+                    PERSONNEL FILE
+                </div>
 
             </div>
 
-            <button
-                type="button"
-                id="closePersonnelModal"
-                class="modal-close"
-            >
-                ×
+
+            <button id="personnelFileBackButton">
+                ← Personnel
             </button>
 
-        </div>
+        </header>
 
 
-        <form id="addPersonnelForm">
 
-            <!-- NAME -->
+        <!-- MAIN -->
 
-            <div class="form-group">
-
-                <label for="personName">
-                    Full Name
-                </label>
-
-                <input
-                    type="text"
-                    id="personName"
-                    placeholder="Enter full name"
-                    required
-                >
-
-            </div>
+        <main class="dashboard">
 
 
-            <!-- EMAIL -->
+            <!-- ==================================
+                 PROFILE HEADER
+                 ================================== -->
 
-            <div class="form-group">
+            <section class="dashboard-header">
 
-                <label for="personEmail">
-                    Email Address
-                </label>
-
-                <input
-                    type="email"
-                    id="personEmail"
-                    placeholder="Enter email address"
-                    required
-                >
-
-            </div>
+                <p class="section-label">
+                    PERSONNEL FILE
+                </p>
 
 
-            <!-- ROLE -->
+                <h1 id="profileName">
+                    Personnel
+                </h1>
 
-            <div class="form-group">
 
-                <label for="personRole">
+                <p id="profileRole">
                     Role
-                </label>
+                </p>
 
-                <select
-                    id="personRole"
-                    required
-                >
-
-                    <option value="">
-                        Select a role
-                    </option>
-
-                    <option value="Team Lead">
-                        Team Lead
-                    </option>
-
-                    <option value="Assistant Team Lead">
-                        Assistant Team Lead
-                    </option>
-
-                    <option value="Investigator">
-                        Investigator
-                    </option>
-
-                    <option value="Researcher">
-                        Researcher
-                    </option>
-
-                    <option value="Analyst">
-                        Analyst
-                    </option>
-
-                    <option value="Tech Specialist">
-                        Tech Specialist
-                    </option>
-
-                    <option value="AV Specialist">
-                        AV Specialist
-                    </option>
-
-                    <option value="Director">
-                        Director
-                    </option>
-
-                    
-                </select>
-
-            </div>
+            </section>
 
 
-            <!-- TEAM -->
 
-            <div class="form-group">
+            <!-- ==================================
+                 PERSONNEL INFORMATION
+                 ================================== -->
 
-                <label for="personTeam">
-                    Team
-                </label>
+            <section class="profile-section">
 
-                <input
-                    type="text"
-                    id="personTeam"
-                    placeholder="Example: Team 1"
-                    required
-                >
-
-            </div>
+                <h2>
+                    Personnel Information
+                </h2>
 
 
-            <!-- FORM ERROR -->
-
-            <p
-                id="addPersonnelError"
-                class="form-error"
-            ></p>
+                <div class="profile-grid">
 
 
-            <!-- FORM BUTTONS -->
+                    <div class="profile-field">
 
-            <div class="modal-actions">
+                        <span>
+                            EMAIL
+                        </span>
 
-                <button
-                    type="button"
-                    id="cancelPersonnelButton"
-                    class="secondary-button"
-                >
-                    Cancel
-                </button>
+                        <strong id="profileEmail">
+                            —
+                        </strong>
 
-                <button
-                    type="submit"
-                    class="primary-button"
-                >
-                    Add Person
-                </button>
+                    </div>
 
-            </div>
 
-        </form>
+                    <div class="profile-field">
+
+                        <span>
+                            ROLE
+                        </span>
+
+                        <strong id="profileRoleField">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-field">
+
+                        <span>
+                            TEAM
+                        </span>
+
+                        <strong id="profileTeam">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-field">
+
+                        <span>
+                            PERSONNEL STATUS
+                        </span>
+
+                        <strong id="profileStatus">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-field">
+
+                        <span>
+                            ACCOUNT STATUS
+                        </span>
+
+                        <strong id="profileAccountStatus">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-field">
+
+                        <span>
+                            JOINED
+                        </span>
+
+                        <strong id="profileJoined">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+
+            <!-- ==================================
+                 CASE HISTORY
+                 ================================== -->
+
+            <section class="profile-section">
+
+                <h2>
+                    Case History
+                </h2>
+
+
+                <div class="profile-stats">
+
+
+                    <div class="profile-stat">
+
+                        <span>
+                            ASSIGNED CASES
+                        </span>
+
+                        <strong>
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-stat">
+
+                        <span>
+                            COMPLETED CASES
+                        </span>
+
+                        <strong>
+                            0
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+
+            <!-- ==================================
+                 PERSONNEL ACTIONS
+                 ================================== -->
+
+            <section class="profile-section">
+
+                <h2>
+                    Personnel Actions
+                </h2>
+
+
+                <div class="profile-actions">
+
+
+                    <button
+                        id="editPersonnelButton"
+                        class="dashboard-card"
+                    >
+
+                        <span class="card-icon">
+                            EDIT
+                        </span>
+
+
+                        <strong>
+                            Edit Personnel
+                        </strong>
+
+
+                        <span>
+                            Modify this personnel record.
+                        </span>
+
+                    </button>
+
+
+
+                    <button
+                        id="disablePersonnelButton"
+                        class="dashboard-card"
+                    >
+
+                        <span class="card-icon">
+                            STATUS
+                        </span>
+
+
+                        <strong>
+                            Disable Personnel
+                        </strong>
+
+
+                        <span>
+                            Temporarily deactivate this member.
+                        </span>
+
+                    </button>
+
+
+                </div>
+
+            </section>
+
+
+        </main>
 
     </div>
 
-</div>
+
+
+    <!-- ==========================================
+         ADD PERSONNEL MODAL
+         
+         IMPORTANT:
+         This is also a top-level element.
+         ========================================== -->
+
+    <div
+        id="addPersonnelModal"
+        class="modal hidden"
+    >
+
+        <div
+            class="modal-overlay"
+            id="modalOverlay"
+        ></div>
+
+
+        <div class="modal-card">
+
+
+            <!-- MODAL HEADER -->
+
+            <div class="modal-header">
+
+                <div>
+
+                    <p class="section-label">
+                        ORGANIZATION
+                    </p>
+
+
+                    <h2>
+                        Add Personnel
+                    </h2>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="closePersonnelModal"
+                    class="modal-close"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+
+            <!-- ==================================
+                 ADD PERSONNEL FORM
+                 ================================== -->
+
+            <form id="addPersonnelForm">
+
+
+                <!-- NAME -->
+
+                <div class="form-group">
+
+                    <label for="personName">
+                        Full Name
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="personName"
+                        placeholder="Enter full name"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label for="personEmail">
+                        Email Address
+                    </label>
+
+
+                    <input
+                        type="email"
+                        id="personEmail"
+                        placeholder="Enter email address"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- ROLE -->
+
+                <div class="form-group">
+
+                    <label for="personRole">
+                        Role
+                    </label>
+
+
+                    <select
+                        id="personRole"
+                        required
+                    >
+
+                        <option value="">
+                            Select a role
+                        </option>
+
+
+                        <option value="Director">
+                            Director
+                        </option>
+
+
+                        <option value="Team Lead">
+                            Team Lead
+                        </option>
+
+
+                        <option value="Assistant Team Lead">
+                            Assistant Team Lead
+                        </option>
+
+
+                        <option value="Investigator">
+                            Investigator
+                        </option>
+
+
+                        <option value="Researcher">
+                            Researcher
+                        </option>
+
+
+                        <option value="Analyst">
+                            Analyst
+                        </option>
+
+
+                        <option value="Tech Specialist">
+                            Tech Specialist
+                        </option>
+
+
+                        <option value="AV Specialist">
+                            AV Specialist
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- TEAM -->
+
+                <div class="form-group">
+
+                    <label for="personTeam">
+                        Team
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="personTeam"
+                        placeholder="Example: Team 1"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- FORM ERROR -->
+
+                <p
+                    id="addPersonnelError"
+                    class="form-error"
+                ></p>
+
+
+
+                <!-- FORM BUTTONS -->
+
+                <div class="modal-actions">
+
+
+                    <button
+                        type="button"
+                        id="cancelPersonnelButton"
+                        class="secondary-button"
+                    >
+                        Cancel
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="primary-button"
+                    >
+                        Add Person
+                    </button>
+
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+
 
     <!-- ==========================================
          JAVASCRIPT
          ========================================== -->
-    
+
     <script
         type="module"
         src="app.js"
