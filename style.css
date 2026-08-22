@@ -956,3 +956,28 @@ body {
     }
 
 }
+
+/* ==========================================
+   SCREEN VISIBILITY
+   ========================================== */
+
+.screen {
+    width: 100%;
+    min-height: 100vh;
+}
+
+.screen.hidden {
+    display: none !important;
+}
+
+#personnelFileScreen:not(.hidden) {
+    display: block !important;
+}
+
+#personnelScreen:not(.hidden) {
+    display: block !important;
+}
+
+#dashboardScreen:not(.hidden) {
+    display: block !important;
+}
