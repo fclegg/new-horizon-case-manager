@@ -23,20 +23,16 @@ import { firebaseConfig } from "./firebase-config.js";
 // FIREBASE
 // ==========================================
 
-const app =
-    initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
-const auth =
-    getAuth(app);
+const auth = getAuth(app);
 
-const db =
-    getFirestore(app);
+const db = getFirestore(app);
 
 
 // ==========================================
 // PAGE ELEMENTS
 // ==========================================
-
 
 // ==========================================
 // LOGIN
@@ -329,6 +325,85 @@ function getUserPermissions(role) {
 
 
 // ==========================================
+// SCREEN NAVIGATION
+// ==========================================
+
+function showDashboard() {
+
+    loginScreen.classList.add("hidden");
+    personnelScreen.classList.add("hidden");
+    personnelFileScreen.classList.add("hidden");
+
+    dashboardScreen.classList.remove("hidden");
+
+    // Clear any inline display overrides
+    loginScreen.style.display = "";
+    personnelScreen.style.display = "";
+    personnelFileScreen.style.display = "";
+
+    dashboardScreen.style.display = "block";
+}
+
+
+function showPersonnel() {
+
+    dashboardScreen.classList.add("hidden");
+    personnelFileScreen.classList.add("hidden");
+    loginScreen.classList.add("hidden");
+
+    personnelScreen.classList.remove("hidden");
+
+    // Explicit display control
+    dashboardScreen.style.display = "none";
+    personnelFileScreen.style.display = "none";
+    loginScreen.style.display = "none";
+
+    personnelScreen.style.display = "block";
+}
+
+
+function showPersonnelFile() {
+
+    dashboardScreen.classList.add("hidden");
+    personnelScreen.classList.add("hidden");
+    loginScreen.classList.add("hidden");
+
+    personnelFileScreen.classList.remove("hidden");
+
+    // Explicit display control
+    dashboardScreen.style.display = "none";
+    personnelScreen.style.display = "none";
+    loginScreen.style.display = "none";
+
+    personnelFileScreen.style.display = "block";
+
+    console.log(
+        "PERSONNEL FILE SCREEN IS NOW:",
+        getComputedStyle(
+            personnelFileScreen
+        ).display
+    );
+}
+
+
+function showLogin() {
+
+    dashboardScreen.classList.add("hidden");
+    personnelScreen.classList.add("hidden");
+    personnelFileScreen.classList.add("hidden");
+
+    loginScreen.classList.remove("hidden");
+
+    // Explicit display control
+    dashboardScreen.style.display = "none";
+    personnelScreen.style.display = "none";
+    personnelFileScreen.style.display = "none";
+
+    loginScreen.style.display = "block";
+}
+
+
+// ==========================================
 // LOGIN
 // ==========================================
 
@@ -342,28 +417,23 @@ loginForm.addEventListener(
             "LOGIN BUTTON WORKED"
         );
 
-
         const email =
             document.getElementById(
                 "email"
             ).value;
-
 
         const password =
             document.getElementById(
                 "password"
             ).value;
 
-
         loginError.textContent = "";
-
 
         try {
 
             console.log(
                 "Starting Firebase login..."
             );
-
 
             const result =
                 await signInWithEmailAndPassword(
@@ -372,12 +442,10 @@ loginForm.addEventListener(
                     password
                 );
 
-
             console.log(
                 "Firebase login successful:",
                 result.user
             );
-
 
         } catch (error) {
 
@@ -385,7 +453,6 @@ loginForm.addEventListener(
                 "FIREBASE LOGIN ERROR:",
                 error
             );
-
 
             loginError.textContent =
                 error.code +
@@ -411,7 +478,6 @@ onAuthStateChanged(
             user
         );
 
-
         // ==================================
         // USER LOGGED IN
         // ==================================
@@ -422,12 +488,10 @@ onAuthStateChanged(
                 "USER IS LOGGED IN"
             );
 
-
             console.log(
                 "User email:",
                 user.email
             );
-
 
             console.log(
                 "User UID:",
@@ -439,24 +503,7 @@ onAuthStateChanged(
             // SHOW DASHBOARD
             // ==================================
 
-            loginScreen.classList.add(
-                "hidden"
-            );
-
-
-            dashboardScreen.classList.remove(
-                "hidden"
-            );
-
-
-            personnelScreen.classList.add(
-                "hidden"
-            );
-
-
-            personnelFileScreen.classList.add(
-                "hidden"
-            );
+            showDashboard();
 
 
             // ==================================
@@ -479,7 +526,6 @@ onAuthStateChanged(
                         "users",
                         user.uid
                     );
-
 
                 const userSnapshot =
                     await getDoc(
@@ -506,7 +552,7 @@ onAuthStateChanged(
 
 
                     // ==================================
-                    // GET PERMISSIONS
+                    // GET ROLE PERMISSIONS
                     // ==================================
 
                     const permissions =
@@ -528,18 +574,14 @@ onAuthStateChanged(
                     welcomeMessage.textContent =
                         `Welcome, ${userData.name}`;
 
-
                     userRole.textContent =
                         `Role: ${userData.role}`;
-
 
                     userTeam.textContent =
                         `Team: ${userData.team}`;
 
-
                     topbarUserName.textContent =
                         userData.name;
-
 
                     topbarUserRole.textContent =
                         userData.role;
@@ -560,18 +602,14 @@ onAuthStateChanged(
                     welcomeMessage.textContent =
                         "Welcome";
 
-
                     userRole.textContent =
                         "Role: Not Assigned";
-
 
                     userTeam.textContent =
                         "Team: Not Assigned";
 
-
                     topbarUserName.textContent =
                         user.email;
-
 
                     topbarUserRole.textContent =
                         "Unassigned";
@@ -591,7 +629,6 @@ onAuthStateChanged(
 
         }
 
-
         // ==================================
         // NO USER LOGGED IN
         // ==================================
@@ -602,25 +639,7 @@ onAuthStateChanged(
                 "NO USER IS LOGGED IN"
             );
 
-
-            loginScreen.classList.remove(
-                "hidden"
-            );
-
-
-            dashboardScreen.classList.add(
-                "hidden"
-            );
-
-
-            personnelScreen.classList.add(
-                "hidden"
-            );
-
-
-            personnelFileScreen.classList.add(
-                "hidden"
-            );
+            showLogin();
 
         }
 
@@ -640,18 +659,15 @@ logoutButton.addEventListener(
             "Signing out..."
         );
 
-
         try {
 
             await signOut(
                 auth
             );
 
-
             console.log(
                 "Successfully signed out."
             );
-
 
         } catch (error) {
 
@@ -675,7 +691,6 @@ async function loadPersonnel() {
     console.log(
         "LOAD PERSONNEL STARTED"
     );
-
 
     console.log(
         "Personnel list element:",
@@ -711,8 +726,7 @@ async function loadPersonnel() {
         );
 
 
-        personnelList.innerHTML =
-            "";
+        personnelList.innerHTML = "";
 
 
         if (
@@ -726,7 +740,6 @@ async function loadPersonnel() {
             `;
 
             return;
-
         }
 
 
@@ -757,7 +770,6 @@ async function loadPersonnel() {
                     "personnel-row";
 
 
-                // Store Firestore document ID
                 row.dataset.userId =
                     userDocument.id;
 
@@ -810,10 +822,6 @@ async function loadPersonnel() {
 
                 `;
 
-
-                // ==================================
-                // ADD TO LIST
-                // ==================================
 
                 personnelList.appendChild(
                     row
@@ -903,11 +911,11 @@ async function openPersonnelFile(
         ) {
 
             console.error(
-                "Personnel record not found."
+                "PERSONNEL RECORD NOT FOUND:",
+                userId
             );
 
             return;
-
         }
 
 
@@ -962,7 +970,7 @@ async function openPersonnelFile(
 
 
         // ==================================
-        // FORMAT JOIN DATE
+        // JOIN DATE
         // ==================================
 
         if (
@@ -975,8 +983,21 @@ async function openPersonnelFile(
                 );
 
 
-            profileJoined.textContent =
-                date.toLocaleDateString();
+            if (
+                !isNaN(
+                    date.getTime()
+                )
+            ) {
+
+                profileJoined.textContent =
+                    date.toLocaleDateString();
+
+            } else {
+
+                profileJoined.textContent =
+                    "Unknown";
+
+            }
 
         } else {
 
@@ -987,18 +1008,32 @@ async function openPersonnelFile(
 
 
         // ==================================
-        // SWITCH SCREENS
+        // SHOW PERSONNEL FILE
         // ==================================
 
-        personnelScreen.classList.add(
-            "hidden"
+        showPersonnelFile();
+
+
+        // ==================================
+        // DIAGNOSTIC
+        // ==================================
+
+        console.log(
+            "PERSONNEL FILE SCREEN DISPLAY:",
+            getComputedStyle(
+                personnelFileScreen
+            ).display
         );
 
-
-        personnelFileScreen.classList.remove(
-            "hidden"
+        console.log(
+            "PERSONNEL FILE SCREEN CLASSES:",
+            personnelFileScreen.className
         );
 
+        console.log(
+            "PERSONNEL FILE SCREEN:",
+            personnelFileScreen
+        );
 
     } catch (error) {
 
@@ -1103,20 +1138,7 @@ personnelButton.addEventListener(
     "click",
     function () {
 
-        dashboardScreen.classList.add(
-            "hidden"
-        );
-
-
-        personnelFileScreen.classList.add(
-            "hidden"
-        );
-
-
-        personnelScreen.classList.remove(
-            "hidden"
-        );
-
+        showPersonnel();
 
         loadPersonnel();
 
@@ -1132,14 +1154,7 @@ personnelBackButton.addEventListener(
     "click",
     function () {
 
-        personnelScreen.classList.add(
-            "hidden"
-        );
-
-
-        dashboardScreen.classList.remove(
-            "hidden"
-        );
+        showDashboard();
 
     }
 );
@@ -1153,14 +1168,7 @@ personnelFileBackButton.addEventListener(
     "click",
     function () {
 
-        personnelFileScreen.classList.add(
-            "hidden"
-        );
-
-
-        personnelScreen.classList.remove(
-            "hidden"
-        );
+        showPersonnel();
 
     }
 );
@@ -1233,6 +1241,10 @@ addPersonnelButton.addEventListener(
             "hidden"
         );
 
+
+        addPersonnelModal.style.display =
+            "flex";
+
     }
 );
 
@@ -1246,6 +1258,10 @@ function closeAddPersonnelModal() {
     addPersonnelModal.classList.add(
         "hidden"
     );
+
+
+    addPersonnelModal.style.display =
+        "";
 
 
     addPersonnelForm.reset();
@@ -1335,7 +1351,6 @@ addPersonnelForm.addEventListener(
                 "Please complete all fields.";
 
             return;
-
         }
 
 
