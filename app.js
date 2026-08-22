@@ -35,6 +35,7 @@ const db = getFirestore(app);
 // PAGE ELEMENTS
 // ==========================================
 
+
 // ==========================================
 // LOGIN
 // ==========================================
@@ -230,6 +231,7 @@ const disablePersonnelButton =
         "disablePersonnelButton"
     );
 
+
 // ==========================================
 // EDIT PERSONNEL MODAL
 // ==========================================
@@ -284,7 +286,13 @@ const editPersonTeam =
         "editPersonTeam"
     );
 
+
+// ==========================================
+// CURRENT PERSONNEL RECORD
+// ==========================================
+
 let currentPersonnelId = null;
+
 
 // ==========================================
 // ROLE PERMISSIONS
@@ -392,7 +400,6 @@ function showDashboard() {
 
     dashboardScreen.classList.remove("hidden");
 
-    // Clear any inline display overrides
     loginScreen.style.display = "";
     personnelScreen.style.display = "";
     personnelFileScreen.style.display = "";
@@ -409,7 +416,6 @@ function showPersonnel() {
 
     personnelScreen.classList.remove("hidden");
 
-    // Explicit display control
     dashboardScreen.style.display = "none";
     personnelFileScreen.style.display = "none";
     loginScreen.style.display = "none";
@@ -426,7 +432,6 @@ function showPersonnelFile() {
 
     personnelFileScreen.classList.remove("hidden");
 
-    // Explicit display control
     dashboardScreen.style.display = "none";
     personnelScreen.style.display = "none";
     loginScreen.style.display = "none";
@@ -450,7 +455,6 @@ function showLogin() {
 
     loginScreen.classList.remove("hidden");
 
-    // Explicit display control
     dashboardScreen.style.display = "none";
     personnelScreen.style.display = "none";
     personnelFileScreen.style.display = "none";
@@ -534,9 +538,6 @@ onAuthStateChanged(
             user
         );
 
-        // ==================================
-        // USER LOGGED IN
-        // ==================================
 
         if (user) {
 
@@ -555,26 +556,14 @@ onAuthStateChanged(
             );
 
 
-            // ==================================
-            // SHOW DASHBOARD
-            // ==================================
-
             showDashboard();
 
-
-            // ==================================
-            // TEMPORARY FALLBACK
-            // ==================================
 
             welcomeMessage.textContent =
                 `Welcome, ${user.email}`;
 
 
             try {
-
-                // ==================================
-                // GET USER PERSONNEL RECORD
-                // ==================================
 
                 const userRef =
                     doc(
@@ -583,15 +572,12 @@ onAuthStateChanged(
                         user.uid
                     );
 
+
                 const userSnapshot =
                     await getDoc(
                         userRef
                     );
 
-
-                // ==================================
-                // PERSONNEL RECORD EXISTS
-                // ==================================
 
                 if (
                     userSnapshot.exists()
@@ -607,10 +593,6 @@ onAuthStateChanged(
                     );
 
 
-                    // ==================================
-                    // GET ROLE PERMISSIONS
-                    // ==================================
-
                     const permissions =
                         getUserPermissions(
                             userData.role
@@ -623,21 +605,21 @@ onAuthStateChanged(
                     );
 
 
-                    // ==================================
-                    // UPDATE DASHBOARD
-                    // ==================================
-
                     welcomeMessage.textContent =
                         `Welcome, ${userData.name}`;
+
 
                     userRole.textContent =
                         `Role: ${userData.role}`;
 
+
                     userTeam.textContent =
                         `Team: ${userData.team}`;
 
+
                     topbarUserName.textContent =
                         userData.name;
+
 
                     topbarUserRole.textContent =
                         userData.role;
@@ -658,14 +640,18 @@ onAuthStateChanged(
                     welcomeMessage.textContent =
                         "Welcome";
 
+
                     userRole.textContent =
                         "Role: Not Assigned";
+
 
                     userTeam.textContent =
                         "Team: Not Assigned";
 
+
                     topbarUserName.textContent =
                         user.email;
+
 
                     topbarUserRole.textContent =
                         "Unassigned";
@@ -683,13 +669,7 @@ onAuthStateChanged(
             }
 
 
-        }
-
-        // ==================================
-        // NO USER LOGGED IN
-        // ==================================
-
-        else {
+        } else {
 
             console.log(
                 "NO USER IS LOGGED IN"
@@ -715,15 +695,18 @@ logoutButton.addEventListener(
             "Signing out..."
         );
 
+
         try {
 
             await signOut(
                 auth
             );
 
+
             console.log(
                 "Successfully signed out."
             );
+
 
         } catch (error) {
 
@@ -746,11 +729,6 @@ async function loadPersonnel() {
 
     console.log(
         "LOAD PERSONNEL STARTED"
-    );
-
-    console.log(
-        "Personnel list element:",
-        personnelList
     );
 
 
@@ -806,16 +784,6 @@ async function loadPersonnel() {
                     userDocument.data();
 
 
-                console.log(
-                    "PERSONNEL RECORD:",
-                    person
-                );
-
-
-                // ==================================
-                // CREATE ROW
-                // ==================================
-
                 const row =
                     document.createElement(
                         "div"
@@ -830,10 +798,6 @@ async function loadPersonnel() {
                     userDocument.id;
 
 
-                // ==================================
-                // STATUS
-                // ==================================
-
                 const statusClass =
                     person.active
                         ? "status-active"
@@ -845,10 +809,6 @@ async function loadPersonnel() {
                         ? "ACTIVE"
                         : "INACTIVE";
 
-
-                // ==================================
-                // ROW CONTENT
-                // ==================================
 
                 row.innerHTML = `
 
@@ -883,16 +843,6 @@ async function loadPersonnel() {
                     row
                 );
 
-
-                console.log(
-                    "PERSONNEL ROW ADDED:",
-                    row
-                );
-
-
-                // ==================================
-                // CLICK → PERSONNEL FILE
-                // ==================================
 
                 row.addEventListener(
                     "click",
@@ -936,7 +886,9 @@ async function openPersonnelFile(
     userId
 ) {
 
-    currentPersonnelId = userId;
+    currentPersonnelId =
+        userId;
+
 
     console.log(
         "OPENING PERSONNEL FILE:",
@@ -945,10 +897,6 @@ async function openPersonnelFile(
 
 
     try {
-
-        // ==================================
-        // GET PERSONNEL DOCUMENT
-        // ==================================
 
         const userRef =
             doc(
@@ -987,10 +935,6 @@ async function openPersonnelFile(
         );
 
 
-        // ==================================
-        // POPULATE PROFILE
-        // ==================================
-
         profileName.textContent =
             person.name ||
             "Unnamed";
@@ -1027,10 +971,6 @@ async function openPersonnelFile(
             "Unknown";
 
 
-        // ==================================
-        // JOIN DATE
-        // ==================================
-
         if (
             person.createdAt
         ) {
@@ -1065,33 +1005,8 @@ async function openPersonnelFile(
         }
 
 
-        // ==================================
-        // SHOW PERSONNEL FILE
-        // ==================================
-
         showPersonnelFile();
 
-
-        // ==================================
-        // DIAGNOSTIC
-        // ==================================
-
-        console.log(
-            "PERSONNEL FILE SCREEN DISPLAY:",
-            getComputedStyle(
-                personnelFileScreen
-            ).display
-        );
-
-        console.log(
-            "PERSONNEL FILE SCREEN CLASSES:",
-            personnelFileScreen.className
-        );
-
-        console.log(
-            "PERSONNEL FILE SCREEN:",
-            personnelFileScreen
-        );
 
     } catch (error) {
 
@@ -1157,7 +1072,7 @@ personnelSearch.addEventListener(
 
 
 // ==========================================
-// DASHBOARD → CASES
+// DASHBOARD BUTTONS
 // ==========================================
 
 casesButton.addEventListener(
@@ -1172,10 +1087,6 @@ casesButton.addEventListener(
 );
 
 
-// ==========================================
-// DASHBOARD → NEW CASE
-// ==========================================
-
 newCaseButton.addEventListener(
     "click",
     function () {
@@ -1187,10 +1098,6 @@ newCaseButton.addEventListener(
     }
 );
 
-
-// ==========================================
-// DASHBOARD → PERSONNEL
-// ==========================================
 
 personnelButton.addEventListener(
     "click",
@@ -1204,10 +1111,6 @@ personnelButton.addEventListener(
 );
 
 
-// ==========================================
-// PERSONNEL → DASHBOARD
-// ==========================================
-
 personnelBackButton.addEventListener(
     "click",
     function () {
@@ -1218,10 +1121,6 @@ personnelBackButton.addEventListener(
 );
 
 
-// ==========================================
-// PERSONNEL FILE → PERSONNEL
-// ==========================================
-
 personnelFileBackButton.addEventListener(
     "click",
     function () {
@@ -1231,10 +1130,6 @@ personnelFileBackButton.addEventListener(
     }
 );
 
-
-// ==========================================
-// DASHBOARD → TEAMS
-// ==========================================
 
 teamsButton.addEventListener(
     "click",
@@ -1248,10 +1143,6 @@ teamsButton.addEventListener(
 );
 
 
-// ==========================================
-// DASHBOARD → EVIDENCE
-// ==========================================
-
 evidenceButton.addEventListener(
     "click",
     function () {
@@ -1263,10 +1154,6 @@ evidenceButton.addEventListener(
     }
 );
 
-
-// ==========================================
-// DASHBOARD → REPORTS
-// ==========================================
 
 reportsButton.addEventListener(
     "click",
@@ -1281,7 +1168,7 @@ reportsButton.addEventListener(
 
 
 // ==========================================
-// OPEN ADD PERSONNEL MODAL
+// ADD PERSONNEL MODAL
 // ==========================================
 
 addPersonnelButton.addEventListener(
@@ -1306,10 +1193,6 @@ addPersonnelButton.addEventListener(
     }
 );
 
-
-// ==========================================
-// CLOSE ADD PERSONNEL MODAL
-// ==========================================
 
 function closeAddPersonnelModal() {
 
@@ -1364,10 +1247,6 @@ addPersonnelForm.addEventListener(
             "";
 
 
-        // ==================================
-        // GET FORM VALUES
-        // ==================================
-
         const name =
             document.getElementById(
                 "personName"
@@ -1394,10 +1273,6 @@ addPersonnelForm.addEventListener(
             ).value.trim();
 
 
-        // ==================================
-        // VALIDATION
-        // ==================================
-
         if (
             !name ||
             !email ||
@@ -1419,10 +1294,6 @@ addPersonnelForm.addEventListener(
             );
 
 
-            // ==================================
-            // CREATE DOCUMENT REFERENCE
-            // ==================================
-
             const personnelRef =
                 doc(
                     collection(
@@ -1431,10 +1302,6 @@ addPersonnelForm.addEventListener(
                     )
                 );
 
-
-            // ==================================
-            // PERSONNEL DATA
-            // ==================================
 
             const personnelData = {
 
@@ -1462,10 +1329,6 @@ addPersonnelForm.addEventListener(
             };
 
 
-            // ==================================
-            // SAVE TO FIRESTORE
-            // ==================================
-
             await setDoc(
                 personnelRef,
                 personnelData
@@ -1478,16 +1341,8 @@ addPersonnelForm.addEventListener(
             );
 
 
-            // ==================================
-            // CLOSE MODAL
-            // ==================================
-
             closeAddPersonnelModal();
 
-
-            // ==================================
-            // REFRESH LIST
-            // ==================================
 
             await loadPersonnel();
 
@@ -1515,21 +1370,25 @@ addPersonnelForm.addEventListener(
 
 
 // ==========================================
-// OPEN EDIT PERSONNEL MODAL
+// EDIT PERSONNEL
 // ==========================================
+
+
+// OPEN EDIT MODAL
 
 editPersonnelButton.addEventListener(
     "click",
     async function () {
 
-        if (!currentPersonnelId) {
+        if (
+            !currentPersonnelId
+        ) {
 
             console.error(
-                "No personnel record selected."
+                "NO PERSONNEL RECORD SELECTED"
             );
 
             return;
-
         }
 
 
@@ -1549,22 +1408,21 @@ editPersonnelButton.addEventListener(
                 );
 
 
-            if (!snapshot.exists()) {
+            if (
+                !snapshot.exists()
+            ) {
 
                 console.error(
-                    "Personnel record no longer exists."
+                    "PERSONNEL RECORD NO LONGER EXISTS"
                 );
 
                 return;
-
             }
 
 
             const person =
                 snapshot.data();
 
-
-            // Fill form
 
             editPersonName.value =
                 person.name || "";
@@ -1609,19 +1467,46 @@ editPersonnelButton.addEventListener(
 
 
 // ==========================================
-// DISABLE PERSONNEL
+// CLOSE EDIT PERSONNEL MODAL
 // ==========================================
 
-disablePersonnelButton.addEventListener(
+function closeEditPersonnelModalWindow() {
+
+    editPersonnelModal.classList.add(
+        "hidden"
+    );
+
+
+    editPersonnelModal.style.display =
+        "";
+
+
+    editPersonnelForm.reset();
+
+
+    editPersonnelError.textContent =
+        "";
+
+}
+
+
+closeEditPersonnelModal.addEventListener(
     "click",
-    function () {
-
-        alert(
-            "Personnel status management will be built in the next step."
-        );
-
-    }
+    closeEditPersonnelModalWindow
 );
+
+
+cancelEditPersonnelButton.addEventListener(
+    "click",
+    closeEditPersonnelModalWindow
+);
+
+
+editModalOverlay.addEventListener(
+    "click",
+    closeEditPersonnelModalWindow
+);
+
 
 // ==========================================
 // SAVE PERSONNEL CHANGES
@@ -1638,13 +1523,14 @@ editPersonnelForm.addEventListener(
             "";
 
 
-        if (!currentPersonnelId) {
+        if (
+            !currentPersonnelId
+        ) {
 
             editPersonnelError.textContent =
                 "No personnel record selected.";
 
             return;
-
         }
 
 
@@ -1677,7 +1563,6 @@ editPersonnelForm.addEventListener(
                 "Please complete all fields.";
 
             return;
-
         }
 
 
@@ -1725,19 +1610,25 @@ editPersonnelForm.addEventListener(
             );
 
 
-            // Close modal
+            // ==================================
+            // CLOSE MODAL
+            // ==================================
 
             closeEditPersonnelModalWindow();
 
 
-            // Reload profile
+            // ==================================
+            // REFRESH PERSONNEL FILE
+            // ==================================
 
             await openPersonnelFile(
                 currentPersonnelId
             );
 
 
-            // Refresh personnel list
+            // ==================================
+            // REFRESH PERSONNEL LIST
+            // ==================================
 
             await loadPersonnel();
 
@@ -1754,6 +1645,22 @@ editPersonnelForm.addEventListener(
                 "Unable to save personnel changes.";
 
         }
+
+    }
+);
+
+
+// ==========================================
+// DISABLE PERSONNEL
+// ==========================================
+
+disablePersonnelButton.addEventListener(
+    "click",
+    function () {
+
+        alert(
+            "Personnel status management will be built in the next step."
+        );
 
     }
 );
