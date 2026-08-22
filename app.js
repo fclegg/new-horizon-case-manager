@@ -230,6 +230,59 @@ const disablePersonnelButton =
         "disablePersonnelButton"
     );
 
+// ==========================================
+// EDIT PERSONNEL MODAL
+// ==========================================
+
+const editPersonnelModal =
+    document.getElementById(
+        "editPersonnelModal"
+    );
+
+const editPersonnelForm =
+    document.getElementById(
+        "editPersonnelForm"
+    );
+
+const closeEditPersonnelModal =
+    document.getElementById(
+        "closeEditPersonnelModal"
+    );
+
+const cancelEditPersonnelButton =
+    document.getElementById(
+        "cancelEditPersonnelButton"
+    );
+
+const editModalOverlay =
+    document.getElementById(
+        "editModalOverlay"
+    );
+
+const editPersonnelError =
+    document.getElementById(
+        "editPersonnelError"
+    );
+
+const editPersonName =
+    document.getElementById(
+        "editPersonName"
+    );
+
+const editPersonEmail =
+    document.getElementById(
+        "editPersonEmail"
+    );
+
+const editPersonRole =
+    document.getElementById(
+        "editPersonRole"
+    );
+
+const editPersonTeam =
+    document.getElementById(
+        "editPersonTeam"
+    );
 
 // ==========================================
 // ROLE PERMISSIONS
