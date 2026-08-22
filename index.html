@@ -591,12 +591,190 @@
 
     </div>
 
+<!-- ==========================================
+     ADD PERSONNEL MODAL
+     ========================================== -->
 
+<div
+    id="addPersonnelModal"
+    class="modal hidden"
+>
+
+    <div class="modal-overlay" id="modalOverlay"></div>
+
+
+    <div class="modal-card">
+
+        <div class="modal-header">
+
+            <div>
+
+                <p class="section-label">
+                    ORGANIZATION
+                </p>
+
+                <h2>
+                    Add Personnel
+                </h2>
+
+            </div>
+
+            <button
+                type="button"
+                id="closePersonnelModal"
+                class="modal-close"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="addPersonnelForm">
+
+            <!-- NAME -->
+
+            <div class="form-group">
+
+                <label for="personName">
+                    Full Name
+                </label>
+
+                <input
+                    type="text"
+                    id="personName"
+                    placeholder="Enter full name"
+                    required
+                >
+
+            </div>
+
+
+            <!-- EMAIL -->
+
+            <div class="form-group">
+
+                <label for="personEmail">
+                    Email Address
+                </label>
+
+                <input
+                    type="email"
+                    id="personEmail"
+                    placeholder="Enter email address"
+                    required
+                >
+
+            </div>
+
+
+            <!-- ROLE -->
+
+            <div class="form-group">
+
+                <label for="personRole">
+                    Role
+                </label>
+
+                <select
+                    id="personRole"
+                    required
+                >
+
+                    <option value="">
+                        Select a role
+                    </option>
+
+                    <option value="Team Lead">
+                        Team Lead
+                    </option>
+
+                    <option value="Assistant Team Lead">
+                        Assistant Team Lead
+                    </option>
+
+                    <option value="Investigator">
+                        Investigator
+                    </option>
+
+                    <option value="Researcher">
+                        Researcher
+                    </option>
+
+                    <option value="Analyst">
+                        Analyst
+                    </option>
+
+                    <option value="Tech Specialist">
+                        Tech Specialist
+                    </option>
+
+                    <option value="AV Specialist">
+                        AV Specialist
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- TEAM -->
+
+            <div class="form-group">
+
+                <label for="personTeam">
+                    Team
+                </label>
+
+                <input
+                    type="text"
+                    id="personTeam"
+                    placeholder="Example: Team 1"
+                    required
+                >
+
+            </div>
+
+
+            <!-- FORM ERROR -->
+
+            <p
+                id="addPersonnelError"
+                class="form-error"
+            ></p>
+
+
+            <!-- FORM BUTTONS -->
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    id="cancelPersonnelButton"
+                    class="secondary-button"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="primary-button"
+                >
+                    Add Person
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
 
     <!-- ==========================================
          JAVASCRIPT
          ========================================== -->
-
+    
     <script
         type="module"
         src="app.js"
