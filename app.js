@@ -597,44 +597,36 @@ function getUserPermissions(role) {
 
 function hideAllScreens() {
 
-    loginScreen.classList.add(
-        "hidden"
-    );
+    if (loginScreen) {
+        loginScreen.classList.add("hidden");
+    }
 
-    dashboardScreen.classList.add(
-        "hidden"
-    );
+    if (dashboardScreen) {
+        dashboardScreen.classList.add("hidden");
+    }
 
-    personnelScreen.classList.add(
-        "hidden"
-    );
+    if (personnelScreen) {
+        personnelScreen.classList.add("hidden");
+    }
 
-    personnelFileScreen.classList.add(
-        "hidden"
-    );
+    if (personnelFileScreen) {
+        personnelFileScreen.classList.add("hidden");
+    }
 
-    teamsScreen.classList.add(
-        "hidden"
-    );
+    if (teamsScreen) {
+        teamsScreen.classList.add("hidden");
+    }
 
-    teamFileScreen.classList.add(
-        "hidden"
-    );
+    if (teamFileScreen) {
+        teamFileScreen.classList.add("hidden");
+    }
 
     if (casesScreen) {
-
-        casesScreen.classList.add(
-            "hidden"
-        );
-
+        casesScreen.classList.add("hidden");
     }
 
     if (caseFileScreen) {
-
-        caseFileScreen.classList.add(
-            "hidden"
-        );
-
+        caseFileScreen.classList.add("hidden");
     }
 
 }
