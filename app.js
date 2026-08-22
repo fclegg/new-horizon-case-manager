@@ -38,6 +38,9 @@ const loginScreen =
 const dashboardScreen =
     document.getElementById("dashboardScreen");
 
+const personnelScreen =
+    document.getElementById("personnelScreen");
+
 const loginForm =
     document.getElementById("loginForm");
 
@@ -65,6 +68,21 @@ const topbarUserRole =
 // Logout
 const logoutButton =
     document.getElementById("logoutButton");
+
+const personnelButton =
+    document.getElementById("personnelButton");
+
+const personnelBackButton =
+    document.getElementById("personnelBackButton");
+
+const addPersonnelButton =
+    document.getElementById("addPersonnelButton");
+
+const personnelSearch =
+    document.getElementById("personnelSearch");
+
+const personnelList =
+    document.getElementById("personnelList");
 
 
 // Dashboard buttons
@@ -552,6 +570,27 @@ reportsButton.addEventListener(
         alert(
             "Reports will be built in a later phase."
         );
+
+    }
+);
+
+personnelButton.addEventListener("click", function () {
+
+    dashboardScreen.classList.add("hidden");
+
+    personnelScreen.classList.remove("hidden");
+
+    loadPersonnel();
+
+});
+
+personnelBackButton.addEventListener(
+    "click",
+    function () {
+
+        personnelScreen.classList.add("hidden");
+
+        dashboardScreen.classList.remove("hidden");
 
     }
 );
