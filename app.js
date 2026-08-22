@@ -1622,3 +1622,138 @@ disablePersonnelButton.addEventListener(
 
     }
 );
+
+// ==========================================
+// SAVE PERSONNEL CHANGES
+// ==========================================
+
+editPersonnelForm.addEventListener(
+    "submit",
+    async function (event) {
+
+        event.preventDefault();
+
+
+        editPersonnelError.textContent =
+            "";
+
+
+        if (!currentPersonnelId) {
+
+            editPersonnelError.textContent =
+                "No personnel record selected.";
+
+            return;
+
+        }
+
+
+        const name =
+            editPersonName.value.trim();
+
+
+        const email =
+            editPersonEmail.value
+                .trim()
+                .toLowerCase();
+
+
+        const role =
+            editPersonRole.value;
+
+
+        const team =
+            editPersonTeam.value.trim();
+
+
+        if (
+            !name ||
+            !email ||
+            !role ||
+            !team
+        ) {
+
+            editPersonnelError.textContent =
+                "Please complete all fields.";
+
+            return;
+
+        }
+
+
+        try {
+
+            console.log(
+                "UPDATING PERSONNEL:",
+                currentPersonnelId
+            );
+
+
+            const userRef =
+                doc(
+                    db,
+                    "users",
+                    currentPersonnelId
+                );
+
+
+            await updateDoc(
+                userRef,
+                {
+
+                    name:
+                        name,
+
+                    email:
+                        email,
+
+                    role:
+                        role,
+
+                    team:
+                        team,
+
+                    updatedAt:
+                        new Date().toISOString()
+
+                }
+            );
+
+
+            console.log(
+                "PERSONNEL UPDATED SUCCESSFULLY"
+            );
+
+
+            // Close modal
+
+            closeEditPersonnelModalWindow();
+
+
+            // Reload profile
+
+            await openPersonnelFile(
+                currentPersonnelId
+            );
+
+
+            // Refresh personnel list
+
+            await loadPersonnel();
+
+
+        } catch (error) {
+
+            console.error(
+                "UPDATE PERSONNEL ERROR:",
+                error
+            );
+
+
+            editPersonnelError.textContent =
+                "Unable to save personnel changes.";
+
+        }
+
+    }
+);
