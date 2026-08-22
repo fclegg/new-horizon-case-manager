@@ -12,7 +12,8 @@ import {
     doc,
     getDoc,
     collection,
-    getDocs
+    getDocs,
+    setDoc
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 import { firebaseConfig } from "./firebase-config.js";
@@ -852,18 +853,212 @@ reportsButton.addEventListener(
     }
 );
 
-
 // ==========================================
-// ADD PERSONNEL
+// OPEN ADD PERSONNEL MODAL
 // ==========================================
 
 addPersonnelButton.addEventListener(
     "click",
     function () {
 
-        alert(
-            "Personnel invitation will be built in Step 27."
+        addPersonnelError.textContent = "";
+
+        addPersonnelForm.reset();
+
+        addPersonnelModal.classList.remove(
+            "hidden"
         );
+
+    }
+);
+
+// ==========================================
+// CLOSE ADD PERSONNEL MODAL
+// ==========================================
+
+function closeAddPersonnelModal() {
+
+    addPersonnelModal.classList.add(
+        "hidden"
+    );
+
+    addPersonnelForm.reset();
+
+    addPersonnelError.textContent = "";
+
+}
+
+
+closePersonnelModal.addEventListener(
+    "click",
+    closeAddPersonnelModal
+);
+
+
+cancelPersonnelButton.addEventListener(
+    "click",
+    closeAddPersonnelModal
+);
+
+
+modalOverlay.addEventListener(
+    "click",
+    closeAddPersonnelModal
+);
+
+// ==========================================
+// ADD PERSONNEL
+// ==========================================
+
+addPersonnelForm.addEventListener(
+    "submit",
+    async function (event) {
+
+        event.preventDefault();
+
+
+        addPersonnelError.textContent = "";
+
+
+        // ==================================
+        // GET FORM VALUES
+        // ==================================
+
+        const name =
+            document.getElementById(
+                "personName"
+            ).value.trim();
+
+
+        const email =
+            document.getElementById(
+                "personEmail"
+            ).value.trim()
+                .toLowerCase();
+
+
+        const role =
+            document.getElementById(
+                "personRole"
+            ).value;
+
+
+        const team =
+            document.getElementById(
+                "personTeam"
+            ).value.trim();
+
+
+        // ==================================
+        // BASIC VALIDATION
+        // ==================================
+
+        if (
+            !name ||
+            !email ||
+            !role ||
+            !team
+        ) {
+
+            addPersonnelError.textContent =
+                "Please complete all fields.";
+
+            return;
+
+        }
+
+
+        try {
+
+            console.log(
+                "Creating personnel record..."
+            );
+
+
+            // ==================================
+            // CREATE A FIRESTORE DOCUMENT ID
+            // ==================================
+
+            const personnelRef =
+                doc(
+                    collection(
+                        db,
+                        "users"
+                    )
+                );
+
+
+            // ==================================
+            // PERSONNEL DATA
+            // ==================================
+
+            const personnelData = {
+
+                name: name,
+
+                email: email,
+
+                role: role,
+
+                team: team,
+
+                active: true,
+
+                accountStatus: "Pending",
+
+                createdAt:
+                    new Date().toISOString()
+
+            };
+
+
+            // ==================================
+            // SAVE TO FIRESTORE
+            // ==================================
+
+            await setDoc(
+                personnelRef,
+                personnelData
+            );
+
+
+            console.log(
+                "PERSONNEL CREATED:",
+                personnelRef.id
+            );
+
+
+            // ==================================
+            // CLOSE MODAL
+            // ==================================
+
+            closeAddPersonnelModal();
+
+
+            // ==================================
+            // REFRESH PERSONNEL LIST
+            // ==================================
+
+            await loadPersonnel();
+
+
+            console.log(
+                "Personnel list refreshed."
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "ADD PERSONNEL ERROR:",
+                error
+            );
+
+
+            addPersonnelError.textContent =
+                "Unable to create personnel record.";
+
+        }
 
     }
 );
