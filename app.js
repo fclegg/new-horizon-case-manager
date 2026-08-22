@@ -936,6 +936,8 @@ async function openPersonnelFile(
     userId
 ) {
 
+    currentPersonnelId = userId;
+
     console.log(
         "OPENING PERSONNEL FILE:",
         userId
