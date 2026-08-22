@@ -88,6 +88,95 @@ loginForm.addEventListener("submit", async function (event) {
 // AUTHENTICATION STATE
 // ==========================================
 
+function getUserPermissions(role) {
+
+    const permissions = {
+
+        Director: {
+            viewAllCases: true,
+            createCases: true,
+            manageUsers: true,
+            manageTeams: true,
+            manageEvidence: true,
+            analyzeEvidence: true,
+            manageResearch: true
+        },
+
+        "Team Lead": {
+            viewAllCases: false,
+            createCases: true,
+            manageUsers: false,
+            manageTeams: false,
+            manageEvidence: true,
+            analyzeEvidence: true,
+            manageResearch: true
+        },
+
+        "Assistant Team Lead": {
+            viewAllCases: false,
+            createCases: false,
+            manageUsers: false,
+            manageTeams: false,
+            manageEvidence: true,
+            analyzeEvidence: true,
+            manageResearch: true
+        },
+
+        Investigator: {
+            viewAllCases: false,
+            createCases: false,
+            manageUsers: false,
+            manageTeams: false,
+            manageEvidence: true,
+            analyzeEvidence: false,
+            manageResearch: false
+        },
+
+        Researcher: {
+            viewAllCases: false,
+            createCases: false,
+            manageUsers: false,
+            manageTeams: false,
+            manageEvidence: false,
+            analyzeEvidence: false,
+            manageResearch: true
+        },
+
+        Analyst: {
+            viewAllCases: false,
+            createCases: false,
+            manageUsers: false,
+            manageTeams: false,
+            manageEvidence: true,
+            analyzeEvidence: true,
+            manageResearch: false
+        },
+
+        "Tech Specialist": {
+            viewAllCases: false,
+            createCases: false,
+            manageUsers: false,
+            manageTeams: false,
+            manageEvidence: false,
+            analyzeEvidence: false,
+            manageResearch: false
+        },
+
+        "AV Specialist": {
+            viewAllCases: false,
+            createCases: false,
+            manageUsers: false,
+            manageTeams: false,
+            manageEvidence: true,
+            analyzeEvidence: true,
+            manageResearch: false
+        }
+
+    };
+
+    return permissions[role] || null;
+}
+
 onAuthStateChanged(auth, async function (user) {
 
     console.log("AUTH STATE CHANGED:", user);
