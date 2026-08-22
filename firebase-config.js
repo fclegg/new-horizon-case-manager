@@ -1,10 +1,21 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-export const firebaseConfig = {
-  apiKey: "AIzaSyB_a3QoU4JfRqtp-dfeEnDgQjmyNC59rRY",
-  authDomain: "new-horizon-case-manager.firebaseapp.com",
-  projectId: "new-horizon-case-manager",
-  storageBucket: "new-horizon-case-manager.firebasestorage.app",
-  messagingSenderId: "457648232954",
-  appId: "1:457648232954:web:8e3348489d33291c1b6c43",
-  measurementId: "G-V89EHGZKQY"
+const firebaseConfig = {
+  apiKey: "AIzaSyAfF6M9DqtpEHJIC1EwxsIZhhRtgDn6hb4",
+  authDomain: "new-horizon-case-manager-9c87e.firebaseapp.com",
+  projectId: "new-horizon-case-manager-9c87e",
+  storageBucket: "new-horizon-case-manager-9c87e.firebasestorage.app",
+  messagingSenderId: "762722257187",
+  appId: "1:762722257187:web:c244d24be11184adfc2496",
+  measurementId: "G-RXCDHY5G68"
 };
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
