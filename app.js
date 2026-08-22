@@ -1573,6 +1573,24 @@ if (newCaseModalOverlay) {
 }
 
 
+// ==========================================
+// CASE NAVIGATION
+// ==========================================
+
+if (casesButton) {
+
+    casesButton.addEventListener(
+        "click",
+        function () {
+
+            showCases();
+
+        }
+    );
+
+}
+
+
 if (newCaseButton) {
 
     newCaseButton.addEventListener(
@@ -1596,6 +1614,34 @@ if (newCaseListButton) {
         function () {
 
             openNewCaseModal();
+
+        }
+    );
+
+}
+
+
+if (casesBackButton) {
+
+    casesBackButton.addEventListener(
+        "click",
+        function () {
+
+            showDashboard();
+
+        }
+    );
+
+}
+
+
+if (caseFileBackButton) {
+
+    caseFileBackButton.addEventListener(
+        "click",
+        function () {
+
+            showCases();
 
         }
     );
