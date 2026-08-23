@@ -700,7 +700,8 @@ body {
 }
 
 .form-group input,
-.form-group select {
+.form-group select,
+.form-group textarea {
     width: 100%;
 
     padding: 12px 14px;
@@ -725,6 +726,16 @@ body {
 
 .form-group select {
     cursor: pointer;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+    font-family: inherit;
+}
+
+.case-list-header {
+    grid-template-columns: 1fr 2fr 1.2fr 1.2fr 1.2fr;
 }
 
 
@@ -979,5 +990,12 @@ body {
 }
 
 #dashboardScreen:not(.hidden) {
+    display: block !important;
+}
+
+#casesScreen:not(.hidden),
+#caseFileScreen:not(.hidden),
+#teamsScreen:not(.hidden),
+#teamFileScreen:not(.hidden) {
     display: block !important;
 }
