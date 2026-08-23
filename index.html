@@ -1095,6 +1095,276 @@
 
 
     <!-- ==========================================
+         CASES SCREEN
+         ========================================== -->
+
+    <div id="casesScreen" class="screen hidden">
+
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand-name">NEW HORIZON</div>
+                <div class="brand-subtitle">CASE MANAGEMENT</div>
+            </div>
+            <button id="casesBackButton">← Dashboard</button>
+        </header>
+
+        <main class="dashboard">
+            <section class="dashboard-header">
+                <p class="section-label">INVESTIGATIONS</p>
+                <h1>Cases</h1>
+                <p>Review and manage active investigations.</p>
+            </section>
+
+            <section class="personnel-controls">
+                <input type="search" id="caseSearch" placeholder="Search cases...">
+                <select id="caseStatusFilter" aria-label="Filter cases by status">
+                    <option value="all">All statuses</option>
+                    <option value="Active">Active</option>
+                    <option value="Completed">Completed</option>
+                    <option value="On Hold">On Hold</option>
+                </select>
+                <select id="caseTeamFilter" aria-label="Filter cases by team">
+                    <option value="all">All teams</option>
+                </select>
+                <button id="newCaseListButton">+ New Case</button>
+            </section>
+
+            <section class="personnel-list">
+                <div class="personnel-list-header case-list-header">
+                    <span>Case #</span><span>Investigation</span><span>Status</span><span>Team</span><span>Date</span>
+                </div>
+                <div id="casesList"><p class="loading-message">Loading cases...</p></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- ==========================================
+         CASE FILE SCREEN
+         ========================================== -->
+
+    <div id="caseFileScreen" class="screen hidden">
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand-name">NEW HORIZON</div>
+                <div class="brand-subtitle">CASE FILE</div>
+            </div>
+            <button id="caseFileBackButton">← Cases</button>
+        </header>
+
+        <main class="dashboard">
+            <section class="dashboard-header">
+                <p class="section-label" id="caseProfileNumber">CASE</p>
+                <h1 id="caseProfileName">Investigation</h1>
+            </section>
+
+            <section class="profile-section">
+                <h2>Case Information</h2>
+                <div class="profile-grid">
+                    <div class="profile-field"><span>CASE NUMBER</span><strong id="caseFieldNumber">—</strong></div>
+                    <div class="profile-field"><span>STATUS</span><strong id="caseFieldStatus">—</strong></div>
+                    <div class="profile-field"><span>PRIORITY</span><strong id="caseFieldPriority">—</strong></div>
+                    <div class="profile-field"><span>TYPE</span><strong id="caseFieldType">—</strong></div>
+                    <div class="profile-field"><span>CLIENT</span><strong id="caseFieldClient">—</strong></div>
+                    <div class="profile-field"><span>LOCATION</span><strong id="caseFieldLocation">—</strong></div>
+                    <div class="profile-field"><span>ASSIGNED TEAM</span><strong id="caseFieldTeam">—</strong></div>
+                    <div class="profile-field"><span>INVESTIGATION DATE</span><strong id="caseFieldInvestigationDate">—</strong></div>
+                    <div class="profile-field"><span>DATE OPENED</span><strong id="caseFieldOpened">—</strong></div>
+                    <div class="profile-field"><span>CREATED BY</span><strong id="caseFieldCreatedBy">—</strong></div>
+                </div>
+            </section>
+
+            <section class="profile-section">
+                <h2>Description</h2>
+                <div class="profile-field"><strong id="caseFieldDescription">No description provided.</strong></div>
+            </section>
+
+            <section class="profile-section">
+                <h2>Case Actions</h2>
+                <div class="profile-actions">
+                    <button id="editCaseButton" class="dashboard-card"><span class="card-icon">EDIT</span><strong>Edit Case</strong><span>Update details, status, and assigned team.</span></button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- ==========================================
+         EDIT CASE MODAL
+         ========================================== -->
+
+    <div id="editCaseModal" class="modal hidden">
+        <div class="modal-overlay" id="editCaseModalOverlay"></div>
+        <div class="modal-card">
+            <div class="modal-header">
+                <div><p class="section-label">INVESTIGATIONS</p><h2>Edit Case</h2></div>
+                <button type="button" id="closeEditCaseModal" class="modal-close" aria-label="Close">×</button>
+            </div>
+            <form id="editCaseForm">
+                <div class="form-group"><label for="editCaseName">Case Name</label><input id="editCaseName" type="text" required></div>
+                <div class="form-group"><label for="editCaseType">Case Type</label><select id="editCaseType" required><option value="Investigation">Investigation</option><option value="Surveillance">Surveillance</option><option value="Research">Research</option><option value="Background">Background</option></select></div>
+                <div class="form-group"><label for="editCasePriority">Priority</label><select id="editCasePriority" required><option value="Low">Low</option><option value="Normal">Normal</option><option value="High">High</option><option value="Critical">Critical</option></select></div>
+                <div class="form-group"><label for="editCaseStatus">Status</label><select id="editCaseStatus" required><option value="Active">Active</option><option value="On Hold">On Hold</option><option value="Completed">Completed</option></select></div>
+                <div class="form-group"><label for="editCaseClient">Client</label><input id="editCaseClient" type="text" required></div>
+                <div class="form-group"><label for="editCaseLocation">Location</label><input id="editCaseLocation" type="text" required></div>
+                <div class="form-group"><label for="editCaseTeam">Assigned Team</label><select id="editCaseTeam"><option value="">Unassigned</option></select></div>
+                <div class="form-group"><label for="editCaseInvestigationDate">Investigation Date</label><input id="editCaseInvestigationDate" type="date"></div>
+                <div class="form-group"><label for="editCaseDescription">Description</label><textarea id="editCaseDescription" rows="4"></textarea></div>
+                <p id="editCaseError" class="form-error"></p>
+                <div class="modal-actions"><button type="button" id="cancelEditCaseButton" class="secondary-button">Cancel</button><button type="submit" class="primary-button">Save Changes</button></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         TEAMS SCREEN
+         ========================================== -->
+
+    <div id="teamsScreen" class="screen hidden">
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand-name">NEW HORIZON</div>
+                <div class="brand-subtitle">CASE MANAGEMENT</div>
+            </div>
+            <button id="teamsBackButton">← Dashboard</button>
+        </header>
+
+        <main class="dashboard">
+            <section class="dashboard-header">
+                <p class="section-label">ORGANIZATION</p>
+                <h1>Teams</h1>
+                <p>Review investigation teams and their assigned personnel.</p>
+            </section>
+
+            <section class="personnel-controls">
+                <div></div>
+                <button id="addTeamButton">+ Add Team</button>
+            </section>
+
+            <section class="personnel-list">
+                <div class="personnel-list-header">
+                    <span>Team</span><span>Type</span><span>Team Lead</span><span>Status</span>
+                </div>
+                <div id="teamsList"><p class="loading-message">Loading teams...</p></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- ==========================================
+         ADD TEAM MODAL
+         ========================================== -->
+
+    <div id="addTeamModal" class="modal hidden">
+        <div class="modal-overlay" id="addTeamModalOverlay"></div>
+        <div class="modal-card">
+            <div class="modal-header">
+                <div><p class="section-label">ORGANIZATION</p><h2>Add Team</h2></div>
+                <button type="button" id="closeAddTeamModal" class="modal-close" aria-label="Close">×</button>
+            </div>
+            <form id="addTeamForm">
+                <div class="form-group"><label for="addTeamName">Team Name</label><input id="addTeamName" type="text" placeholder="Example: Team 1" required></div>
+                <div class="form-group"><label for="addTeamType">Team Type</label><select id="addTeamType" required><option value="">Select a team type</option><option value="Investigation">Investigation</option><option value="Surveillance">Surveillance</option><option value="Research">Research</option><option value="Support">Support</option></select></div>
+                <div class="form-group"><label for="addTeamLead">Team Lead</label><select id="addTeamLead"><option value="">Unassigned</option></select></div>
+                <div class="form-group"><label for="addTeamDescription">Description</label><textarea id="addTeamDescription" rows="4" placeholder="Describe this team's purpose or assignment."></textarea></div>
+                <p id="addTeamError" class="form-error"></p>
+                <div class="modal-actions"><button type="button" id="cancelAddTeamButton" class="secondary-button">Cancel</button><button type="submit" id="saveAddTeamButton" class="primary-button">Create Team</button></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         TEAM FILE SCREEN
+         ========================================== -->
+
+    <div id="teamFileScreen" class="screen hidden">
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand-name">NEW HORIZON</div>
+                <div class="brand-subtitle">TEAM FILE</div>
+            </div>
+            <button id="teamFileBackButton">← Teams</button>
+        </header>
+
+        <main class="dashboard">
+            <section class="dashboard-header">
+                <p class="section-label" id="teamProfileType">TEAM</p>
+                <h1 id="teamProfileName">Team</h1>
+            </section>
+
+            <section class="profile-section">
+                <h2>Team Information</h2>
+                <div class="profile-grid">
+                    <div class="profile-field"><span>TEAM TYPE</span><strong id="teamProfileTypeField">—</strong></div>
+                    <div class="profile-field"><span>STATUS</span><strong id="teamProfileStatus">—</strong></div>
+                    <div class="profile-field"><span>TEAM LEAD</span><strong id="teamProfileLead">—</strong></div>
+                    <div class="profile-field"><span>MEMBERS</span><strong id="teamProfileMemberCount">0</strong></div>
+                    <div class="profile-field"><span>CREATED</span><strong id="teamProfileCreated">—</strong></div>
+                    <div class="profile-field"><span>DESCRIPTION</span><strong id="teamProfileDescription">No description provided.</strong></div>
+                </div>
+            </section>
+
+            <section class="profile-section">
+                <h2>Team Members</h2>
+                <div class="personnel-list"><div id="teamMembersList"><p class="loading-message">Loading members...</p></div></div>
+            </section>
+
+            <section class="profile-section">
+                <h2>Team Actions</h2>
+                <div class="profile-actions">
+                    <button id="editTeamButton" class="dashboard-card"><span class="card-icon">EDIT</span><strong>Edit Team</strong><span>Update team information.</span></button>
+                    <button id="teamStatusButton" class="dashboard-card"><span class="card-icon">STATUS</span><strong>Disable Team</strong><span>Change this team's active status.</span></button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- ==========================================
+         NEW CASE MODAL
+         ========================================== -->
+
+    <div id="newCaseModal" class="modal hidden">
+        <div class="modal-overlay" id="newCaseModalOverlay"></div>
+        <div class="modal-card">
+            <div class="modal-header">
+                <div><p class="section-label">INVESTIGATIONS</p><h2>New Case</h2></div>
+                <button type="button" id="closeNewCaseModal" class="modal-close" aria-label="Close">×</button>
+            </div>
+            <form id="newCaseForm">
+                <div class="form-group"><label for="newCaseName">Case Name</label><input id="newCaseName" type="text" required></div>
+                <div class="form-group"><label for="newCaseType">Case Type</label><select id="newCaseType" required><option value="">Select a type</option><option value="Investigation">Investigation</option><option value="Surveillance">Surveillance</option><option value="Research">Research</option><option value="Background">Background</option></select></div>
+                <div class="form-group"><label for="newCasePriority">Priority</label><select id="newCasePriority" required><option value="Low">Low</option><option value="Normal" selected>Normal</option><option value="High">High</option><option value="Critical">Critical</option></select></div>
+                <div class="form-group"><label for="newCaseClient">Client</label><input id="newCaseClient" type="text" required></div>
+                <div class="form-group"><label for="newCaseLocation">Location</label><input id="newCaseLocation" type="text" required></div>
+                <div class="form-group"><label for="newCaseTeam">Assigned Team</label><select id="newCaseTeam"><option value="">Unassigned</option></select></div>
+                <div class="form-group"><label for="newCaseInvestigationDate">Investigation Date</label><input id="newCaseInvestigationDate" type="date"></div>
+                <div class="form-group"><label for="newCaseDescription">Description</label><textarea id="newCaseDescription" rows="4"></textarea></div>
+                <p id="newCaseError" class="form-error"></p>
+                <div class="modal-actions"><button type="button" id="cancelNewCaseButton" class="secondary-button">Cancel</button><button type="submit" id="saveNewCaseButton" class="primary-button">Create Case</button></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         EDIT TEAM MODAL
+         ========================================== -->
+
+    <div id="editTeamModal" class="modal hidden">
+        <div class="modal-overlay" id="editTeamModalOverlay"></div>
+        <div class="modal-card">
+            <div class="modal-header">
+                <div><p class="section-label">ORGANIZATION</p><h2>Edit Team</h2></div>
+                <button type="button" id="closeEditTeamModal" class="modal-close" aria-label="Close">×</button>
+            </div>
+            <form id="editTeamForm">
+                <div class="form-group"><label for="editTeamName">Team Name</label><input id="editTeamName" type="text" required></div>
+                <div class="form-group"><label for="editTeamType">Team Type</label><select id="editTeamType" required><option value="Investigation">Investigation</option><option value="Surveillance">Surveillance</option><option value="Research">Research</option><option value="Support">Support</option></select></div>
+                <div class="form-group"><label for="editTeamLead">Team Lead</label><select id="editTeamLead"><option value="">Select Team Lead</option></select></div>
+                <div class="form-group"><label for="editTeamDescription">Description</label><textarea id="editTeamDescription" rows="4"></textarea></div>
+                <p id="editTeamError" class="form-error"></p>
+                <div class="modal-actions"><button type="button" id="cancelEditTeamButton" class="secondary-button">Cancel</button><button type="submit" class="primary-button">Save Changes</button></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==========================================
          JAVASCRIPT
          ========================================== -->
 
