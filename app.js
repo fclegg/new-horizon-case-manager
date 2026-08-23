@@ -131,6 +131,54 @@ const caseTeamFilter =
 const newCaseListButton =
     document.getElementById("newCaseListButton");
 
+const editCaseButton =
+    document.getElementById("editCaseButton");
+
+const editCaseModal =
+    document.getElementById("editCaseModal");
+
+const editCaseForm =
+    document.getElementById("editCaseForm");
+
+const closeEditCaseModal =
+    document.getElementById("closeEditCaseModal");
+
+const cancelEditCaseButton =
+    document.getElementById("cancelEditCaseButton");
+
+const editCaseModalOverlay =
+    document.getElementById("editCaseModalOverlay");
+
+const editCaseError =
+    document.getElementById("editCaseError");
+
+const editCaseName =
+    document.getElementById("editCaseName");
+
+const editCaseType =
+    document.getElementById("editCaseType");
+
+const editCasePriority =
+    document.getElementById("editCasePriority");
+
+const editCaseStatus =
+    document.getElementById("editCaseStatus");
+
+const editCaseClient =
+    document.getElementById("editCaseClient");
+
+const editCaseLocation =
+    document.getElementById("editCaseLocation");
+
+const editCaseTeam =
+    document.getElementById("editCaseTeam");
+
+const editCaseInvestigationDate =
+    document.getElementById("editCaseInvestigationDate");
+
+const editCaseDescription =
+    document.getElementById("editCaseDescription");
+
 const activeCaseCount =
     document.getElementById("activeCaseCount");
 
@@ -349,6 +397,66 @@ const teamsBackButton =
 const teamsList =
     document.getElementById(
         "teamsList"
+    );
+
+const addTeamButton =
+    document.getElementById(
+        "addTeamButton"
+    );
+
+const addTeamModal =
+    document.getElementById(
+        "addTeamModal"
+    );
+
+const addTeamForm =
+    document.getElementById(
+        "addTeamForm"
+    );
+
+const closeAddTeamModal =
+    document.getElementById(
+        "closeAddTeamModal"
+    );
+
+const cancelAddTeamButton =
+    document.getElementById(
+        "cancelAddTeamButton"
+    );
+
+const addTeamModalOverlay =
+    document.getElementById(
+        "addTeamModalOverlay"
+    );
+
+const addTeamError =
+    document.getElementById(
+        "addTeamError"
+    );
+
+const addTeamName =
+    document.getElementById(
+        "addTeamName"
+    );
+
+const addTeamType =
+    document.getElementById(
+        "addTeamType"
+    );
+
+const addTeamLead =
+    document.getElementById(
+        "addTeamLead"
+    );
+
+const addTeamDescription =
+    document.getElementById(
+        "addTeamDescription"
+    );
+
+const saveAddTeamButton =
+    document.getElementById(
+        "saveAddTeamButton"
     );
 
 
@@ -655,11 +763,19 @@ function showPersonnelFile() {
 
 function showTeams() {
 
+    if (!teamsScreen || !teamsList) {
+
+        console.warn(
+            "Teams screen is not available."
+        );
+
+        return;
+
+    }
+
     hideAllScreens();
 
-    if (teamsScreen) {
-        teamsScreen.classList.remove("hidden");
-    }
+    teamsScreen.classList.remove("hidden");
 
 }
 
@@ -677,23 +793,25 @@ function showTeamFile() {
 
 function showCases() {
 
-    hideAllScreens();
+    if (!casesScreen || !casesList) {
 
-    if (casesScreen) {
-
-        casesScreen.classList.remove(
-            "hidden"
+        console.warn(
+            "Cases screen is not available."
         );
 
-        loadCases();
-
-    } else {
-
-        console.error(
-            "CASES SCREEN NOT FOUND: #casesScreen"
-        );
+        return;
 
     }
+
+    hideAllScreens();
+
+    casesScreen.classList.remove(
+        "hidden"
+    );
+
+    loadCaseTeamOptions();
+
+    loadCases();
 
 }
 
@@ -814,6 +932,25 @@ onAuthStateChanged(
                     "USER PERMISSIONS:",
                     permissions
                 );
+
+                if (addTeamButton) {
+
+                    addTeamButton.style.display =
+                        permissions?.manageTeams
+                            ? ""
+                            : "none";
+
+                }
+
+                if (editCaseButton) {
+
+                    editCaseButton.style.display =
+                        permissions?.createCases ||
+                        permissions?.viewAllCases
+                            ? ""
+                            : "none";
+
+                }
 
 
                 welcomeMessage.textContent =
@@ -1233,6 +1370,16 @@ teamsButton.addEventListener(
     "click",
     function () {
 
+        if (!teamsScreen || !teamsList) {
+
+            console.warn(
+                "Teams screen is not available."
+            );
+
+            return;
+
+        }
+
         showTeams();
 
         loadTeams();
@@ -1284,16 +1431,6 @@ teamFileBackButton?.addEventListener(
 // ==========================================
 // OTHER DASHBOARD BUTTONS
 // ==========================================
-
-casesButton.addEventListener(
-    "click",
-    function () {
-
-        showCases();
-
-    }
-);
-
 
 // ==========================================
 // NEW CASE CREATION
@@ -1417,6 +1554,120 @@ function openNewCaseModal() {
     if (newCaseName) {
 
         newCaseName.focus();
+
+    }
+
+    loadCaseTeamOptions();
+
+}
+
+
+async function loadCaseTeamOptions() {
+
+    const selectors = [
+        {
+            element: newCaseTeam,
+            firstOption: "Unassigned",
+            value: ""
+        },
+        {
+            element: caseTeamFilter,
+            firstOption: "All teams",
+            value: "all"
+        },
+        {
+            element: editCaseTeam,
+            firstOption: "Unassigned",
+            value: ""
+        }
+    ];
+
+    const activeSelectors = selectors.filter(
+        selector => selector.element
+    );
+
+    if (activeSelectors.length === 0) {
+
+        return;
+
+    }
+
+    try {
+
+        const snapshot = await getDocs(
+            collection(
+                db,
+                "teams"
+            )
+        );
+
+        activeSelectors.forEach(
+            function (selector) {
+
+                const selectedValue =
+                    selector.element.value;
+
+                selector.element.innerHTML = "";
+
+                const firstOption =
+                    document.createElement(
+                        "option"
+                    );
+
+                firstOption.value = selector.value;
+                firstOption.textContent =
+                    selector.firstOption;
+
+                selector.element.appendChild(
+                    firstOption
+                );
+
+                snapshot.forEach(
+                    function (teamDocument) {
+
+                        const team = teamDocument.data();
+
+                        const option =
+                            document.createElement(
+                                "option"
+                            );
+
+                        option.value = teamDocument.id;
+                        option.textContent =
+                            team.name ||
+                            "Unnamed Team";
+
+                        selector.element.appendChild(
+                            option
+                        );
+
+                    }
+                );
+
+                if (
+                    Array.from(
+                        selector.element.options
+                    ).some(
+                        option =>
+                            option.value ===
+                            selectedValue
+                    )
+                ) {
+
+                    selector.element.value =
+                        selectedValue;
+
+                }
+
+            }
+        );
+
+    } catch (error) {
+
+        console.error(
+            "CASE TEAM OPTIONS ERROR:",
+            error
+        );
 
     }
 
@@ -2345,6 +2596,203 @@ async function openCaseFile(
 
 }
 
+async function userCanManageCases() {
+
+    const user = auth.currentUser;
+
+    if (!user) {
+
+        return false;
+
+    }
+
+    const snapshot = await getDoc(
+        doc(db, "users", user.uid)
+    );
+
+    if (!snapshot.exists()) {
+
+        return false;
+
+    }
+
+    const permissions = getUserPermissions(
+        snapshot.data().role
+    );
+
+    return Boolean(
+        permissions?.createCases ||
+        permissions?.viewAllCases
+    );
+
+}
+
+
+async function openEditCaseModal() {
+
+    if (!currentCaseId || !editCaseModal) {
+
+        return;
+
+    }
+
+    try {
+
+        if (!await userCanManageCases()) {
+
+            throw new Error(
+                "You do not have permission to edit cases."
+            );
+
+        }
+
+        const snapshot = await getDoc(
+            doc(db, "cases", currentCaseId)
+        );
+
+        if (!snapshot.exists()) {
+
+            throw new Error("Case not found.");
+
+        }
+
+        const caseData = snapshot.data();
+
+        editCaseName.value = caseData.caseName || "";
+        editCaseType.value = caseData.caseType || "Investigation";
+        editCasePriority.value = caseData.priority || "Normal";
+        editCaseStatus.value = caseData.status || "Active";
+        editCaseClient.value = caseData.client || "";
+        editCaseLocation.value = caseData.location || "";
+        editCaseInvestigationDate.value =
+            caseData.investigationDate || "";
+        editCaseDescription.value =
+            caseData.description || "";
+
+        await loadCaseTeamOptions();
+
+        editCaseTeam.value =
+            caseData.assignedTeamId || "";
+
+        editCaseError.textContent = "";
+        editCaseModal.classList.remove("hidden");
+        editCaseModal.style.display = "flex";
+
+    } catch (error) {
+
+        console.error("EDIT CASE LOAD ERROR:", error);
+
+        if (editCaseError) {
+
+            editCaseError.textContent = error.message;
+
+        }
+
+    }
+
+}
+
+
+function closeEditCaseModalWindow() {
+
+    editCaseModal?.classList.add("hidden");
+
+    if (editCaseModal) {
+
+        editCaseModal.style.display = "";
+
+    }
+
+    editCaseForm?.reset();
+
+    if (editCaseError) {
+
+        editCaseError.textContent = "";
+
+    }
+
+}
+
+
+editCaseButton?.addEventListener(
+    "click",
+    openEditCaseModal
+);
+
+closeEditCaseModal?.addEventListener(
+    "click",
+    closeEditCaseModalWindow
+);
+
+cancelEditCaseButton?.addEventListener(
+    "click",
+    closeEditCaseModalWindow
+);
+
+editCaseModalOverlay?.addEventListener(
+    "click",
+    closeEditCaseModalWindow
+);
+
+editCaseForm?.addEventListener(
+    "submit",
+    async function (event) {
+
+        event.preventDefault();
+
+        if (!currentCaseId || !editCaseForm.checkValidity()) {
+
+            editCaseForm.reportValidity();
+
+            return;
+
+        }
+
+        try {
+
+            if (!await userCanManageCases()) {
+
+                throw new Error(
+                    "You do not have permission to edit cases."
+                );
+
+            }
+
+            await updateDoc(
+                doc(db, "cases", currentCaseId),
+                {
+                    caseName: editCaseName.value.trim(),
+                    caseType: editCaseType.value,
+                    priority: editCasePriority.value,
+                    status: editCaseStatus.value,
+                    client: editCaseClient.value.trim(),
+                    location: editCaseLocation.value.trim(),
+                    assignedTeamId: editCaseTeam.value || null,
+                    investigationDate:
+                        editCaseInvestigationDate.value,
+                    description:
+                        editCaseDescription.value.trim(),
+                    updatedAt:
+                        new Date().toISOString()
+                }
+            );
+
+            closeEditCaseModalWindow();
+
+            await openCaseFile(currentCaseId);
+            await loadCases();
+
+        } catch (error) {
+
+            console.error("UPDATE CASE ERROR:", error);
+            editCaseError.textContent =
+                error.message || "Unable to save case changes.";
+
+        }
+
+    }
+);
+
 function formatDate(
     value
 ) {
@@ -2864,6 +3312,210 @@ disablePersonnelButton.addEventListener(
             alert(
                 "Unable to update personnel status."
             );
+
+        }
+
+    }
+);
+
+
+// ==========================================
+// ADD TEAM
+// ==========================================
+
+async function openAddTeamModal() {
+
+    if (!addTeamModal || !addTeamForm) {
+
+        return;
+
+    }
+
+    addTeamForm.reset();
+    addTeamError.textContent = "";
+
+    await loadTeamLeadOptions(
+        null,
+        addTeamLead
+    );
+
+    addTeamModal.classList.remove(
+        "hidden"
+    );
+
+    addTeamModal.style.display =
+        "flex";
+
+    addTeamName.focus();
+
+}
+
+
+function closeAddTeamModalWindow() {
+
+    if (addTeamModal) {
+
+        addTeamModal.classList.add(
+            "hidden"
+        );
+
+        addTeamModal.style.display = "";
+
+    }
+
+    if (addTeamForm) {
+
+        addTeamForm.reset();
+
+    }
+
+    if (addTeamError) {
+
+        addTeamError.textContent = "";
+
+    }
+
+}
+
+
+addTeamButton?.addEventListener(
+    "click",
+    openAddTeamModal
+);
+
+
+closeAddTeamModal?.addEventListener(
+    "click",
+    closeAddTeamModalWindow
+);
+
+
+cancelAddTeamButton?.addEventListener(
+    "click",
+    closeAddTeamModalWindow
+);
+
+
+addTeamModalOverlay?.addEventListener(
+    "click",
+    closeAddTeamModalWindow
+);
+
+
+addTeamForm?.addEventListener(
+    "submit",
+    async function (event) {
+
+        event.preventDefault();
+
+        if (!addTeamForm.checkValidity()) {
+
+            addTeamForm.reportValidity();
+
+            return;
+
+        }
+
+        const user = auth.currentUser;
+
+        if (!user) {
+
+            addTeamError.textContent =
+                "You must be signed in to create a team.";
+
+            return;
+
+        }
+
+        saveAddTeamButton.disabled = true;
+        saveAddTeamButton.textContent =
+            "Creating Team...";
+
+        addTeamError.textContent = "";
+
+        try {
+
+            const userSnapshot = await getDoc(
+                doc(
+                    db,
+                    "users",
+                    user.uid
+                )
+            );
+
+            if (!userSnapshot.exists()) {
+
+                throw new Error(
+                    "Your personnel record could not be found."
+                );
+
+            }
+
+            const permissions =
+                getUserPermissions(
+                    userSnapshot.data().role
+                );
+
+            if (!permissions?.manageTeams) {
+
+                throw new Error(
+                    "You do not have permission to create teams."
+                );
+
+            }
+
+            const teamReference = doc(
+                collection(
+                    db,
+                    "teams"
+                )
+            );
+
+            await setDoc(
+                teamReference,
+                {
+                    name:
+                        addTeamName.value.trim(),
+                    teamType:
+                        addTeamType.value,
+                    teamLeadId:
+                        addTeamLead.value ||
+                        null,
+                    description:
+                        addTeamDescription.value.trim(),
+                    active: true,
+                    createdBy: user.uid,
+                    createdAt:
+                        new Date().toISOString(),
+                    updatedAt:
+                        new Date().toISOString()
+                }
+            );
+
+            closeAddTeamModalWindow();
+
+            await loadTeams();
+
+            await openTeamFile(
+                teamReference.id
+            );
+
+        } catch (error) {
+
+            console.error(
+                "CREATE TEAM ERROR:",
+                error
+            );
+
+            addTeamError.textContent =
+                error.message ||
+                "Unable to create team.";
+
+        } finally {
+
+            saveAddTeamButton.disabled = false;
+            saveAddTeamButton.textContent =
+                "Create Team";
 
         }
 
@@ -3494,10 +4146,17 @@ editTeamButton?.addEventListener(
 // ==========================================
 
 async function loadTeamLeadOptions(
-    selectedId
+    selectedId,
+    selectElement = editTeamLead
 ) {
 
-    editTeamLead.innerHTML = `
+    if (!selectElement) {
+
+        return;
+
+    }
+
+    selectElement.innerHTML = `
 
         <option value="">
             Select Team Lead
@@ -3558,7 +4217,7 @@ async function loadTeamLeadOptions(
                 }
 
 
-                editTeamLead.appendChild(
+                selectElement.appendChild(
                     option
                 );
 
