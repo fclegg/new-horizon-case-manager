@@ -3638,6 +3638,7 @@ async function openCaseFile(
 
         showCaseFile();
 
+        await loadCaseDocuments(caseId);
 
     } catch (error) {
 
