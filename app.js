@@ -579,7 +579,7 @@ async function openCaseDocument(
 }
 
 
-function closeCaseDocumentReader() {
+function closeCaseDocumentReaderWindow() {
 
     caseDocumentReaderModal.classList.add(
         "hidden"
