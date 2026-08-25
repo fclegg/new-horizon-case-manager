@@ -907,6 +907,134 @@ async function deleteCurrentCaseDocument() {
 
 }
 
+// ==========================================
+// CASE DOCUMENT ELEMENTS
+// ==========================================
+
+const newCaseDocumentButton =
+    document.getElementById(
+        "newCaseDocumentButton"
+    );
+
+const caseDocumentsList =
+    document.getElementById(
+        "caseDocumentsList"
+    );
+
+const caseDocumentModal =
+    document.getElementById(
+        "caseDocumentModal"
+    );
+
+const caseDocumentModalOverlay =
+    document.getElementById(
+        "caseDocumentModalOverlay"
+    );
+
+const caseDocumentForm =
+    document.getElementById(
+        "caseDocumentForm"
+    );
+
+const caseDocumentModalTitle =
+    document.getElementById(
+        "caseDocumentModalTitle"
+    );
+
+const caseDocumentType =
+    document.getElementById(
+        "caseDocumentType"
+    );
+
+const caseDocumentTitle =
+    document.getElementById(
+        "caseDocumentTitle"
+    );
+
+const caseDocumentContent =
+    document.getElementById(
+        "caseDocumentContent"
+    );
+
+const caseDocumentError =
+    document.getElementById(
+        "caseDocumentError"
+    );
+
+const closeCaseDocumentModal =
+    document.getElementById(
+        "closeCaseDocumentModal"
+    );
+
+const cancelCaseDocumentButton =
+    document.getElementById(
+        "cancelCaseDocumentButton"
+    );
+
+const saveCaseDocumentButton =
+    document.getElementById(
+        "saveCaseDocumentButton"
+    );
+
+const caseDocumentReaderModal =
+    document.getElementById(
+        "caseDocumentReaderModal"
+    );
+
+const caseDocumentReaderOverlay =
+    document.getElementById(
+        "caseDocumentReaderOverlay"
+    );
+
+const closeCaseDocumentReader =
+    document.getElementById(
+        "closeCaseDocumentReader"
+    );
+
+const closeCaseDocumentReaderButton =
+    document.getElementById(
+        "closeCaseDocumentReaderButton"
+    );
+
+const caseDocumentReaderType =
+    document.getElementById(
+        "caseDocumentReaderType"
+    );
+
+const caseDocumentReaderTitle =
+    document.getElementById(
+        "caseDocumentReaderTitle"
+    );
+
+const caseDocumentReaderMeta =
+    document.getElementById(
+        "caseDocumentReaderMeta"
+    );
+
+const caseDocumentReaderContent =
+    document.getElementById(
+        "caseDocumentReaderContent"
+    );
+
+const editCaseDocumentButton =
+    document.getElementById(
+        "editCaseDocumentButton"
+    );
+
+const deleteCaseDocumentButton =
+    document.getElementById(
+        "deleteCaseDocumentButton"
+    );
+
+let allCases = [];
+
+function showCaseFile() {
+
+    hideAllScreens();
+
+    caseFileScreen.classList.remove("hidden");
+
+}
 
 if (
     newCaseDocumentButton
@@ -1121,134 +1249,6 @@ let currentCaseId = null;
 
 let allCaseDocuments = [];
 
-// ==========================================
-// CASE DOCUMENT ELEMENTS
-// ==========================================
-
-const newCaseDocumentButton =
-    document.getElementById(
-        "newCaseDocumentButton"
-    );
-
-const caseDocumentsList =
-    document.getElementById(
-        "caseDocumentsList"
-    );
-
-const caseDocumentModal =
-    document.getElementById(
-        "caseDocumentModal"
-    );
-
-const caseDocumentModalOverlay =
-    document.getElementById(
-        "caseDocumentModalOverlay"
-    );
-
-const caseDocumentForm =
-    document.getElementById(
-        "caseDocumentForm"
-    );
-
-const caseDocumentModalTitle =
-    document.getElementById(
-        "caseDocumentModalTitle"
-    );
-
-const caseDocumentType =
-    document.getElementById(
-        "caseDocumentType"
-    );
-
-const caseDocumentTitle =
-    document.getElementById(
-        "caseDocumentTitle"
-    );
-
-const caseDocumentContent =
-    document.getElementById(
-        "caseDocumentContent"
-    );
-
-const caseDocumentError =
-    document.getElementById(
-        "caseDocumentError"
-    );
-
-const closeCaseDocumentModal =
-    document.getElementById(
-        "closeCaseDocumentModal"
-    );
-
-const cancelCaseDocumentButton =
-    document.getElementById(
-        "cancelCaseDocumentButton"
-    );
-
-const saveCaseDocumentButton =
-    document.getElementById(
-        "saveCaseDocumentButton"
-    );
-
-const caseDocumentReaderModal =
-    document.getElementById(
-        "caseDocumentReaderModal"
-    );
-
-const caseDocumentReaderOverlay =
-    document.getElementById(
-        "caseDocumentReaderOverlay"
-    );
-
-const closeCaseDocumentReader =
-    document.getElementById(
-        "closeCaseDocumentReader"
-    );
-
-const closeCaseDocumentReaderButton =
-    document.getElementById(
-        "closeCaseDocumentReaderButton"
-    );
-
-const caseDocumentReaderType =
-    document.getElementById(
-        "caseDocumentReaderType"
-    );
-
-const caseDocumentReaderTitle =
-    document.getElementById(
-        "caseDocumentReaderTitle"
-    );
-
-const caseDocumentReaderMeta =
-    document.getElementById(
-        "caseDocumentReaderMeta"
-    );
-
-const caseDocumentReaderContent =
-    document.getElementById(
-        "caseDocumentReaderContent"
-    );
-
-const editCaseDocumentButton =
-    document.getElementById(
-        "editCaseDocumentButton"
-    );
-
-const deleteCaseDocumentButton =
-    document.getElementById(
-        "deleteCaseDocumentButton"
-    );
-
-let allCases = [];
-
-function showCaseFile() {
-
-    hideAllScreens();
-
-    caseFileScreen.classList.remove("hidden");
-
-}
 
 // ==========================================
 // PERSONNEL SCREEN
