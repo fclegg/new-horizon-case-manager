@@ -1178,6 +1178,43 @@
                 <div class="profile-field"><strong id="caseFieldDescription">No description provided.</strong></div>
             </section>
 
+
+            <!-- ==================================
+                 CASE DOCUMENTS
+                 ================================== -->
+
+            <section class="profile-section">
+
+                <div class="case-documents-header">
+
+                    <div>
+                        <h2>Case Documents</h2>
+                        <p class="case-documents-subtitle">
+                            Create and review the written records associated with this investigation.
+                        </p>
+                    </div>
+
+                    <button
+                        id="newCaseDocumentButton"
+                        class="primary-button"
+                        type="button"
+                    >
+                        + New Document
+                    </button>
+
+                </div>
+
+                <div
+                    id="caseDocumentsList"
+                    class="case-documents-list"
+                >
+                    <p class="loading-message">
+                        Loading case documents...
+                    </p>
+                </div>
+
+            </section>
+
             <section class="profile-section">
                 <h2>Case Actions</h2>
                 <div class="profile-actions">
@@ -1185,6 +1222,174 @@
                 </div>
             </section>
         </main>
+    </div>
+
+
+    <!-- ==========================================
+         NEW CASE DOCUMENT MODAL
+         ========================================== -->
+
+    <div id="caseDocumentModal" class="modal hidden">
+        <div class="modal-overlay" id="caseDocumentModalOverlay"></div>
+
+        <div class="modal-card case-document-modal-card">
+
+            <div class="modal-header">
+                <div>
+                    <p class="section-label">CASE DOCUMENT</p>
+                    <h2 id="caseDocumentModalTitle">New Document</h2>
+                </div>
+
+                <button
+                    type="button"
+                    id="closeCaseDocumentModal"
+                    class="modal-close"
+                    aria-label="Close"
+                >
+                    ×
+                </button>
+            </div>
+
+            <form id="caseDocumentForm">
+
+                <div class="form-group">
+                    <label for="caseDocumentType">
+                        Document Type
+                    </label>
+
+                    <select id="caseDocumentType" required>
+                        <option value="">Select document type</option>
+                        <option value="Investigation Report">Investigation Report</option>
+                        <option value="Witness Report">Witness Report</option>
+                        <option value="Location History">Location History</option>
+                        <option value="IPO">IPO</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="caseDocumentTitle">
+                        Document Title
+                    </label>
+
+                    <input
+                        id="caseDocumentTitle"
+                        type="text"
+                        placeholder="Example: Final Investigation Report"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="caseDocumentContent">
+                        Document Content
+                    </label>
+
+                    <textarea
+                        id="caseDocumentContent"
+                        rows="18"
+                        placeholder="Write the report here..."
+                        required
+                    ></textarea>
+                </div>
+
+                <p id="caseDocumentError" class="form-error"></p>
+
+                <div class="modal-actions">
+                    <button
+                        type="button"
+                        id="cancelCaseDocumentButton"
+                        class="secondary-button"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        id="saveCaseDocumentButton"
+                        class="primary-button"
+                    >
+                        Save Document
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+
+    <!-- ==========================================
+         READ CASE DOCUMENT MODAL
+         ========================================== -->
+
+    <div id="caseDocumentReaderModal" class="modal hidden">
+        <div class="modal-overlay" id="caseDocumentReaderOverlay"></div>
+
+        <div class="modal-card case-document-reader-card">
+
+            <div class="modal-header">
+
+                <div>
+                    <p
+                        class="section-label"
+                        id="caseDocumentReaderType"
+                    >
+                        CASE DOCUMENT
+                    </p>
+
+                    <h2 id="caseDocumentReaderTitle">
+                        Document
+                    </h2>
+
+                    <p
+                        class="case-document-meta"
+                        id="caseDocumentReaderMeta"
+                    ></p>
+                </div>
+
+                <button
+                    type="button"
+                    id="closeCaseDocumentReader"
+                    class="modal-close"
+                    aria-label="Close"
+                >
+                    ×
+                </button>
+
+            </div>
+
+            <article
+                id="caseDocumentReaderContent"
+                class="case-document-reader-content"
+            ></article>
+
+            <div class="modal-actions">
+                <button
+                    type="button"
+                    id="editCaseDocumentButton"
+                    class="secondary-button"
+                >
+                    Edit Document
+                </button>
+
+                <button
+                    type="button"
+                    id="deleteCaseDocumentButton"
+                    class="secondary-button danger-button"
+                >
+                    Delete
+                </button>
+
+                <button
+                    type="button"
+                    id="closeCaseDocumentReaderButton"
+                    class="primary-button"
+                >
+                    Close
+                </button>
+            </div>
+
+        </div>
     </div>
 
     <!-- ==========================================
