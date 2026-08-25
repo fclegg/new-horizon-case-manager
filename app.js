@@ -980,7 +980,7 @@ if (
 
     closeCaseDocumentReader.addEventListener(
         "click",
-        closeCaseDocumentReader
+        closeCaseDocumentReaderWindow
     );
 
 }
@@ -992,11 +992,10 @@ if (
 
     closeCaseDocumentReaderButton.addEventListener(
         "click",
-        closeCaseDocumentReader
+        closeCaseDocumentReaderWindow
     );
 
 }
-
 
 if (
     caseDocumentReaderOverlay
@@ -1004,7 +1003,7 @@ if (
 
     caseDocumentReaderOverlay.addEventListener(
         "click",
-        closeCaseDocumentReader
+        closeCaseDocumentReaderWindow
     );
 
 }
