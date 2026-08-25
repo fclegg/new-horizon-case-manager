@@ -102,6 +102,938 @@ const reportsButton =
 
 
 // ==========================================
+// CASE DOCUMENT MANAGEMENT
+// ==========================================
+
+function getCaseDocumentsCollection(
+    caseId
+) {
+
+    return collection(
+        db,
+        "cases",
+        caseId,
+        "documents"
+    );
+
+}
+
+
+function formatDocumentDate(
+    value
+) {
+
+    if (!value) {
+
+        return "Unknown date";
+
+    }
+
+
+    if (
+        typeof value.toDate ===
+        "function"
+    ) {
+
+        return value
+            .toDate()
+            .toLocaleString();
+
+    }
+
+
+    const date =
+        new Date(value);
+
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return String(value);
+
+    }
+
+
+    return date.toLocaleString();
+
+}
+
+
+async function canManageCaseDocuments() {
+
+    const user =
+        auth.currentUser;
+
+
+    if (!user) {
+
+        return false;
+
+    }
+
+
+    const snapshot =
+        await getDoc(
+            doc(
+                db,
+                "users",
+                user.uid
+            )
+        );
+
+
+    if (
+        !snapshot.exists()
+    ) {
+
+        return false;
+
+    }
+
+
+    const userData =
+        snapshot.data();
+
+
+    const permissions =
+        getUserPermissions(
+            userData.role
+        );
+
+
+    return Boolean(
+        permissions &&
+        permissions.manageCaseDocuments
+    );
+
+}
+
+
+function openNewCaseDocument() {
+
+    if (
+        !currentCaseId ||
+        !caseDocumentModal
+    ) {
+
+        return;
+
+    }
+
+
+    currentCaseDocumentId =
+        null;
+
+
+    caseDocumentForm.reset();
+
+
+    caseDocumentModalTitle.textContent =
+        "New Case Document";
+
+
+    caseDocumentError.textContent =
+        "";
+
+
+    caseDocumentModal.classList.remove(
+        "hidden"
+    );
+
+    caseDocumentModal.style.display =
+        "flex";
+
+
+    caseDocumentType.focus();
+
+}
+
+
+function closeCaseDocument() {
+
+    if (caseDocumentModal) {
+
+        caseDocumentModal.classList.add(
+            "hidden"
+        );
+
+        caseDocumentModal.style.display =
+            "";
+
+    }
+
+}
+
+
+async function loadCaseDocuments() {
+
+    if (
+        !currentCaseId ||
+        !caseDocumentsList
+    ) {
+
+        return;
+
+    }
+
+
+    caseDocumentsList.innerHTML = `
+        <p class="loading-message">
+            Loading case documents...
+        </p>
+    `;
+
+
+    try {
+
+        const snapshot =
+            await getDocs(
+                getCaseDocumentsCollection(
+                    currentCaseId
+                )
+            );
+
+
+        allCaseDocuments =
+            [];
+
+
+        snapshot.forEach(
+            function (documentSnapshot) {
+
+                allCaseDocuments.push({
+
+                    id:
+                        documentSnapshot.id,
+
+                    ...documentSnapshot.data()
+
+                });
+
+            }
+        );
+
+
+        allCaseDocuments.sort(
+            function (a, b) {
+
+                return (
+                    new Date(
+                        b.updatedAt ||
+                        b.createdAt ||
+                        0
+                    ) -
+                    new Date(
+                        a.updatedAt ||
+                        a.createdAt ||
+                        0
+                    )
+                );
+
+            }
+        );
+
+
+        renderCaseDocuments();
+
+
+    } catch (error) {
+
+        console.error(
+            "CASE DOCUMENT LOAD ERROR:",
+            error
+        );
+
+
+        caseDocumentsList.innerHTML = `
+            <div class="case-document-empty">
+                Unable to load case documents.
+            </div>
+        `;
+
+    }
+
+}
+
+
+function renderCaseDocuments() {
+
+    if (
+        !caseDocumentsList
+    ) {
+
+        return;
+
+    }
+
+
+    caseDocumentsList.innerHTML =
+        "";
+
+
+    if (
+        allCaseDocuments.length ===
+        0
+    ) {
+
+        caseDocumentsList.innerHTML = `
+            <div class="case-document-empty">
+                <strong>
+                    No case documents yet.
+                </strong>
+
+                <p>
+                    Create an Investigation Report,
+                    Witness Report,
+                    Location History,
+                    or IPO.
+                </p>
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    allCaseDocuments.forEach(
+        function (documentData) {
+
+            const card =
+                document.createElement(
+                    "article"
+                );
+
+
+            card.className =
+                "case-document-card";
+
+
+            const preview =
+                String(
+                    documentData.content ||
+                    ""
+                )
+                .replace(
+                    /\s+/g,
+                    " "
+                )
+                .trim();
+
+
+            card.innerHTML = `
+
+                <span
+                    class="case-document-type"
+                >
+                    ${
+                        documentData.documentType ||
+                        "DOCUMENT"
+                    }
+                </span>
+
+
+                <h3>
+                    ${
+                        documentData.title ||
+                        "Untitled Document"
+                    }
+                </h3>
+
+
+                <p>
+
+                    By
+                    ${
+                        documentData.authorName ||
+                        "Unknown"
+                    }
+
+                    ·
+
+                    ${
+                        formatDocumentDate(
+                            documentData.updatedAt ||
+                            documentData.createdAt
+                        )
+                    }
+
+                </p>
+
+
+                <p
+                    class="case-document-preview"
+                >
+                    ${
+                        preview ||
+                        "No content available."
+                    }
+                </p>
+
+            `;
+
+
+            card.addEventListener(
+                "click",
+                function () {
+
+                    openCaseDocument(
+                        documentData.id
+                    );
+
+                }
+            );
+
+
+            caseDocumentsList.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+async function openCaseDocument(
+    documentId
+) {
+
+    const documentData =
+        allCaseDocuments.find(
+            function (item) {
+
+                return (
+                    item.id ===
+                    documentId
+                );
+
+            }
+        );
+
+
+    if (!documentData) {
+
+        return;
+
+    }
+
+
+    currentCaseDocumentId =
+        documentId;
+
+
+    caseDocumentReaderType.textContent =
+        documentData.documentType ||
+        "CASE DOCUMENT";
+
+
+    caseDocumentReaderTitle.textContent =
+        documentData.title ||
+        "Untitled Document";
+
+
+    caseDocumentReaderMeta.textContent =
+        `Author: ${
+            documentData.authorName ||
+            "Unknown"
+        } · Updated: ${
+            formatDocumentDate(
+                documentData.updatedAt ||
+                documentData.createdAt
+            )
+        }`;
+
+
+    caseDocumentReaderContent.textContent =
+        documentData.content ||
+        "No content available.";
+
+
+    const canManage =
+        await canManageCaseDocuments();
+
+
+    editCaseDocumentButton.style.display =
+        canManage
+            ? ""
+            : "none";
+
+
+    deleteCaseDocumentButton.style.display =
+        canManage
+            ? ""
+            : "none";
+
+
+    caseDocumentReaderModal.classList.remove(
+        "hidden"
+    );
+
+    caseDocumentReaderModal.style.display =
+        "flex";
+
+}
+
+
+function closeCaseDocumentReader() {
+
+    caseDocumentReaderModal.classList.add(
+        "hidden"
+    );
+
+    caseDocumentReaderModal.style.display =
+        "";
+
+}
+
+
+async function saveCaseDocument() {
+
+    if (
+        !currentCaseId ||
+        !caseDocumentForm
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        !caseDocumentForm.checkValidity()
+    ) {
+
+        caseDocumentForm.reportValidity();
+
+        return;
+
+    }
+
+
+    const user =
+        auth.currentUser;
+
+
+    if (!user) {
+
+        caseDocumentError.textContent =
+            "You must be signed in.";
+
+        return;
+
+    }
+
+
+    saveCaseDocumentButton.disabled =
+        true;
+
+
+    saveCaseDocumentButton.textContent =
+        "Saving...";
+
+
+    try {
+
+        const allowed =
+            await canManageCaseDocuments();
+
+
+        if (!allowed) {
+
+            throw new Error(
+                "You do not have permission to manage case documents."
+            );
+
+        }
+
+
+        const userSnapshot =
+            await getDoc(
+                doc(
+                    db,
+                    "users",
+                    user.uid
+                )
+            );
+
+
+        const userData =
+            userSnapshot.data();
+
+
+        const documentData = {
+
+            documentType:
+                caseDocumentType.value,
+
+            title:
+                caseDocumentTitle.value.trim(),
+
+            content:
+                caseDocumentContent.value.trim(),
+
+            authorId:
+                user.uid,
+
+            authorName:
+                userData.name ||
+                user.email ||
+                "Unknown",
+
+            status:
+                "Completed",
+
+            updatedAt:
+                new Date().toISOString()
+
+        };
+
+
+        if (
+            currentCaseDocumentId
+        ) {
+
+            await updateDoc(
+                doc(
+                    db,
+                    "cases",
+                    currentCaseId,
+                    "documents",
+                    currentCaseDocumentId
+                ),
+                documentData
+            );
+
+
+        } else {
+
+            const documentReference =
+                doc(
+                    getCaseDocumentsCollection(
+                        currentCaseId
+                    )
+                );
+
+
+            await setDoc(
+                documentReference,
+                {
+
+                    ...documentData,
+
+                    createdAt:
+                        new Date().toISOString()
+
+                }
+            );
+
+        }
+
+
+        closeCaseDocument();
+
+
+        await loadCaseDocuments();
+
+
+    } catch (error) {
+
+        console.error(
+            "CASE DOCUMENT SAVE ERROR:",
+            error
+        );
+
+
+        caseDocumentError.textContent =
+            error.message ||
+            "Unable to save document.";
+
+
+    } finally {
+
+        saveCaseDocumentButton.disabled =
+            false;
+
+
+        saveCaseDocumentButton.textContent =
+            "Save Document";
+
+    }
+
+}
+
+
+async function editCurrentCaseDocument() {
+
+    const documentData =
+        allCaseDocuments.find(
+            function (item) {
+
+                return (
+                    item.id ===
+                    currentCaseDocumentId
+                );
+
+            }
+        );
+
+
+    if (!documentData) {
+
+        return;
+
+    }
+
+
+    if (
+        !await canManageCaseDocuments()
+    ) {
+
+        return;
+
+    }
+
+
+    caseDocumentType.value =
+        documentData.documentType ||
+        "";
+
+
+    caseDocumentTitle.value =
+        documentData.title ||
+        "";
+
+
+    caseDocumentContent.value =
+        documentData.content ||
+        "";
+
+
+    caseDocumentModalTitle.textContent =
+        "Edit Case Document";
+
+
+    caseDocumentError.textContent =
+        "";
+
+
+    closeCaseDocumentReader();
+
+
+    caseDocumentModal.classList.remove(
+        "hidden"
+    );
+
+    caseDocumentModal.style.display =
+        "flex";
+
+}
+
+
+async function deleteCurrentCaseDocument() {
+
+    if (
+        !currentCaseId ||
+        !currentCaseDocumentId
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        !await canManageCaseDocuments()
+    ) {
+
+        alert(
+            "You do not have permission to delete case documents."
+        );
+
+        return;
+
+    }
+
+
+    const confirmed =
+        confirm(
+            "Delete this document permanently?"
+        );
+
+
+    if (!confirmed) {
+
+        return;
+
+    }
+
+
+    try {
+
+        await deleteDoc(
+            doc(
+                db,
+                "cases",
+                currentCaseId,
+                "documents",
+                currentCaseDocumentId
+            )
+        );
+
+
+        closeCaseDocumentReader();
+
+
+        await loadCaseDocuments();
+
+
+    } catch (error) {
+
+        console.error(
+            "CASE DOCUMENT DELETE ERROR:",
+            error
+        );
+
+
+        alert(
+            "Unable to delete the document."
+        );
+
+    }
+
+}
+
+
+if (
+    newCaseDocumentButton
+) {
+
+    newCaseDocumentButton.addEventListener(
+        "click",
+        openNewCaseDocument
+    );
+
+}
+
+
+if (
+    closeCaseDocumentModal
+) {
+
+    closeCaseDocumentModal.addEventListener(
+        "click",
+        closeCaseDocument
+    );
+
+}
+
+
+if (
+    cancelCaseDocumentButton
+) {
+
+    cancelCaseDocumentButton.addEventListener(
+        "click",
+        closeCaseDocument
+    );
+
+}
+
+
+if (
+    caseDocumentModalOverlay
+) {
+
+    caseDocumentModalOverlay.addEventListener(
+        "click",
+        closeCaseDocument
+    );
+
+}
+
+
+if (
+    caseDocumentForm
+) {
+
+    caseDocumentForm.addEventListener(
+        "submit",
+        function (event) {
+
+            event.preventDefault();
+
+            saveCaseDocument();
+
+        }
+    );
+
+}
+
+
+if (
+    closeCaseDocumentReader
+) {
+
+    closeCaseDocumentReader.addEventListener(
+        "click",
+        closeCaseDocumentReader
+    );
+
+}
+
+
+if (
+    closeCaseDocumentReaderButton
+) {
+
+    closeCaseDocumentReaderButton.addEventListener(
+        "click",
+        closeCaseDocumentReader
+    );
+
+}
+
+
+if (
+    caseDocumentReaderOverlay
+) {
+
+    caseDocumentReaderOverlay.addEventListener(
+        "click",
+        closeCaseDocumentReader
+    );
+
+}
+
+
+if (
+    editCaseDocumentButton
+) {
+
+    editCaseDocumentButton.addEventListener(
+        "click",
+        editCurrentCaseDocument
+    );
+
+}
+
+
+if (
+    deleteCaseDocumentButton
+) {
+
+    deleteCaseDocumentButton.addEventListener(
+        "click",
+        deleteCurrentCaseDocument
+    );
+
+}
+
+// ==========================================
 // CASE MANAGEMENT
 // ==========================================
 
