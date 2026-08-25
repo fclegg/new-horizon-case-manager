@@ -1247,6 +1247,8 @@ const completedCaseCount =
 
 let currentCaseId = null;
 
+let currentCaseDocumentId = null;
+
 let allCaseDocuments = [];
 
 
