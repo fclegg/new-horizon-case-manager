@@ -5538,3 +5538,764 @@ teamStatusButton?.addEventListener(
 
     }
 );
+
+// ==========================================
+// CASE DOCUMENT QUESTIONNAIRES
+// ==========================================
+
+const CASE_DOCUMENT_QUESTIONS = {
+
+    "Investigation Report": [
+
+        {
+            id: "firstName",
+            label: "Your First Name",
+            type: "text",
+            required: true
+        },
+
+        {
+            id: "lastName",
+            label: "Your Last Name",
+            type: "text",
+            required: true
+        },
+
+        {
+            id: "todayDate",
+            label: "Today's Date",
+            type: "date",
+            required: true
+        },
+
+        {
+            id: "locationName",
+            label: "Location Name",
+            type: "text",
+            required: true
+        },
+
+        {
+            id: "locationAddress",
+            label: "Location Address or Coordinates",
+            type: "textarea",
+            required: true
+        },
+
+        {
+            id: "city",
+            label: "City",
+            type: "text",
+            required: true
+        },
+
+        {
+            id: "state",
+            label: "State",
+            type: "text",
+            required: true
+        },
+
+        {
+            id: "dateOfInvestigation",
+            label: "Date of Investigation",
+            type: "date",
+            required: true
+        },
+
+        {
+            id: "startTime",
+            label: "Start Time",
+            type: "time",
+            required: true
+        },
+
+        {
+            id: "endTime",
+            label: "End Time",
+            type: "time",
+            required: true
+        },
+
+        {
+            id: "spiritTypes",
+            label: "Types of Spirit(s) Encountered",
+            type: "checkboxes",
+            required: false,
+            options: [
+                "Ghost",
+                "Demon",
+                "Fallen",
+                "Angel"
+            ]
+        },
+
+        {
+            id: "teamName",
+            label: "Team Name",
+            type: "team",
+            required: true
+        },
+
+        {
+            id: "moonPhase",
+            label: "Moon Phase and Luminance",
+            type: "text",
+            required: true
+        },
+
+        {
+            id: "membersPresent",
+            label: "Members Present",
+            type: "textarea",
+            required: true
+        },
+
+        {
+            id: "detailedReport",
+            label: "Detailed Report of the Investigation",
+            type: "textarea",
+            required: true
+        }
+
+    ],
+
+
+    "Witness Report": [
+
+        {
+            id: "firstName",
+            label: "First Name",
+            type: "text",
+            required: true
+        },
+
+        {
+            id: "lastName",
+            label: "Last Name",
+            type: "text",
+            required: true
+        },
+
+        {
+            id: "todayDate",
+            label: "Today's Date",
+            type: "date",
+            required: true
+        },
+
+        {
+            id: "locationName",
+            label: "Location Name",
+            type: "text",
+            required: true
+        },
+
+        {
+            id: "locationAddress",
+            label: "Location Address or Coordinates",
+            type: "textarea",
+            required: true
+        },
+
+        {
+            id: "city",
+            label: "City",
+            type: "text",
+            required: true
+        },
+
+        {
+            id: "state",
+            label: "State",
+            type: "text",
+            required: true
+        },
+
+        {
+            id: "encounterReport",
+            label: "Detailed Report Over Victim's Encounter",
+            type: "textarea",
+            required: true
+        }
+
+    ],
+
+
+    "Location History": [
+
+        {
+            id: "firstName",
+            label: "First Name",
+            type: "text",
+            required: true
+        },
+
+        {
+            id: "lastName",
+            label: "Last Name",
+            type: "text",
+            required: true
+        },
+
+        {
+            id: "todayDate",
+            label: "Today's Date",
+            type: "date",
+            required: true
+        },
+
+        {
+            id: "locationName",
+            label: "Location Name",
+            type: "text",
+            required: true
+        },
+
+        {
+            id: "locationAddress",
+            label: "Location Address or Coordinates",
+            type: "textarea",
+            required: true
+        },
+
+        {
+            id: "city",
+            label: "City",
+            type: "text",
+            required: true
+        },
+
+        {
+            id: "state",
+            label: "State",
+            type: "text",
+            required: true
+        },
+
+        {
+            id: "historyDescription",
+            label: "Detailed Description of the Location's History",
+            type: "textarea",
+            required: true
+        }
+
+    ],
+
+
+    "IPO": [
+
+        {
+            id: "locationName",
+            label: "Location Name",
+            type: "text",
+            required: true
+        },
+
+        {
+            id: "locationAddress",
+            label: "Location Address or Coordinates",
+            type: "textarea",
+            required: true
+        },
+
+        {
+            id: "city",
+            label: "City",
+            type: "text",
+            required: true
+        },
+
+        {
+            id: "state",
+            label: "State",
+            type: "text",
+            required: true
+        },
+
+        {
+            id: "dateOfInvestigation",
+            label: "Date of Investigation",
+            type: "date",
+            required: true
+        },
+
+        {
+            id: "startTime",
+            label: "Start Time",
+            type: "time",
+            required: true
+        },
+
+        {
+            id: "investigationTeam",
+            label: "Investigation Team",
+            type: "team",
+            required: true
+        },
+
+        {
+            id: "firstName",
+            label: "Your First Name",
+            type: "text",
+            required: true
+        },
+
+        {
+            id: "lastName",
+            label: "Your Last Name",
+            type: "text",
+            required: true
+        },
+
+        {
+            id: "todayDate",
+            label: "Today's Date",
+            type: "date",
+            required: true
+        },
+
+        {
+            id: "preDeployment",
+            label: "Pre-Deployment Procedures (If Any)",
+            type: "textarea",
+            required: true
+        },
+
+        {
+            id: "reconDeployment",
+            label: "Recon and Initial Deployment / Setting Base",
+            type: "textarea",
+            required: true
+        },
+
+        {
+            id: "baselineReadings",
+            label: "Baseline Readings",
+            type: "textarea",
+            required: true
+        },
+
+        {
+            id: "contactingSpirits",
+            label: "Contacting Spirits",
+            type: "textarea",
+            required: true
+        },
+
+        {
+            id: "triggerObjects",
+            label: "Trigger Objects and Experiments",
+            type: "textarea",
+            required: true
+        },
+
+        {
+            id: "liveDocumentation",
+            label: "Live Documentation",
+            type: "textarea",
+            required: true
+        },
+
+        {
+            id: "wrapUp",
+            label: "Wrap Up & Review / Debrief",
+            type: "textarea",
+            required: true
+        }
+
+    ]
+
+};
+
+// ==========================================
+// QUESTIONNAIRE RENDERER
+// ==========================================
+
+const caseDocumentQuestionnaire =
+    document.getElementById(
+        "caseDocumentQuestionnaire"
+    );
+
+
+function renderCaseDocumentQuestionnaire(
+    documentType,
+    existingAnswers = {}
+) {
+
+    if (
+        !caseDocumentQuestionnaire
+    ) {
+
+        return;
+
+    }
+
+
+    const questions =
+        CASE_DOCUMENT_QUESTIONS[
+            documentType
+        ];
+
+
+    if (!questions) {
+
+        caseDocumentQuestionnaire.innerHTML = `
+            <p class="loading-message">
+                Select a document type to begin.
+            </p>
+        `;
+
+        return;
+
+    }
+
+
+    caseDocumentQuestionnaire.innerHTML =
+        "";
+
+
+    questions.forEach(
+        function (question) {
+
+            const group =
+                document.createElement(
+                    "div"
+                );
+
+
+            group.className =
+                "form-group";
+
+
+            const label =
+                document.createElement(
+                    "label"
+                );
+
+
+            label.textContent =
+                question.label;
+
+
+            group.appendChild(
+                label
+            );
+
+
+            // ==================================
+            // CHECKBOX GROUP
+            // ==================================
+
+            if (
+                question.type ===
+                "checkboxes"
+            ) {
+
+                const checkboxContainer =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                checkboxContainer.className =
+                    "case-document-checkboxes";
+
+
+                question.options.forEach(
+                    function (option) {
+
+                        const wrapper =
+                            document.createElement(
+                                "label"
+                            );
+
+
+                        wrapper.className =
+                            "case-document-checkbox";
+
+
+                        const checkbox =
+                            document.createElement(
+                                "input"
+                            );
+
+
+                        checkbox.type =
+                            "checkbox";
+
+
+                        checkbox.name =
+                            question.id;
+
+
+                        checkbox.value =
+                            option;
+
+
+                        const savedValues =
+                            Array.isArray(
+                                existingAnswers[
+                                    question.id
+                                ]
+                            )
+                                ? existingAnswers[
+                                    question.id
+                                ]
+                                : [];
+
+
+                        checkbox.checked =
+                            savedValues.includes(
+                                option
+                            );
+
+
+                        wrapper.appendChild(
+                            checkbox
+                        );
+
+
+                        const text =
+                            document.createTextNode(
+                                ` ${option}`
+                            );
+
+
+                        wrapper.appendChild(
+                            text
+                        );
+
+
+                        checkboxContainer.appendChild(
+                            wrapper
+                        );
+
+                    }
+                );
+
+
+                group.appendChild(
+                    checkboxContainer
+                );
+
+
+                caseDocumentQuestionnaire.appendChild(
+                    group
+                );
+
+
+                return;
+
+            }
+
+
+            // ==================================
+            // TEAM SELECT
+            // ==================================
+
+            if (
+                question.type ===
+                "team"
+            ) {
+
+                const select =
+                    document.createElement(
+                        "select"
+                    );
+
+
+                select.id =
+                    `caseDoc_${question.id}`;
+
+
+                select.required =
+                    question.required;
+
+
+                select.innerHTML = `
+                    <option value="">
+                        Select Team
+                    </option>
+                `;
+
+
+                loadCaseDocumentTeams(
+                    select,
+                    existingAnswers[
+                        question.id
+                    ] || ""
+                );
+
+
+                group.appendChild(
+                    select
+                );
+
+
+                caseDocumentQuestionnaire.appendChild(
+                    group
+                );
+
+
+                return;
+
+            }
+
+
+            // ==================================
+            // NORMAL INPUT
+            // ==================================
+
+            let input;
+
+
+            if (
+                question.type ===
+                "textarea"
+            ) {
+
+                input =
+                    document.createElement(
+                        "textarea"
+                    );
+
+
+                input.rows =
+                    6;
+
+            } else {
+
+                input =
+                    document.createElement(
+                        "input"
+                    );
+
+
+                input.type =
+                    question.type;
+
+            }
+
+
+            input.id =
+                `caseDoc_${question.id}`;
+
+
+            input.required =
+                question.required;
+
+
+            input.value =
+                existingAnswers[
+                    question.id
+                ] || "";
+
+
+            group.appendChild(
+                input
+            );
+
+
+            caseDocumentQuestionnaire.appendChild(
+                group
+            );
+
+        }
+    );
+
+}
+
+async function loadCaseDocumentTeams(
+    selectElement,
+    selectedTeam = ""
+) {
+
+    try {
+
+        const snapshot =
+            await getDocs(
+                collection(
+                    db,
+                    "teams"
+                )
+            );
+
+
+        snapshot.forEach(
+            function (teamDocument) {
+
+                const team =
+                    teamDocument.data();
+
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    team.name ||
+                    teamDocument.id;
+
+
+                option.textContent =
+                    team.name ||
+                    teamDocument.id;
+
+
+                if (
+                    option.value ===
+                    selectedTeam
+                ) {
+
+                    option.selected =
+                        true;
+
+                }
+
+
+                selectElement.appendChild(
+                    option
+                );
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "CASE DOCUMENT TEAM LOAD ERROR:",
+            error
+        );
+
+
+        // Fallback to a normal text-like option
+        const option =
+            document.createElement(
+                "option"
+            );
+
+
+        option.value =
+            selectedTeam;
+
+
+        option.textContent =
+            selectedTeam ||
+            "Unable to load teams";
+
+
+        option.selected =
+            true;
+
+
+        selectElement.appendChild(
+            option
+        );
+
+    }
+
+}
