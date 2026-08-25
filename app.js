@@ -1663,7 +1663,8 @@ function getUserPermissions(role) {
             manageTeams: true,
             manageEvidence: true,
             analyzeEvidence: true,
-            manageResearch: true
+            manageResearch: true,
+            manageCaseDocuments: true
         },
 
         "Team Lead": {
@@ -1673,7 +1674,8 @@ function getUserPermissions(role) {
             manageTeams: false,
             manageEvidence: true,
             analyzeEvidence: true,
-            manageResearch: true
+            manageResearch: true,
+            manageCaseDocuments: true
         },
 
         "Assistant Team Lead": {
@@ -1683,7 +1685,8 @@ function getUserPermissions(role) {
             manageTeams: false,
             manageEvidence: true,
             analyzeEvidence: true,
-            manageResearch: true
+            manageResearch: true,
+            manageCaseDocuments: true
         },
 
         Investigator: {
