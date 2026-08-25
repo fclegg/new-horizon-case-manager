@@ -5955,250 +5955,270 @@ function renderCaseDocumentQuestionnaire(
         "";
 
 
-    questions.forEach(
-        function (question) {
+questions.forEach(
+    function (question) {
 
-            const group =
+        const group =
+            document.createElement(
+                "div"
+            );
+
+
+        group.className =
+            "form-group";
+
+
+        const label =
+            document.createElement(
+                "label"
+            );
+
+
+        label.textContent =
+            question.label;
+
+
+        group.appendChild(
+            label
+        );
+
+
+        // ==================================
+        // CHECKBOX GROUP
+        // ==================================
+
+        if (
+            question.type ===
+            "checkboxes"
+        ) {
+
+            const checkboxContainer =
                 document.createElement(
                     "div"
                 );
 
 
-            group.className =
-                "form-group";
+            checkboxContainer.className =
+                "case-document-checkboxes";
 
 
-            const label =
-                document.createElement(
-                    "label"
-                );
+            question.options.forEach(
+                function (option) {
+
+                    const wrapper =
+                        document.createElement(
+                            "label"
+                        );
 
 
-            label.textContent =
-                question.label;
+                    wrapper.className =
+                        "case-document-checkbox";
 
 
-            group.appendChild(
-                label
+                    const checkbox =
+                        document.createElement(
+                            "input"
+                        );
+
+
+                    checkbox.type =
+                        "checkbox";
+
+
+                    checkbox.name =
+                        question.id;
+
+
+                    checkbox.value =
+                        option;
+
+
+                    const savedValues =
+                        Array.isArray(
+                            existingAnswers[
+                                question.id
+                            ]
+                        )
+                            ? existingAnswers[
+                                question.id
+                            ]
+                            : [];
+
+
+                    checkbox.checked =
+                        savedValues.includes(
+                            option
+                        );
+
+
+                    wrapper.appendChild(
+                        checkbox
+                    );
+
+
+                    const text =
+                        document.createTextNode(
+                            ` ${option}`
+                        );
+
+
+                    wrapper.appendChild(
+                        text
+                    );
+
+
+                    checkboxContainer.appendChild(
+                        wrapper
+                    );
+
+                }
             );
 
 
-            // ==================================
-            // CHECKBOX GROUP
-            // ==================================
-
-            if (
-                question.type ===
-                "checkboxes"
-            ) {
-
-                const checkboxContainer =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                checkboxContainer.className =
-                    "case-document-checkboxes";
-
-
-                question.options.forEach(
-                    function (option) {
-
-                        const wrapper =
-                            document.createElement(
-                                "label"
-                            );
-
-
-                        wrapper.className =
-                            "case-document-checkbox";
-
-
-                        const checkbox =
-                            document.createElement(
-                                "input"
-                            );
-
-
-                        checkbox.type =
-                            "checkbox";
-
-
-                        checkbox.name =
-                            question.id;
-
-
-                        checkbox.value =
-                            option;
-
-
-                        const savedValues =
-                            Array.isArray(
-                                existingAnswers[
-                                    question.id
-                                ]
-                            )
-                                ? existingAnswers[
-                                    question.id
-                                ]
-                                : [];
-
-
-                        checkbox.checked =
-                            savedValues.includes(
-                                option
-                            );
-
-
-                        wrapper.appendChild(
-                            checkbox
-                        );
-
-
-                        const text =
-                            document.createTextNode(
-                                ` ${option}`
-                            );
-
-
-                        wrapper.appendChild(
-                            text
-                        );
-
-
-                        checkboxContainer.appendChild(
-                            wrapper
-                        );
-
-                    }
-                );
-
-
-                group.appendChild(
-                    checkboxContainer
-                );
-
-
-                caseDocumentQuestionnaire.appendChild(
-                    group
-                );
-
-
-                return;
-
-            }
-
-
-            // ==================================
-            // TEAM SELECT
-            // ==================================
-
-            if (
-                question.type ===
-                "team"
-            ) {
-
-                const select =
-                    document.createElement(
-                        "select"
-                    );
-
-
-                select.id =
-                    `caseDoc_${question.id}`;
-
-
-                select.required =
-                    question.required;
-
-
-                select.innerHTML = `
-                    <option value="">
-                        Select Team
-                    </option>
-                `;
-
-
-                loadCaseDocumentTeams(
-                    select,
-                    existingAnswers[
-                        question.id
-                    ] || ""
-                );
-
-
-                group.appendChild(
-                    select
-                );
-
-
-                caseDocumentQuestionnaire.appendChild(
-                    group
-                );
-
-
-                return;
-
-            }
-
-
-            // ==================================
-            // NORMAL INPUT
-            // ==================================
-
-            let input;
-
-
-            if (
-                question.type ===
-                "textarea"
-            ) {
-
-                input =
-                    document.createElement(
-                        "textarea"
-                    );
-
-
-                input.rows =
-                    6;
-
-            } else {
-
-                input =
-                    document.createElement(
-                        "input"
-                    );
-
-
-                input.type =
-                    question.type;
-
-            }
-
-
-            input.id =
-                `caseDoc_${question.id}`;
-
-
-            input.required =
-                question.required;
-
-
-            input.value =
-                existingAnswers[
-                    question.id
-                ] || "";
-
-
             group.appendChild(
-                input
+                checkboxContainer
             );
 
 
             caseDocumentQuestionnaire.appendChild(
                 group
+            );
+
+
+            return;
+
+        }
+
+
+        // ==================================
+        // TEAM SELECT
+        // ==================================
+
+        if (
+            question.type ===
+            "team"
+        ) {
+
+            const select =
+                document.createElement(
+                    "select"
+                );
+
+
+            select.id =
+                `caseDoc_${question.id}`;
+
+
+            select.required =
+                question.required;
+
+
+            select.innerHTML = `
+                <option value="">
+                    Select Team
+                </option>
+            `;
+
+
+            loadCaseDocumentTeams(
+                select,
+                existingAnswers[
+                    question.id
+                ] || ""
+            );
+
+
+            group.appendChild(
+                select
+            );
+
+
+            caseDocumentQuestionnaire.appendChild(
+                group
+            );
+
+
+            return;
+
+        }
+
+
+        // ==================================
+        // NORMAL INPUT
+        // ==================================
+
+        let input;
+
+
+        if (
+            question.type ===
+            "textarea"
+        ) {
+
+            input =
+                document.createElement(
+                    "textarea"
+                );
+
+
+            input.rows =
+                6;
+
+        } else {
+
+            input =
+                document.createElement(
+                    "input"
+                );
+
+
+            input.type =
+                question.type;
+
+        }
+
+
+        input.id =
+            `caseDoc_${question.id}`;
+
+
+        input.required =
+            question.required;
+
+
+        input.value =
+            existingAnswers[
+                question.id
+            ] || "";
+
+
+        group.appendChild(
+            input
+        );
+
+
+        caseDocumentQuestionnaire.appendChild(
+            group
+        );
+
+    }
+);
+
+
+// ==========================================
+// DOCUMENT TYPE CHANGE
+// ==========================================
+
+if (
+    caseDocumentType
+) {
+
+    caseDocumentType.addEventListener(
+        "change",
+        function () {
+
+            renderCaseDocumentQuestionnaire(
+                caseDocumentType.value
             );
 
         }
