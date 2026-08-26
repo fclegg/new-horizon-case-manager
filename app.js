@@ -212,8 +212,8 @@ async function canManageCaseDocuments() {
 }
 
 
-function openNewCaseDocument() {
-
+async function openNewCaseDocument() {
+    
     if (
         !currentCaseId ||
         !caseDocumentModal
