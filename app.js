@@ -681,6 +681,82 @@ function closeCaseDocumentReaderWindow() {
 }
 
 
+function collectCaseDocumentAnswers() {
+
+    const documentType =
+        caseDocumentType.value;
+
+
+    const questions =
+        CASE_DOCUMENT_QUESTIONS[
+            documentType
+        ];
+
+
+    if (!questions) {
+
+        return {};
+
+    }
+
+
+    const answers = {};
+
+
+    questions.forEach(
+        function (question) {
+
+            if (
+                question.type ===
+                "checkboxes"
+            ) {
+
+                const checked =
+                    document.querySelectorAll(
+                        `input[name="${question.id}"]:checked`
+                    );
+
+
+                answers[
+                    question.id
+                ] =
+                    Array.from(
+                        checked
+                    ).map(
+                        function (checkbox) {
+
+                            return checkbox.value;
+
+                        }
+                    );
+
+
+                return;
+
+            }
+
+
+            const element =
+                document.getElementById(
+                    `caseDoc_${question.id}`
+                );
+
+
+            answers[
+                question.id
+            ] =
+                element
+                    ? element.value
+                    : "";
+
+        }
+    );
+
+
+    return answers;
+
+}
+
 async function saveCaseDocument() {
 
     if (
