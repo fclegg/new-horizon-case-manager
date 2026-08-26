@@ -6401,8 +6401,6 @@ if (
                 caseDocumentType.value
             );
 
-        }
-
 
             if (
                 !caseDocumentType.value
@@ -6538,7 +6536,7 @@ if (
     );
 
 }
-
+    
 async function loadCaseDocumentTeams(
     selectElement,
     selectedTeam = ""
