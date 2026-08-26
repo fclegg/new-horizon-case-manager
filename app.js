@@ -7877,6 +7877,131 @@ if (
 
 }
 
+// ==========================================
+// LOAD CASE DOCUMENT TEAMS
+// ==========================================
+
+async function loadCaseDocumentTeams(
+    selectElement,
+    selectedTeam = ""
+) {
+
+    if (
+        !selectElement
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const snapshot =
+            await getDocs(
+                collection(
+                    db,
+                    "teams"
+                )
+            );
+
+
+        selectElement.innerHTML = `
+            <option value="">
+                Select Team
+            </option>
+        `;
+
+
+        snapshot.forEach(
+            function (
+                teamDocument
+            ) {
+
+                const team =
+                    teamDocument.data();
+
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    teamDocument.id;
+
+
+                option.textContent =
+                    team.name ||
+                    teamDocument.id;
+
+
+                if (
+                    selectedTeam ===
+                    teamDocument.id
+                ) {
+
+                    option.selected =
+                        true;
+
+                }
+
+
+                selectElement.appendChild(
+                    option
+                );
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "CASE DOCUMENT TEAM LOAD ERROR:",
+            error
+        );
+
+
+        selectElement.innerHTML = `
+            <option value="">
+                Unable to load teams
+            </option>
+        `;
+
+
+        if (
+            selectedTeam
+        ) {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+                selectedTeam;
+
+
+            option.textContent =
+                selectedTeam;
+
+
+            option.selected =
+                true;
+
+
+            selectElement.appendChild(
+                option
+            );
+
+        }
+
+    }
+
+}
 
 // ==========================================
 // APPLICATION READY
