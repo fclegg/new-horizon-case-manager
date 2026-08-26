@@ -6399,7 +6399,11 @@ if (
 
             renderCaseDocumentQuestionnaire(
                 caseDocumentType.value
+            
+                }
             );
+
+        }
 
 
             if (
