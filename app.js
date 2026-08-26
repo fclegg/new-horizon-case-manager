@@ -639,8 +639,9 @@ async function openCaseDocument(
 
 
     caseDocumentReaderContent.textContent =
-        documentData.content ||
-        "No content available.";
+        formatCaseDocumentAnswers(
+            documentData
+        );
 
 
     const canManage =
