@@ -831,16 +831,29 @@ async function saveCaseDocument() {
             userSnapshot.data();
 
 
+        const answers =
+    collectCaseDocumentAnswers();
+
+
+        const locationName =
+            answers.locationName ||
+            "Unnamed Location";
+        
+        
+        const generatedTitle =
+            `${caseDocumentType.value} — ${locationName}`;
+        
         const documentData = {
 
             documentType:
                 caseDocumentType.value,
 
             title:
-                caseDocumentTitle.value.trim(),
+                caseDocumentTitle.value.trim() ||
+                generatedTitle,
 
-            content:
-                caseDocumentContent.value.trim(),
+            answers:
+                collectCaseDocumentAnswers(),
 
             authorId:
                 user.uid,
