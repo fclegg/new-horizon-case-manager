@@ -26,11 +26,16 @@ import { firebaseConfig } from "./firebase-config.js";
 // FIREBASE
 // ==========================================
 
-const app = initializeApp(firebaseConfig);
+const app =
+    initializeApp(
+        firebaseConfig
+    );
 
-const auth = getAuth(app);
+const auth =
+    getAuth(app);
 
-const db = getFirestore(app);
+const db =
+    getFirestore(app);
 
 
 // ==========================================
@@ -38,13 +43,19 @@ const db = getFirestore(app);
 // ==========================================
 
 const loginScreen =
-    document.getElementById("loginScreen");
+    document.getElementById(
+        "loginScreen"
+    );
 
 const loginForm =
-    document.getElementById("loginForm");
+    document.getElementById(
+        "loginForm"
+    );
 
 const loginError =
-    document.getElementById("loginError");
+    document.getElementById(
+        "loginError"
+    );
 
 
 // ==========================================
@@ -52,22 +63,34 @@ const loginError =
 // ==========================================
 
 const dashboardScreen =
-    document.getElementById("dashboardScreen");
+    document.getElementById(
+        "dashboardScreen"
+    );
 
 const welcomeMessage =
-    document.getElementById("welcomeMessage");
+    document.getElementById(
+        "welcomeMessage"
+    );
 
 const userRole =
-    document.getElementById("userRole");
+    document.getElementById(
+        "userRole"
+    );
 
 const userTeam =
-    document.getElementById("userTeam");
+    document.getElementById(
+        "userTeam"
+    );
 
 const topbarUserName =
-    document.getElementById("topbarUserName");
+    document.getElementById(
+        "topbarUserName"
+    );
 
 const topbarUserRole =
-    document.getElementById("topbarUserRole");
+    document.getElementById(
+        "topbarUserRole"
+    );
 
 
 // ==========================================
@@ -75,7 +98,9 @@ const topbarUserRole =
 // ==========================================
 
 const logoutButton =
-    document.getElementById("logoutButton");
+    document.getElementById(
+        "logoutButton"
+    );
 
 
 // ==========================================
@@ -83,22 +108,34 @@ const logoutButton =
 // ==========================================
 
 const casesButton =
-    document.getElementById("casesButton");
+    document.getElementById(
+        "casesButton"
+    );
 
 const newCaseButton =
-    document.getElementById("newCaseButton");
+    document.getElementById(
+        "newCaseButton"
+    );
 
 const personnelButton =
-    document.getElementById("personnelButton");
+    document.getElementById(
+        "personnelButton"
+    );
 
 const teamsButton =
-    document.getElementById("teamsButton");
+    document.getElementById(
+        "teamsButton"
+    );
 
 const evidenceButton =
-    document.getElementById("evidenceButton");
+    document.getElementById(
+        "evidenceButton"
+    );
 
 const reportsButton =
-    document.getElementById("reportsButton");
+    document.getElementById(
+        "reportsButton"
+    );
 
 
 // ==========================================
@@ -212,8 +249,12 @@ async function canManageCaseDocuments() {
 }
 
 
+// ==========================================
+// OPEN NEW CASE DOCUMENT
+// ==========================================
+
 async function openNewCaseDocument() {
-    
+
     if (
         !currentCaseId ||
         !caseDocumentModal
@@ -228,95 +269,82 @@ async function openNewCaseDocument() {
         null;
 
 
-caseDocumentForm.reset();
+    if (caseDocumentForm) {
+
+        caseDocumentForm.reset();
+
+    }
 
 
-const today =
-    new Date()
-        .toISOString()
-        .split("T")[0];
+    const today =
+        new Date()
+            .toISOString()
+            .split("T")[0];
 
 
-const user =
-    auth.currentUser;
+    const user =
+        auth.currentUser;
 
 
-let firstName = "";
-let lastName = "";
+    let firstName = "";
+
+    let lastName = "";
 
 
-if (user) {
+    if (user) {
 
-    try {
+        try {
 
-        const userSnapshot =
-            await getDoc(
-                doc(
-                    db,
-                    "users",
-                    user.uid
-                )
-            );
-
-
-        if (
-            userSnapshot.exists()
-        ) {
-
-            const userData =
-                userSnapshot.data();
+            const userSnapshot =
+                await getDoc(
+                    doc(
+                        db,
+                        "users",
+                        user.uid
+                    )
+                );
 
 
-            const fullName =
-                userData.name ||
-                "";
+            if (
+                userSnapshot.exists()
+            ) {
+
+                const userData =
+                    userSnapshot.data();
 
 
-            const nameParts =
-                fullName
+                const nameParts =
+                    String(
+                        userData.name ||
+                        ""
+                    )
                     .trim()
                     .split(/\s+/);
 
 
-            firstName =
-                nameParts[0] ||
-                "";
+                firstName =
+                    nameParts[0] ||
+                    "";
 
 
-            lastName =
-                nameParts
-                    .slice(1)
-                    .join(" ");
+                lastName =
+                    nameParts
+                        .slice(1)
+                        .join(" ");
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "DOCUMENT USER PREFILL ERROR:",
+                error
+            );
 
         }
 
-    } catch (error) {
-
-        console.error(
-            "DOCUMENT USER PREFILL ERROR:",
-            error
-        );
-
     }
 
-}
-
-
-caseDocumentModalTitle.textContent =
-    "New Case Document";
-
-
-caseDocumentError.textContent =
-    "";
-
-
-caseDocumentModal.classList.remove(
-    "hidden"
-);
-
-
-caseDocumentModal.style.display =
-    "flex";
 
     caseDocumentModalTitle.textContent =
         "New Case Document";
@@ -330,21 +358,40 @@ caseDocumentModal.style.display =
         "hidden"
     );
 
+
     caseDocumentModal.style.display =
         "flex";
 
+
     renderCaseDocumentQuestionnaire(
-    caseDocumentType.value
-);
+        caseDocumentType.value,
+        {
+            firstName:
+                firstName,
+
+            lastName:
+                lastName,
+
+            todayDate:
+                today
+        }
+    );
+
 
     caseDocumentType.focus();
 
 }
 
 
+// ==========================================
+// CLOSE CASE DOCUMENT
+// ==========================================
+
 function closeCaseDocument() {
 
-    if (caseDocumentModal) {
+    if (
+        caseDocumentModal
+    ) {
 
         caseDocumentModal.classList.add(
             "hidden"
@@ -357,6 +404,10 @@ function closeCaseDocument() {
 
 }
 
+
+// ==========================================
+// LOAD CASE DOCUMENTS
+// ==========================================
 
 async function loadCaseDocuments() {
 
@@ -392,7 +443,9 @@ async function loadCaseDocuments() {
 
 
         snapshot.forEach(
-            function (documentSnapshot) {
+            function (
+                documentSnapshot
+            ) {
 
                 allCaseDocuments.push({
 
@@ -408,7 +461,10 @@ async function loadCaseDocuments() {
 
 
         allCaseDocuments.sort(
-            function (a, b) {
+            function (
+                a,
+                b
+            ) {
 
                 return (
                     new Date(
@@ -448,6 +504,10 @@ async function loadCaseDocuments() {
 
 }
 
+
+// ==========================================
+// RENDER CASE DOCUMENTS
+// ==========================================
 
 function renderCaseDocuments() {
 
@@ -490,7 +550,9 @@ function renderCaseDocuments() {
 
 
     allCaseDocuments.forEach(
-        function (documentData) {
+        function (
+            documentData
+        ) {
 
             const card =
                 document.createElement(
@@ -588,13 +650,108 @@ function renderCaseDocuments() {
 }
 
 
+// ==========================================
+// FORMAT CASE DOCUMENT ANSWERS
+// ==========================================
+
+function formatCaseDocumentAnswers(
+    documentData
+) {
+
+    const answers =
+        documentData.answers ||
+        {};
+
+
+    const questions =
+        CASE_DOCUMENT_QUESTIONS[
+            documentData.documentType
+        ] || [];
+
+
+    if (
+        questions.length ===
+        0
+    ) {
+
+        return (
+            documentData.content ||
+            "No content available."
+        );
+
+    }
+
+
+    const sections =
+        [];
+
+
+    questions.forEach(
+        function (
+            question
+        ) {
+
+            const value =
+                answers[
+                    question.id
+                ];
+
+
+            if (
+                Array.isArray(
+                    value
+                )
+            ) {
+
+                sections.push(
+                    `${
+                        question.label
+                    }: ${
+                        value.length
+                            ? value.join(
+                                ", "
+                            )
+                            : "None"
+                    }`
+                );
+
+            } else {
+
+                sections.push(
+                    `${
+                        question.label
+                    }: ${
+                        value ||
+                        "—"
+                    }`
+                );
+
+            }
+
+        }
+    );
+
+
+    return sections.join(
+        "\n\n"
+    );
+
+}
+
+
+// ==========================================
+// OPEN CASE DOCUMENT
+// ==========================================
+
 async function openCaseDocument(
     documentId
 ) {
 
     const documentData =
         allCaseDocuments.find(
-            function (item) {
+            function (
+                item
+            ) {
 
                 return (
                     item.id ===
@@ -605,7 +762,9 @@ async function openCaseDocument(
         );
 
 
-    if (!documentData) {
+    if (
+        !documentData
+    ) {
 
         return;
 
@@ -664,23 +823,38 @@ async function openCaseDocument(
         "hidden"
     );
 
+
     caseDocumentReaderModal.style.display =
         "flex";
 
 }
 
 
+// ==========================================
+// CLOSE CASE DOCUMENT READER
+// ==========================================
+
 function closeCaseDocumentReaderWindow() {
 
-    caseDocumentReaderModal.classList.add(
-        "hidden"
-    );
+    if (
+        caseDocumentReaderModal
+    ) {
 
-    caseDocumentReaderModal.style.display =
-        "";
+        caseDocumentReaderModal.classList.add(
+            "hidden"
+        );
+
+        caseDocumentReaderModal.style.display =
+            "";
+
+    }
 
 }
 
+
+// ==========================================
+// COLLECT CASE DOCUMENT ANSWERS
+// ==========================================
 
 function collectCaseDocumentAnswers() {
 
@@ -701,11 +875,14 @@ function collectCaseDocumentAnswers() {
     }
 
 
-    const answers = {};
+    const answers =
+        {};
 
 
     questions.forEach(
-        function (question) {
+        function (
+            question
+        ) {
 
             if (
                 question.type ===
@@ -724,7 +901,9 @@ function collectCaseDocumentAnswers() {
                     Array.from(
                         checked
                     ).map(
-                        function (checkbox) {
+                        function (
+                            checkbox
+                        ) {
 
                             return checkbox.value;
 
@@ -757,6 +936,11 @@ function collectCaseDocumentAnswers() {
     return answers;
 
 }
+
+
+// ==========================================
+// SAVE CASE DOCUMENT
+// ==========================================
 
 async function saveCaseDocument() {
 
@@ -828,22 +1012,34 @@ async function saveCaseDocument() {
             );
 
 
+        if (
+            !userSnapshot.exists()
+        ) {
+
+            throw new Error(
+                "Your personnel record could not be found."
+            );
+
+        }
+
+
         const userData =
             userSnapshot.data();
 
 
         const answers =
-    collectCaseDocumentAnswers();
+            collectCaseDocumentAnswers();
 
 
         const locationName =
             answers.locationName ||
             "Unnamed Location";
-        
-        
+
+
         const generatedTitle =
             `${caseDocumentType.value} — ${locationName}`;
-        
+
+
         const documentData = {
 
             documentType:
@@ -854,7 +1050,7 @@ async function saveCaseDocument() {
                 generatedTitle,
 
             answers:
-                collectCaseDocumentAnswers(),
+                answers,
 
             authorId:
                 user.uid,
@@ -887,7 +1083,6 @@ async function saveCaseDocument() {
                 ),
                 documentData
             );
-
 
         } else {
 
@@ -947,11 +1142,17 @@ async function saveCaseDocument() {
 }
 
 
+// ==========================================
+// EDIT CURRENT CASE DOCUMENT
+// ==========================================
+
 async function editCurrentCaseDocument() {
 
     const documentData =
         allCaseDocuments.find(
-            function (item) {
+            function (
+                item
+            ) {
 
                 return (
                     item.id ===
@@ -962,7 +1163,9 @@ async function editCurrentCaseDocument() {
         );
 
 
-    if (!documentData) {
+    if (
+        !documentData
+    ) {
 
         return;
 
@@ -988,11 +1191,6 @@ async function editCurrentCaseDocument() {
         "";
 
 
-    caseDocumentContent.value =
-        documentData.content ||
-        "";
-
-
     caseDocumentModalTitle.textContent =
         "Edit Case Document";
 
@@ -1001,18 +1199,31 @@ async function editCurrentCaseDocument() {
         "";
 
 
-    closeCaseDocumentReader();
+    renderCaseDocumentQuestionnaire(
+        documentData.documentType ||
+        "",
+        documentData.answers ||
+        {}
+    );
+
+
+    closeCaseDocumentReaderWindow();
 
 
     caseDocumentModal.classList.remove(
         "hidden"
     );
 
+
     caseDocumentModal.style.display =
         "flex";
 
 }
 
+
+// ==========================================
+// DELETE CURRENT CASE DOCUMENT
+// ==========================================
 
 async function deleteCurrentCaseDocument() {
 
@@ -1065,7 +1276,7 @@ async function deleteCurrentCaseDocument() {
         );
 
 
-        closeCaseDocumentReader();
+        closeCaseDocumentReaderWindow();
 
 
         await loadCaseDocuments();
@@ -1086,6 +1297,7 @@ async function deleteCurrentCaseDocument() {
     }
 
 }
+
 
 // ==========================================
 // CASE DOCUMENT ELEMENTS
@@ -1208,13 +1420,25 @@ const deleteCaseDocumentButton =
 
 let allCases = [];
 
+
+// ==========================================
+// CASE DOCUMENT EVENT HANDLERS
+// ==========================================
+
 function showCaseFile() {
 
     hideAllScreens();
 
-    caseFileScreen.classList.remove("hidden");
+    if (caseFileScreen) {
+
+        caseFileScreen.classList.remove(
+            "hidden"
+        );
+
+    }
 
 }
+
 
 if (
     newCaseDocumentButton
@@ -1270,7 +1494,9 @@ if (
 
     caseDocumentForm.addEventListener(
         "submit",
-        function (event) {
+        function (
+            event
+        ) {
 
             event.preventDefault();
 
@@ -1304,6 +1530,7 @@ if (
     );
 
 }
+
 
 if (
     caseDocumentReaderOverlay
@@ -1340,104 +1567,163 @@ if (
 
 }
 
+
 // ==========================================
 // CASE MANAGEMENT
 // ==========================================
 
 const casesScreen =
-    document.getElementById("casesScreen");
+    document.getElementById(
+        "casesScreen"
+    );
 
 const caseFileScreen =
-    document.getElementById("caseFileScreen");
+    document.getElementById(
+        "caseFileScreen"
+    );
 
 const casesBackButton =
-    document.getElementById("casesBackButton");
+    document.getElementById(
+        "casesBackButton"
+    );
 
 const caseFileBackButton =
-    document.getElementById("caseFileBackButton");
+    document.getElementById(
+        "caseFileBackButton"
+    );
 
 const casesList =
-    document.getElementById("casesList");
+    document.getElementById(
+        "casesList"
+    );
 
 const caseSearch =
-    document.getElementById("caseSearch");
+    document.getElementById(
+        "caseSearch"
+    );
 
 const caseStatusFilter =
-    document.getElementById("caseStatusFilter");
+    document.getElementById(
+        "caseStatusFilter"
+    );
 
 const caseTeamFilter =
-    document.getElementById("caseTeamFilter");
+    document.getElementById(
+        "caseTeamFilter"
+    );
 
 const newCaseListButton =
-    document.getElementById("newCaseListButton");
+    document.getElementById(
+        "newCaseListButton"
+    );
 
 const editCaseButton =
-    document.getElementById("editCaseButton");
+    document.getElementById(
+        "editCaseButton"
+    );
 
 const editCaseModal =
-    document.getElementById("editCaseModal");
+    document.getElementById(
+        "editCaseModal"
+    );
 
 const editCaseForm =
-    document.getElementById("editCaseForm");
+    document.getElementById(
+        "editCaseForm"
+    );
 
 const closeEditCaseModal =
-    document.getElementById("closeEditCaseModal");
+    document.getElementById(
+        "closeEditCaseModal"
+    );
 
 const cancelEditCaseButton =
-    document.getElementById("cancelEditCaseButton");
+    document.getElementById(
+        "cancelEditCaseButton"
+    );
 
 const editCaseModalOverlay =
-    document.getElementById("editCaseModalOverlay");
+    document.getElementById(
+        "editCaseModalOverlay"
+    );
 
 const editCaseError =
-    document.getElementById("editCaseError");
+    document.getElementById(
+        "editCaseError"
+    );
 
 const editCaseName =
-    document.getElementById("editCaseName");
+    document.getElementById(
+        "editCaseName"
+    );
 
 const editCaseType =
-    document.getElementById("editCaseType");
+    document.getElementById(
+        "editCaseType"
+    );
 
 const editCasePriority =
-    document.getElementById("editCasePriority");
+    document.getElementById(
+        "editCasePriority"
+    );
 
 const editCaseStatus =
-    document.getElementById("editCaseStatus");
+    document.getElementById(
+        "editCaseStatus"
+    );
 
 const editCaseClient =
-    document.getElementById("editCaseClient");
+    document.getElementById(
+        "editCaseClient"
+    );
 
 const editCaseLocation =
-    document.getElementById("editCaseLocation");
+    document.getElementById(
+        "editCaseLocation"
+    );
 
 const editCaseTeam =
-    document.getElementById("editCaseTeam");
+    document.getElementById(
+        "editCaseTeam"
+    );
 
 const editCaseInvestigationDate =
-    document.getElementById("editCaseInvestigationDate");
+    document.getElementById(
+        "editCaseInvestigationDate"
+    );
 
 const editCaseDescription =
-    document.getElementById("editCaseDescription");
+    document.getElementById(
+        "editCaseDescription"
+    );
 
 const activeCaseCount =
-    document.getElementById("activeCaseCount");
+    document.getElementById(
+        "activeCaseCount"
+    );
 
 const completedCaseCount =
-    document.getElementById("completedCaseCount");
+    document.getElementById(
+        "completedCaseCount"
+    );
 
-let currentCaseId = null;
+let currentCaseId =
+    null;
 
-let currentCaseDocumentId = null;
+let currentCaseDocumentId =
+    null;
 
-let allCaseDocuments = [];
-
+let allCaseDocuments =
+    [];
 
 // ==========================================
 // PERSONNEL SCREEN
 // ==========================================
 
 const personnelScreen =
-    document.getElementById("personnelScreen");
+    document.getElementById(
+        "personnelScreen"
+    );
 
 const personnelBackButton =
     document.getElementById(
@@ -1824,106 +2110,200 @@ const editTeamDescription =
 // CURRENT RECORDS
 // ==========================================
 
-let currentPersonnelId = null;
+let currentPersonnelId =
+    null;
 
-let currentTeamId = null;
+let currentTeamId =
+    null;
 
 
 // ==========================================
 // ROLE PERMISSIONS
 // ==========================================
 
-function getUserPermissions(role) {
+function getUserPermissions(
+    role
+) {
 
     const permissions = {
 
         Director: {
+
             viewAllCases: true,
+
             createCases: true,
+
             manageUsers: true,
+
             manageTeams: true,
+
             manageEvidence: true,
+
             analyzeEvidence: true,
+
             manageResearch: true,
+
             manageCaseDocuments: true
+
         },
+
 
         "Team Lead": {
+
             viewAllCases: false,
+
             createCases: true,
+
             manageUsers: false,
+
             manageTeams: false,
+
             manageEvidence: true,
+
             analyzeEvidence: true,
+
             manageResearch: true,
+
             manageCaseDocuments: true
+
         },
+
 
         "Assistant Team Lead": {
+
             viewAllCases: false,
+
             createCases: false,
+
             manageUsers: false,
+
             manageTeams: false,
+
             manageEvidence: true,
+
             analyzeEvidence: true,
+
             manageResearch: true,
+
             manageCaseDocuments: true
+
         },
+
 
         Investigator: {
+
             viewAllCases: false,
+
             createCases: false,
+
             manageUsers: false,
+
             manageTeams: false,
+
             manageEvidence: true,
+
             analyzeEvidence: false,
-            manageResearch: false
+
+            manageResearch: false,
+
+            manageCaseDocuments: true
+
         },
+
 
         Researcher: {
+
             viewAllCases: false,
+
             createCases: false,
+
             manageUsers: false,
+
             manageTeams: false,
+
             manageEvidence: false,
+
             analyzeEvidence: false,
-            manageResearch: true
+
+            manageResearch: true,
+
+            manageCaseDocuments: true
+
         },
+
 
         Analyst: {
+
             viewAllCases: false,
+
             createCases: false,
+
             manageUsers: false,
+
             manageTeams: false,
+
             manageEvidence: true,
+
             analyzeEvidence: true,
-            manageResearch: false
+
+            manageResearch: false,
+
+            manageCaseDocuments: true
+
         },
+
 
         "Tech Specialist": {
+
             viewAllCases: false,
+
             createCases: false,
+
             manageUsers: false,
+
             manageTeams: false,
+
             manageEvidence: false,
+
             analyzeEvidence: false,
-            manageResearch: false
+
+            manageResearch: false,
+
+            manageCaseDocuments: true
+
         },
 
+
         "AV Specialist": {
+
             viewAllCases: false,
+
             createCases: false,
+
             manageUsers: false,
+
             manageTeams: false,
+
             manageEvidence: true,
+
             analyzeEvidence: true,
-            manageResearch: false
+
+            manageResearch: false,
+
+            manageCaseDocuments: true
+
         }
 
     };
 
-    return permissions[role] || null;
+
+    return (
+        permissions[role] ||
+        null
+    );
+
 }
+
 
 // ==========================================
 // SCREEN NAVIGATION
@@ -1932,35 +2312,74 @@ function getUserPermissions(role) {
 function hideAllScreens() {
 
     if (loginScreen) {
-        loginScreen.classList.add("hidden");
+
+        loginScreen.classList.add(
+            "hidden"
+        );
+
     }
+
 
     if (dashboardScreen) {
-        dashboardScreen.classList.add("hidden");
+
+        dashboardScreen.classList.add(
+            "hidden"
+        );
+
     }
+
 
     if (personnelScreen) {
-        personnelScreen.classList.add("hidden");
+
+        personnelScreen.classList.add(
+            "hidden"
+        );
+
     }
+
 
     if (personnelFileScreen) {
-        personnelFileScreen.classList.add("hidden");
+
+        personnelFileScreen.classList.add(
+            "hidden"
+        );
+
     }
+
 
     if (teamsScreen) {
-        teamsScreen.classList.add("hidden");
+
+        teamsScreen.classList.add(
+            "hidden"
+        );
+
     }
+
 
     if (teamFileScreen) {
-        teamFileScreen.classList.add("hidden");
+
+        teamFileScreen.classList.add(
+            "hidden"
+        );
+
     }
+
 
     if (casesScreen) {
-        casesScreen.classList.add("hidden");
+
+        casesScreen.classList.add(
+            "hidden"
+        );
+
     }
 
+
     if (caseFileScreen) {
-        caseFileScreen.classList.add("hidden");
+
+        caseFileScreen.classList.add(
+            "hidden"
+        );
+
     }
 
 }
@@ -1970,8 +2389,13 @@ function showDashboard() {
 
     hideAllScreens();
 
+
     if (dashboardScreen) {
-        dashboardScreen.classList.remove("hidden");
+
+        dashboardScreen.classList.remove(
+            "hidden"
+        );
+
     }
 
 }
@@ -1981,8 +2405,13 @@ function showPersonnel() {
 
     hideAllScreens();
 
+
     if (personnelScreen) {
-        personnelScreen.classList.remove("hidden");
+
+        personnelScreen.classList.remove(
+            "hidden"
+        );
+
     }
 
 }
@@ -1992,8 +2421,13 @@ function showPersonnelFile() {
 
     hideAllScreens();
 
+
     if (personnelFileScreen) {
-        personnelFileScreen.classList.remove("hidden");
+
+        personnelFileScreen.classList.remove(
+            "hidden"
+        );
+
     }
 
 }
@@ -2001,7 +2435,10 @@ function showPersonnelFile() {
 
 function showTeams() {
 
-    if (!teamsScreen || !teamsList) {
+    if (
+        !teamsScreen ||
+        !teamsList
+    ) {
 
         console.warn(
             "Teams screen is not available."
@@ -2011,9 +2448,13 @@ function showTeams() {
 
     }
 
+
     hideAllScreens();
 
-    teamsScreen.classList.remove("hidden");
+
+    teamsScreen.classList.remove(
+        "hidden"
+    );
 
 }
 
@@ -2022,8 +2463,13 @@ function showTeamFile() {
 
     hideAllScreens();
 
+
     if (teamFileScreen) {
-        teamFileScreen.classList.remove("hidden");
+
+        teamFileScreen.classList.remove(
+            "hidden"
+        );
+
     }
 
 }
@@ -2031,7 +2477,10 @@ function showTeamFile() {
 
 function showCases() {
 
-    if (!casesScreen || !casesList) {
+    if (
+        !casesScreen ||
+        !casesList
+    ) {
 
         console.warn(
             "Cases screen is not available."
@@ -2041,11 +2490,14 @@ function showCases() {
 
     }
 
+
     hideAllScreens();
+
 
     casesScreen.classList.remove(
         "hidden"
     );
+
 
     loadCaseTeamOptions();
 
@@ -2058,58 +2510,96 @@ function showLogin() {
 
     hideAllScreens();
 
+
     if (loginScreen) {
-        loginScreen.classList.remove("hidden");
+
+        loginScreen.classList.remove(
+            "hidden"
+        );
+
     }
 
 }
+
 
 // ==========================================
 // LOGIN
 // ==========================================
 
-loginForm.addEventListener(
-    "submit",
-    async function (event) {
+if (loginForm) {
 
-        event.preventDefault();
+    loginForm.addEventListener(
+        "submit",
+        async function (
+            event
+        ) {
 
-        const email =
-            document.getElementById(
-                "email"
-            ).value;
+            event.preventDefault();
 
-        const password =
-            document.getElementById(
-                "password"
-            ).value;
 
-        loginError.textContent = "";
+            const emailInput =
+                document.getElementById(
+                    "email"
+                );
 
-        try {
 
-            await signInWithEmailAndPassword(
-                auth,
-                email,
-                password
-            );
+            const passwordInput =
+                document.getElementById(
+                    "password"
+                );
 
-        } catch (error) {
 
-            console.error(
-                "FIREBASE LOGIN ERROR:",
-                error
-            );
+            const email =
+                emailInput
+                    ? emailInput.value
+                    : "";
 
-            loginError.textContent =
-                error.code +
-                ": " +
-                error.message;
+
+            const password =
+                passwordInput
+                    ? passwordInput.value
+                    : "";
+
+
+            if (loginError) {
+
+                loginError.textContent =
+                    "";
+
+            }
+
+
+            try {
+
+                await signInWithEmailAndPassword(
+                    auth,
+                    email,
+                    password
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "FIREBASE LOGIN ERROR:",
+                    error
+                );
+
+
+                if (loginError) {
+
+                    loginError.textContent =
+                        error.code +
+                        ": " +
+                        error.message;
+
+                }
+
+            }
 
         }
+    );
 
-    }
-);
+}
 
 
 // ==========================================
@@ -2118,7 +2608,9 @@ loginForm.addEventListener(
 
 onAuthStateChanged(
     auth,
-    async function (user) {
+    async function (
+        user
+    ) {
 
         if (!user) {
 
@@ -2132,8 +2624,12 @@ onAuthStateChanged(
         showDashboard();
 
 
-        welcomeMessage.textContent =
-            `Welcome, ${user.email}`;
+        if (welcomeMessage) {
+
+            welcomeMessage.textContent =
+                `Welcome, ${user.email}`;
+
+        }
 
 
         try {
@@ -2171,6 +2667,7 @@ onAuthStateChanged(
                     permissions
                 );
 
+
                 if (addTeamButton) {
 
                     addTeamButton.style.display =
@@ -2179,6 +2676,7 @@ onAuthStateChanged(
                             : "none";
 
                 }
+
 
                 if (editCaseButton) {
 
@@ -2191,24 +2689,56 @@ onAuthStateChanged(
                 }
 
 
-                welcomeMessage.textContent =
-                    `Welcome, ${userData.name}`;
+                if (welcomeMessage) {
+
+                    welcomeMessage.textContent =
+                        `Welcome, ${
+                            userData.name ||
+                            user.email
+                        }`;
+
+                }
 
 
-                userRole.textContent =
-                    `Role: ${userData.role}`;
+                if (userRole) {
+
+                    userRole.textContent =
+                        `Role: ${
+                            userData.role ||
+                            "Unassigned"
+                        }`;
+
+                }
 
 
-                userTeam.textContent =
-                    `Team: ${userData.team || "Unassigned"}`;
+                if (userTeam) {
+
+                    userTeam.textContent =
+                        `Team: ${
+                            getTeamDisplayName(
+                                userData.team
+                            )
+                        }`;
+
+                }
 
 
-                topbarUserName.textContent =
-                    userData.name;
+                if (topbarUserName) {
+
+                    topbarUserName.textContent =
+                        userData.name ||
+                        user.email;
+
+                }
 
 
-                topbarUserRole.textContent =
-                    userData.role;
+                if (topbarUserRole) {
+
+                    topbarUserRole.textContent =
+                        userData.role ||
+                        "Unassigned";
+
+                }
 
             }
 
@@ -2229,25 +2759,31 @@ onAuthStateChanged(
 // LOGOUT
 // ==========================================
 
-logoutButton.addEventListener(
-    "click",
-    async function () {
+if (logoutButton) {
 
-        try {
+    logoutButton.addEventListener(
+        "click",
+        async function () {
 
-            await signOut(auth);
+            try {
 
-        } catch (error) {
+                await signOut(
+                    auth
+                );
 
-            console.error(
-                "SIGN OUT ERROR:",
-                error
-            );
+            } catch (error) {
+
+                console.error(
+                    "SIGN OUT ERROR:",
+                    error
+                );
+
+            }
 
         }
+    );
 
-    }
-);
+}
 
 
 // ==========================================
@@ -2255,6 +2791,13 @@ logoutButton.addEventListener(
 // ==========================================
 
 async function loadPersonnel() {
+
+    if (!personnelList) {
+
+        return;
+
+    }
+
 
     personnelList.innerHTML = `
         <p class="loading-message">
@@ -2274,7 +2817,8 @@ async function loadPersonnel() {
             );
 
 
-        personnelList.innerHTML = "";
+        personnelList.innerHTML =
+            "";
 
 
         if (
@@ -2288,11 +2832,14 @@ async function loadPersonnel() {
             `;
 
             return;
+
         }
 
 
         snapshot.forEach(
-            function (userDocument) {
+            function (
+                userDocument
+            ) {
 
                 const person =
                     userDocument.data();
@@ -2329,21 +2876,34 @@ async function loadPersonnel() {
                     <div>
 
                         <div class="personnel-name">
-                            ${person.name || "Unnamed"}
+                            ${
+                                person.name ||
+                                "Unnamed"
+                            }
                         </div>
 
                         <div class="personnel-email">
-                            ${person.email || ""}
+                            ${
+                                person.email ||
+                                ""
+                            }
                         </div>
 
                     </div>
 
                     <div class="personnel-role">
-                        ${person.role || "Unassigned"}
+                        ${
+                            person.role ||
+                            "Unassigned"
+                        }
                     </div>
 
                     <div class="personnel-team">
-                        ${getTeamDisplayName(person.team)}
+                        ${
+                            getTeamDisplayName(
+                                person.team
+                            )
+                        }
                     </div>
 
                     <div class="personnel-status ${statusClass}">
@@ -2401,7 +2961,8 @@ function getTeamDisplayName(
 ) {
 
     if (
-        teamId === "administration"
+        teamId ===
+        "administration"
     ) {
 
         return "Administration";
@@ -2410,7 +2971,8 @@ function getTeamDisplayName(
 
 
     if (
-        teamId === "okc-alpha"
+        teamId ===
+        "okc-alpha"
     ) {
 
         return "OKC Alpha Team";
@@ -2418,8 +2980,10 @@ function getTeamDisplayName(
     }
 
 
-    return teamId ||
-        "Unassigned";
+    return (
+        teamId ||
+        "Unassigned"
+    );
 
 }
 
@@ -2461,74 +3025,121 @@ async function openPersonnelFile(
             snapshot.data();
 
 
-        profileName.textContent =
-            person.name ||
-            "Unnamed";
+        if (profileName) {
+
+            profileName.textContent =
+                person.name ||
+                "Unnamed";
+
+        }
 
 
-        profileRole.textContent =
-            person.role ||
-            "Unassigned";
+        if (profileRole) {
+
+            profileRole.textContent =
+                person.role ||
+                "Unassigned";
+
+        }
 
 
-        profileEmail.textContent =
-            person.email ||
-            "—";
+        if (profileEmail) {
+
+            profileEmail.textContent =
+                person.email ||
+                "—";
+
+        }
 
 
-        profileRoleField.textContent =
-            person.role ||
-            "Unassigned";
+        if (profileRoleField) {
+
+            profileRoleField.textContent =
+                person.role ||
+                "Unassigned";
+
+        }
 
 
-        profileTeam.textContent =
-            getTeamDisplayName(
-                person.team
-            );
+        if (profileTeam) {
 
-
-        profileStatus.textContent =
-            person.active
-                ? "ACTIVE"
-                : "INACTIVE";
-
-
-        profileAccountStatus.textContent =
-            person.accountStatus ||
-            "Unknown";
-
-
-        if (
-            person.createdAt
-        ) {
-
-            const date =
-                new Date(
-                    person.createdAt
+            profileTeam.textContent =
+                getTeamDisplayName(
+                    person.team
                 );
 
+        }
 
-            profileJoined.textContent =
-                isNaN(
-                    date.getTime()
-                )
-                    ? "Unknown"
-                    : date.toLocaleDateString();
 
-        } else {
+        if (profileStatus) {
 
-            profileJoined.textContent =
+            profileStatus.textContent =
+                person.active
+                    ? "ACTIVE"
+                    : "INACTIVE";
+
+        }
+
+
+        if (profileAccountStatus) {
+
+            profileAccountStatus.textContent =
+                person.accountStatus ||
                 "Unknown";
 
         }
 
 
-        disablePersonnelButton
-            .querySelector("strong")
-            .textContent =
-                person.active
-                    ? "Disable Personnel"
-                    : "Reactivate Personnel";
+        if (profileJoined) {
+
+            if (
+                person.createdAt
+            ) {
+
+                const date =
+                    new Date(
+                        person.createdAt
+                    );
+
+
+                profileJoined.textContent =
+                    isNaN(
+                        date.getTime()
+                    )
+                        ? "Unknown"
+                        : date.toLocaleDateString();
+
+            } else {
+
+                profileJoined.textContent =
+                    "Unknown";
+
+            }
+
+        }
+
+
+        if (
+            disablePersonnelButton
+        ) {
+
+            const strong =
+                disablePersonnelButton
+                    .querySelector(
+                        "strong"
+                    );
+
+
+            if (strong) {
+
+                strong.textContent =
+                    person.active
+                        ? "Disable Personnel"
+                        : "Reactivate Personnel";
+
+            }
+
+        }
 
 
         showPersonnelFile();
@@ -2550,432 +3161,93 @@ async function openPersonnelFile(
 // PERSONNEL SEARCH
 // ==========================================
 
-personnelSearch.addEventListener(
-    "input",
-    function () {
+if (personnelSearch) {
 
-        const searchTerm =
-            personnelSearch.value
-                .toLowerCase()
-                .trim();
+    personnelSearch.addEventListener(
+        "input",
+        function () {
+
+            const searchTerm =
+                personnelSearch.value
+                    .toLowerCase()
+                    .trim();
 
 
-        const rows =
-            document.querySelectorAll(
-                ".personnel-row"
+            const rows =
+                document.querySelectorAll(
+                    ".personnel-row"
+                );
+
+
+            rows.forEach(
+                function (
+                    row
+                ) {
+
+                    const text =
+                        row.textContent
+                            .toLowerCase();
+
+
+                    row.style.display =
+                        text.includes(
+                            searchTerm
+                        )
+                            ? "grid"
+                            : "none";
+
+                }
             );
 
+        }
+    );
 
-        rows.forEach(
-            function (row) {
-
-                const text =
-                    row.textContent
-                        .toLowerCase();
-
-
-                row.style.display =
-                    text.includes(
-                        searchTerm
-                    )
-                        ? "grid"
-                        : "none";
-
-            }
-        );
-
-    }
-);
+}
 
 
 // ==========================================
 // DASHBOARD NAVIGATION
 // ==========================================
 
-personnelButton.addEventListener(
-    "click",
-    function () {
+if (personnelButton) {
 
-        showPersonnel();
+    personnelButton.addEventListener(
+        "click",
+        function () {
 
-        loadPersonnel();
+            showPersonnel();
 
-    }
-);
-
-
-teamsButton.addEventListener(
-    "click",
-    function () {
-
-        if (!teamsScreen || !teamsList) {
-
-            console.warn(
-                "Teams screen is not available."
-            );
-
-            return;
+            loadPersonnel();
 
         }
-
-        showTeams();
-
-        loadTeams();
-
-    }
-);
-
-
-personnelBackButton.addEventListener(
-    "click",
-    function () {
-
-        showDashboard();
-
-    }
-);
-
-
-personnelFileBackButton.addEventListener(
-    "click",
-    function () {
-
-        showPersonnel();
-
-    }
-);
-
-
-teamsBackButton?.addEventListener(
-    "click",
-    function () {
-
-        showDashboard();
-
-    }
-);
-
-
-teamFileBackButton?.addEventListener(
-    "click",
-    function () {
-
-        showTeams();
-
-    }
-);
-
-
-// ==========================================
-// OTHER DASHBOARD BUTTONS
-// ==========================================
-
-// ==========================================
-// NEW CASE CREATION
-// ==========================================
-
-const newCaseModal =
-    document.getElementById(
-        "newCaseModal"
     );
-
-const newCaseForm =
-    document.getElementById(
-        "newCaseForm"
-    );
-
-const closeNewCaseModal =
-    document.getElementById(
-        "closeNewCaseModal"
-    );
-
-const cancelNewCaseButton =
-    document.getElementById(
-        "cancelNewCaseButton"
-    );
-
-const newCaseModalOverlay =
-    document.getElementById(
-        "newCaseModalOverlay"
-    );
-
-const newCaseError =
-    document.getElementById(
-        "newCaseError"
-    );
-
-const saveNewCaseButton =
-    document.getElementById(
-        "saveNewCaseButton"
-    );
-
-const newCaseName =
-    document.getElementById(
-        "newCaseName"
-    );
-
-const newCaseType =
-    document.getElementById(
-        "newCaseType"
-    );
-
-const newCasePriority =
-    document.getElementById(
-        "newCasePriority"
-    );
-
-const newCaseClient =
-    document.getElementById(
-        "newCaseClient"
-    );
-
-const newCaseLocation =
-    document.getElementById(
-        "newCaseLocation"
-    );
-
-const newCaseTeam =
-    document.getElementById(
-        "newCaseTeam"
-    );
-
-const newCaseInvestigationDate =
-    document.getElementById(
-        "newCaseInvestigationDate"
-    );
-
-const newCaseDescription =
-    document.getElementById(
-        "newCaseDescription"
-    );
-
-
-function openNewCaseModal() {
-
-    if (!newCaseModal) {
-
-        console.error(
-            "NEW CASE MODAL NOT FOUND"
-        );
-
-        return;
-
-    }
-
-    if (newCaseForm) {
-
-        newCaseForm.reset();
-
-    }
-
-    if (newCasePriority) {
-
-        newCasePriority.value =
-            "Normal";
-
-    }
-
-    if (newCaseError) {
-
-        newCaseError.textContent =
-            "";
-
-    }
-
-    newCaseModal.classList.remove(
-        "hidden"
-    );
-
-    newCaseModal.style.display =
-        "flex";
-
-    if (newCaseName) {
-
-        newCaseName.focus();
-
-    }
-
-    loadCaseTeamOptions();
 
 }
 
 
-async function loadCaseTeamOptions() {
+if (teamsButton) {
 
-    const selectors = [
-        {
-            element: newCaseTeam,
-            firstOption: "Unassigned",
-            value: ""
-        },
-        {
-            element: caseTeamFilter,
-            firstOption: "All teams",
-            value: "all"
-        },
-        {
-            element: editCaseTeam,
-            firstOption: "Unassigned",
-            value: ""
-        }
-    ];
+    teamsButton.addEventListener(
+        "click",
+        function () {
 
-    const activeSelectors = selectors.filter(
-        selector => selector.element
-    );
+            if (
+                !teamsScreen ||
+                !teamsList
+            ) {
 
-    if (activeSelectors.length === 0) {
-
-        return;
-
-    }
-
-    try {
-
-        const snapshot = await getDocs(
-            collection(
-                db,
-                "teams"
-            )
-        );
-
-        activeSelectors.forEach(
-            function (selector) {
-
-                const selectedValue =
-                    selector.element.value;
-
-                selector.element.innerHTML = "";
-
-                const firstOption =
-                    document.createElement(
-                        "option"
-                    );
-
-                firstOption.value = selector.value;
-                firstOption.textContent =
-                    selector.firstOption;
-
-                selector.element.appendChild(
-                    firstOption
+                console.warn(
+                    "Teams screen is not available."
                 );
 
-                snapshot.forEach(
-                    function (teamDocument) {
-
-                        const team = teamDocument.data();
-
-                        const option =
-                            document.createElement(
-                                "option"
-                            );
-
-                        option.value = teamDocument.id;
-                        option.textContent =
-                            team.name ||
-                            "Unnamed Team";
-
-                        selector.element.appendChild(
-                            option
-                        );
-
-                    }
-                );
-
-                if (
-                    Array.from(
-                        selector.element.options
-                    ).some(
-                        option =>
-                            option.value ===
-                            selectedValue
-                    )
-                ) {
-
-                    selector.element.value =
-                        selectedValue;
-
-                }
+                return;
 
             }
-        );
-
-    } catch (error) {
-
-        console.error(
-            "CASE TEAM OPTIONS ERROR:",
-            error
-        );
-
-    }
-
-}
 
 
-function closeNewCaseModalFunction() {
+            showTeams();
 
-    if (newCaseModal) {
-
-        newCaseModal.classList.add(
-            "hidden"
-        );
-
-        newCaseModal.style.display =
-            "";
-
-    }
-
-    if (newCaseError) {
-
-        newCaseError.textContent =
-            "";
-
-    }
-
-}
-
-
-if (closeNewCaseModal) {
-
-    closeNewCaseModal.addEventListener(
-        "click",
-        closeNewCaseModalFunction
-    );
-
-}
-
-
-if (cancelNewCaseButton) {
-
-    cancelNewCaseButton.addEventListener(
-        "click",
-        closeNewCaseModalFunction
-    );
-
-}
-
-
-if (newCaseModalOverlay) {
-
-    newCaseModalOverlay.addEventListener(
-        "click",
-        closeNewCaseModalFunction
-    );
-
-}
-
-
-// ==========================================
-// CASE NAVIGATION
-// ==========================================
-
-if (casesButton) {
-
-    casesButton.addEventListener(
-        "click",
-        function () {
-
-            showCases();
+            loadTeams();
 
         }
     );
@@ -2983,39 +3255,9 @@ if (casesButton) {
 }
 
 
-if (newCaseButton) {
+if (personnelBackButton) {
 
-    newCaseButton.addEventListener(
-        "click",
-        function () {
-
-            showCases();
-
-            openNewCaseModal();
-
-        }
-    );
-
-}
-
-
-if (newCaseListButton) {
-
-    newCaseListButton.addEventListener(
-        "click",
-        function () {
-
-            openNewCaseModal();
-
-        }
-    );
-
-}
-
-
-if (casesBackButton) {
-
-    casesBackButton.addEventListener(
+    personnelBackButton.addEventListener(
         "click",
         function () {
 
@@ -3027,13 +3269,13 @@ if (casesBackButton) {
 }
 
 
-if (caseFileBackButton) {
+if (personnelFileBackButton) {
 
-    caseFileBackButton.addEventListener(
+    personnelFileBackButton.addEventListener(
         "click",
         function () {
 
-            showCases();
+            showPersonnel();
 
         }
     );
@@ -3041,1732 +3283,45 @@ if (caseFileBackButton) {
 }
 
 
-async function generateNextCaseNumber() {
+if (teamsBackButton) {
 
-    const year =
-        new Date().getFullYear();
+    teamsBackButton.addEventListener(
+        "click",
+        function () {
 
-    const prefix =
-        `NH-${year}-`;
-
-    const snapshot =
-        await getDocs(
-            collection(
-                db,
-                "cases"
-            )
-        );
-
-    let highestNumber =
-        0;
-
-    snapshot.forEach(
-        function (caseDocument) {
-
-            const caseData =
-                caseDocument.data();
-
-            const caseNumber =
-                String(
-                    caseData.caseNumber || ""
-                );
-
-            if (
-                caseNumber.startsWith(
-                    prefix
-                )
-            ) {
-
-                const number =
-                    parseInt(
-                        caseNumber.substring(
-                            prefix.length
-                        ),
-                        10
-                    );
-
-                if (
-                    !isNaN(number) &&
-                    number > highestNumber
-                ) {
-
-                    highestNumber =
-                        number;
-
-                }
-
-            }
+            showDashboard();
 
         }
-    );
-
-    return (
-        prefix +
-        String(
-            highestNumber + 1
-        ).padStart(
-            3,
-            "0"
-        )
     );
 
 }
 
 
-async function createNewCase() {
+if (teamFileBackButton) {
 
-    if (!newCaseForm) {
+    teamFileBackButton.addEventListener(
+        "click",
+        function () {
 
-        return;
-
-    }
-
-    if (
-        !newCaseForm.checkValidity()
-    ) {
-
-        newCaseForm.reportValidity();
-
-        return;
-
-    }
-
-    if (newCaseError) {
-
-        newCaseError.textContent =
-            "";
-
-    }
-
-    saveNewCaseButton.disabled =
-        true;
-
-    saveNewCaseButton.textContent =
-        "Creating Case...";
-
-
-    try {
-
-        const user =
-            auth.currentUser;
-
-
-        if (!user) {
-
-            throw new Error(
-                "You must be signed in to create a case."
-            );
-
-        }
-
-
-        // ==================================
-        // GET CREATOR
-        // ==================================
-
-        const userSnapshot =
-            await getDoc(
-                doc(
-                    db,
-                    "users",
-                    user.uid
-                )
-            );
-
-
-        if (
-            !userSnapshot.exists()
-        ) {
-
-            throw new Error(
-                "Your personnel record could not be found."
-            );
-
-        }
-
-
-        const userData =
-            userSnapshot.data();
-
-
-        const permissions =
-            getUserPermissions(
-                userData.role
-            );
-
-
-        if (
-            !permissions ||
-            !permissions.createCases
-        ) {
-
-            throw new Error(
-                "You do not have permission to create cases."
-            );
-
-        }
-
-
-        // ==================================
-        // GENERATE CASE NUMBER
-        // ==================================
-
-        const caseNumber =
-            await generateNextCaseNumber();
-
-
-        // ==================================
-        // CREATE CASE DOCUMENT
-        // ==================================
-
-        const caseReference =
-            doc(
-                collection(
-                    db,
-                    "cases"
-                )
-            );
-
-
-        await setDoc(
-            caseReference,
-            {
-
-                caseNumber:
-                    caseNumber,
-
-                caseName:
-                    newCaseName.value.trim(),
-
-                caseType:
-                    newCaseType.value,
-
-                priority:
-                    newCasePriority.value,
-
-                status:
-                    "Active",
-
-                client:
-                    newCaseClient.value.trim(),
-
-                location:
-                    newCaseLocation.value.trim(),
-
-                assignedTeamId:
-                    newCaseTeam.value,
-
-                investigationDate:
-                    newCaseInvestigationDate.value,
-
-                description:
-                    newCaseDescription.value.trim(),
-
-                createdBy:
-                    user.uid,
-
-                createdByName:
-                    userData.name ||
-                    user.email,
-
-                createdByRole:
-                    userData.role,
-
-                dateOpened:
-                    new Date().toISOString(),
-
-                createdAt:
-                    serverTimestamp(),
-
-                updatedAt:
-                    serverTimestamp()
-
-            }
-        );
-
-
-        console.log(
-            "CASE CREATED:",
-            caseNumber
-        );
-
-
-        closeNewCaseModalFunction();
-
-
-        await loadCases();
-
-
-        openCaseFile(
-            caseReference.id
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "NEW CASE CREATION ERROR:",
-            error
-        );
-
-
-        if (newCaseError) {
-
-            newCaseError.textContent =
-                error.message ||
-                "Unable to create case.";
-
-        }
-
-    } finally {
-
-        saveNewCaseButton.disabled =
-            false;
-
-        saveNewCaseButton.textContent =
-            "Create Case";
-
-    }
-
-}
-
-
-if (newCaseForm) {
-
-    newCaseForm.addEventListener(
-        "submit",
-        async function (event) {
-
-            event.preventDefault();
-
-            await createNewCase();
+            showTeams();
 
         }
     );
 
 }
-
-
-evidenceButton?.addEventListener(
-    "click",
-    function () {
-
-        alert(
-            "Evidence Management will be built in Phase 3."
-        );
-
-    }
-);
-
-casesBackButton?.addEventListener(
-    "click",
-    function () {
-
-        showDashboard();
-
-    }
-);
-
-
-caseFileBackButton?.addEventListener(
-    "click",
-    function () {
-
-        showCases();
-
-    }
-);
-
-
-reportsButton.addEventListener(
-    "click",
-    function () {
-
-        alert(
-            "Reports will be built later."
-        );
-
-    }
-);
-
-async function loadCases() {
-
-    casesList.innerHTML = `
-        <p class="loading-message">
-            Loading cases...
-        </p>
-    `;
-
-
-    try {
-
-        const snapshot =
-            await getDocs(
-                collection(
-                    db,
-                    "cases"
-                )
-            );
-
-
-        allCases = [];
-
-
-        snapshot.forEach(
-            function (caseDocument) {
-
-                allCases.push({
-
-                    id:
-                        caseDocument.id,
-
-                    ...caseDocument.data()
-
-                });
-
-            }
-        );
-
-
-        updateCaseStatistics();
-
-        renderCases();
-
-
-    } catch (error) {
-
-        console.error(
-            "CASES LOAD ERROR:",
-            error
-        );
-
-
-        casesList.innerHTML = `
-            <p class="loading-message">
-                Unable to load cases.
-            </p>
-        `;
-
-    }
-
-}
-
-function renderCases() {
-
-    const searchTerm =
-        caseSearch.value
-            .toLowerCase()
-            .trim();
-
-
-    const status =
-        caseStatusFilter.value;
-
-
-    const team =
-        caseTeamFilter.value;
-
-
-    const filteredCases =
-        allCases.filter(
-            function (caseData) {
-
-                const matchesSearch =
-
-                    !searchTerm ||
-
-                    (
-                        String(
-                            caseData.caseNumber || ""
-                        )
-                        .toLowerCase()
-                        .includes(searchTerm)
-                    ) ||
-
-                    (
-                        String(
-                            caseData.caseName || ""
-                        )
-                        .toLowerCase()
-                        .includes(searchTerm)
-                    ) ||
-
-                    (
-                        String(
-                            caseData.client || ""
-                        )
-                        .toLowerCase()
-                        .includes(searchTerm)
-                    ) ||
-
-                    (
-                        String(
-                            caseData.location || ""
-                        )
-                        .toLowerCase()
-                        .includes(searchTerm)
-                    );
-
-
-                const matchesStatus =
-                    status === "all" ||
-                    caseData.status === status;
-
-
-                const matchesTeam =
-                    team === "all" ||
-                    caseData.assignedTeamId === team;
-
-
-                return (
-                    matchesSearch &&
-                    matchesStatus &&
-                    matchesTeam
-                );
-
-            }
-        );
-
-
-    casesList.innerHTML = "";
-
-
-    if (
-        filteredCases.length === 0
-    ) {
-
-        casesList.innerHTML = `
-            <p class="loading-message">
-                No cases found.
-            </p>
-        `;
-
-        return;
-
-    }
-
-
-    filteredCases.forEach(
-        function (caseData) {
-
-            const row =
-                document.createElement(
-                    "div"
-                );
-
-
-            row.className =
-                "personnel-row";
-
-
-            row.style.gridTemplateColumns =
-                "1fr 2fr 1.2fr 1.2fr 1.2fr";
-
-
-            row.innerHTML = `
-
-                <div>
-
-                    <div class="personnel-name">
-                        ${caseData.caseNumber || "—"}
-                    </div>
-
-                </div>
-
-
-                <div>
-
-                    <div class="personnel-name">
-                        ${caseData.caseName || "Unnamed Case"}
-                    </div>
-
-                    <div class="personnel-email">
-                        ${caseData.client || "No client listed"}
-                    </div>
-
-                </div>
-
-
-                <div class="personnel-status">
-
-                    ${caseData.status || "Unknown"}
-
-                </div>
-
-
-                <div class="personnel-team">
-
-                    ${getTeamDisplayName(
-                        caseData.assignedTeamId
-                    )}
-
-                </div>
-
-
-                <div class="personnel-team">
-
-                    ${formatDate(
-                        caseData.investigationDate
-                    )}
-
-                </div>
-
-            `;
-
-
-            casesList.appendChild(
-                row
-            );
-
-
-            row.addEventListener(
-                "click",
-                function () {
-
-                    openCaseFile(
-                        caseData.id
-                    );
-
-                }
-            );
-
-        }
-    );
-
-}
-
-function updateCaseStatistics() {
-
-    const active =
-        allCases.filter(
-            caseData =>
-                caseData.status === "Active"
-        ).length;
-
-
-    const completed =
-        allCases.filter(
-            caseData =>
-                caseData.status === "Completed"
-        ).length;
-
-
-    activeCaseCount.textContent =
-        active;
-
-
-    completedCaseCount.textContent =
-        completed;
-
-}
-
-if (caseSearch) {
-
-    caseSearch.addEventListener(
-        "input",
-        renderCases
-    );
-    
-}
-
-if (caseStatusFilter) {
-
-    caseStatusFilter.addEventListener(
-        "change",
-        renderCases
-    );
-
-}
-
-if (caseTeamFilter) {
-
-    caseTeamFilter.addEventListener(
-        "change",
-        renderCases
-    );
-
-}
-
-async function openCaseFile(
-    caseId
-) {
-
-    currentCaseId =
-        caseId;
-
-
-    try {
-
-        const snapshot =
-            await getDoc(
-                doc(
-                    db,
-                    "cases",
-                    caseId
-                )
-            );
-
-
-        if (
-            !snapshot.exists()
-        ) {
-
-            console.error(
-                "CASE NOT FOUND:",
-                caseId
-            );
-
-            return;
-
-        }
-
-
-        const caseData =
-            snapshot.data();
-
-
-        document.getElementById(
-            "caseProfileNumber"
-        ).textContent =
-            caseData.caseNumber ||
-            "CASE";
-
-
-        document.getElementById(
-            "caseProfileName"
-        ).textContent =
-            caseData.caseName ||
-            "Investigation";
-
-
-        document.getElementById(
-            "caseFieldNumber"
-        ).textContent =
-            caseData.caseNumber ||
-            "—";
-
-
-        document.getElementById(
-            "caseFieldStatus"
-        ).textContent =
-            caseData.status ||
-            "—";
-
-
-        document.getElementById(
-            "caseFieldPriority"
-        ).textContent =
-            caseData.priority ||
-            "—";
-
-
-        document.getElementById(
-            "caseFieldType"
-        ).textContent =
-            caseData.caseType ||
-            "—";
-
-
-        document.getElementById(
-            "caseFieldClient"
-        ).textContent =
-            caseData.client ||
-            "—";
-
-
-        document.getElementById(
-            "caseFieldLocation"
-        ).textContent =
-            caseData.location ||
-            "—";
-
-
-        document.getElementById(
-            "caseFieldTeam"
-        ).textContent =
-            getTeamDisplayName(
-                caseData.assignedTeamId
-            );
-
-
-        document.getElementById(
-            "caseFieldInvestigationDate"
-        ).textContent =
-            formatDate(
-                caseData.investigationDate
-            );
-
-
-        document.getElementById(
-            "caseFieldOpened"
-        ).textContent =
-            formatDate(
-                caseData.dateOpened
-            );
-
-
-        document.getElementById(
-            "caseFieldCreatedBy"
-        ).textContent =
-            caseData.createdByName ||
-            caseData.createdBy ||
-            "—";
-
-
-        document.getElementById(
-            "caseFieldDescription"
-        ).textContent =
-            caseData.description ||
-            "No description provided.";
-
-
-        showCaseFile();
-
-        await loadCaseDocuments(caseId);
-
-    } catch (error) {
-
-        console.error(
-            "CASE FILE ERROR:",
-            error
-        );
-
-    }
-
-}
-
-async function userCanManageCases() {
-
-    const user = auth.currentUser;
-
-    if (!user) {
-
-        return false;
-
-    }
-
-    const snapshot = await getDoc(
-        doc(db, "users", user.uid)
-    );
-
-    if (!snapshot.exists()) {
-
-        return false;
-
-    }
-
-    const permissions = getUserPermissions(
-        snapshot.data().role
-    );
-
-    return Boolean(
-        permissions?.createCases ||
-        permissions?.viewAllCases
-    );
-
-}
-
-
-async function openEditCaseModal() {
-
-    if (!currentCaseId || !editCaseModal) {
-
-        return;
-
-    }
-
-    try {
-
-        if (!await userCanManageCases()) {
-
-            throw new Error(
-                "You do not have permission to edit cases."
-            );
-
-        }
-
-        const snapshot = await getDoc(
-            doc(db, "cases", currentCaseId)
-        );
-
-        if (!snapshot.exists()) {
-
-            throw new Error("Case not found.");
-
-        }
-
-        const caseData = snapshot.data();
-
-        editCaseName.value = caseData.caseName || "";
-        editCaseType.value = caseData.caseType || "Investigation";
-        editCasePriority.value = caseData.priority || "Normal";
-        editCaseStatus.value = caseData.status || "Active";
-        editCaseClient.value = caseData.client || "";
-        editCaseLocation.value = caseData.location || "";
-        editCaseInvestigationDate.value =
-            caseData.investigationDate || "";
-        editCaseDescription.value =
-            caseData.description || "";
-
-        await loadCaseTeamOptions();
-
-        editCaseTeam.value =
-            caseData.assignedTeamId || "";
-
-        editCaseError.textContent = "";
-        editCaseModal.classList.remove("hidden");
-        editCaseModal.style.display = "flex";
-
-    } catch (error) {
-
-        console.error("EDIT CASE LOAD ERROR:", error);
-
-        if (editCaseError) {
-
-            editCaseError.textContent = error.message;
-
-        }
-
-    }
-
-}
-
-
-function closeEditCaseModalWindow() {
-
-    editCaseModal?.classList.add("hidden");
-
-    if (editCaseModal) {
-
-        editCaseModal.style.display = "";
-
-    }
-
-    editCaseForm?.reset();
-
-    if (editCaseError) {
-
-        editCaseError.textContent = "";
-
-    }
-
-}
-
-
-editCaseButton?.addEventListener(
-    "click",
-    openEditCaseModal
-);
-
-closeEditCaseModal?.addEventListener(
-    "click",
-    closeEditCaseModalWindow
-);
-
-cancelEditCaseButton?.addEventListener(
-    "click",
-    closeEditCaseModalWindow
-);
-
-editCaseModalOverlay?.addEventListener(
-    "click",
-    closeEditCaseModalWindow
-);
-
-editCaseForm?.addEventListener(
-    "submit",
-    async function (event) {
-
-        event.preventDefault();
-
-        if (!currentCaseId || !editCaseForm.checkValidity()) {
-
-            editCaseForm.reportValidity();
-
-            return;
-
-        }
-
-        try {
-
-            if (!await userCanManageCases()) {
-
-                throw new Error(
-                    "You do not have permission to edit cases."
-                );
-
-            }
-
-            await updateDoc(
-                doc(db, "cases", currentCaseId),
-                {
-                    caseName: editCaseName.value.trim(),
-                    caseType: editCaseType.value,
-                    priority: editCasePriority.value,
-                    status: editCaseStatus.value,
-                    client: editCaseClient.value.trim(),
-                    location: editCaseLocation.value.trim(),
-                    assignedTeamId: editCaseTeam.value || null,
-                    investigationDate:
-                        editCaseInvestigationDate.value,
-                    description:
-                        editCaseDescription.value.trim(),
-                    updatedAt:
-                        new Date().toISOString()
-                }
-            );
-
-            closeEditCaseModalWindow();
-
-            await openCaseFile(currentCaseId);
-            await loadCases();
-
-        } catch (error) {
-
-            console.error("UPDATE CASE ERROR:", error);
-            editCaseError.textContent =
-                error.message || "Unable to save case changes.";
-
-        }
-
-    }
-);
-
-function formatDate(
-    value
-) {
-
-    if (!value) {
-
-        return "—";
-
-    }
-
-
-    const date =
-        new Date(value);
-
-
-    if (
-        isNaN(
-            date.getTime()
-        )
-    ) {
-
-        return value;
-
-    }
-
-
-    return date.toLocaleDateString();
-
-}
-
-// ==========================================
-// ADD PERSONNEL
-// ==========================================
-
-addPersonnelButton.addEventListener(
-    "click",
-    function () {
-
-        addPersonnelError.textContent =
-            "";
-
-        addPersonnelForm.reset();
-
-        addPersonnelModal.classList.remove(
-            "hidden"
-        );
-
-        addPersonnelModal.style.display =
-            "flex";
-
-    }
-);
-
-
-function closeAddPersonnelModal() {
-
-    addPersonnelModal.classList.add(
-        "hidden"
-    );
-
-    addPersonnelModal.style.display =
-        "";
-
-    addPersonnelForm.reset();
-
-    addPersonnelError.textContent =
-        "";
-
-}
-
-
-closePersonnelModal.addEventListener(
-    "click",
-    closeAddPersonnelModal
-);
-
-
-cancelPersonnelButton.addEventListener(
-    "click",
-    closeAddPersonnelModal
-);
-
-
-modalOverlay.addEventListener(
-    "click",
-    closeAddPersonnelModal
-);
-
-
-addPersonnelForm.addEventListener(
-    "submit",
-    async function (event) {
-
-        event.preventDefault();
-
-
-        const name =
-            document.getElementById(
-                "personName"
-            ).value.trim();
-
-
-        const email =
-            document.getElementById(
-                "personEmail"
-            ).value
-                .trim()
-                .toLowerCase();
-
-
-        const role =
-            document.getElementById(
-                "personRole"
-            ).value;
-
-
-        const team =
-            document.getElementById(
-                "personTeam"
-            ).value;
-
-
-        if (
-            !name ||
-            !email ||
-            !role ||
-            !team
-        ) {
-
-            addPersonnelError.textContent =
-                "Please complete all fields.";
-
-            return;
-
-        }
-
-
-        try {
-
-            const personnelRef =
-                doc(
-                    collection(
-                        db,
-                        "users"
-                    )
-                );
-
-
-            await setDoc(
-                personnelRef,
-                {
-
-                    name:
-                        name,
-
-                    email:
-                        email,
-
-                    role:
-                        role,
-
-                    team:
-                        team,
-
-                    active:
-                        true,
-
-                    accountStatus:
-                        "Pending",
-
-                    createdAt:
-                        new Date().toISOString()
-
-                }
-            );
-
-
-            closeAddPersonnelModal();
-
-            await loadPersonnel();
-
-
-        } catch (error) {
-
-            console.error(
-                "ADD PERSONNEL ERROR:",
-                error
-            );
-
-
-            addPersonnelError.textContent =
-                "Unable to create personnel record.";
-
-        }
-
-    }
-);
-
-
-// ==========================================
-// EDIT PERSONNEL
-// ==========================================
-
-editPersonnelButton.addEventListener(
-    "click",
-    async function () {
-
-        if (
-            !currentPersonnelId
-        ) {
-
-            return;
-
-        }
-
-
-        try {
-
-            const snapshot =
-                await getDoc(
-                    doc(
-                        db,
-                        "users",
-                        currentPersonnelId
-                    )
-                );
-
-
-            if (
-                !snapshot.exists()
-            ) {
-
-                return;
-
-            }
-
-
-            const person =
-                snapshot.data();
-
-
-            editPersonName.value =
-                person.name || "";
-
-
-            editPersonEmail.value =
-                person.email || "";
-
-
-            editPersonRole.value =
-                person.role || "";
-
-
-            editPersonTeam.value =
-                person.team || "";
-
-
-            editPersonnelError.textContent =
-                "";
-
-
-            editPersonnelModal.classList.remove(
-                "hidden"
-            );
-
-            editPersonnelModal.style.display =
-                "flex";
-
-
-        } catch (error) {
-
-            console.error(
-                "EDIT PERSONNEL LOAD ERROR:",
-                error
-            );
-
-        }
-
-    }
-);
-
-
-function closeEditPersonnelModalWindow() {
-
-    editPersonnelModal.classList.add(
-        "hidden"
-    );
-
-    editPersonnelModal.style.display =
-        "";
-
-    editPersonnelForm.reset();
-
-    editPersonnelError.textContent =
-        "";
-
-}
-
-
-closeEditPersonnelModal?.addEventListener(
-    "click",
-    closeEditPersonnelModalWindow
-);
-
-
-cancelEditPersonnelButton?.addEventListener(
-    "click",
-    closeEditPersonnelModalWindow
-);
-
-
-editModalOverlay?.addEventListener(
-    "click",
-    closeEditPersonnelModalWindow
-);
-
-
-editPersonnelForm?.addEventListener(
-    "submit",
-    async function (event) {
-
-        event.preventDefault();
-
-
-        const name =
-            editPersonName.value.trim();
-
-
-        const email =
-            editPersonEmail.value
-                .trim()
-                .toLowerCase();
-
-
-        const role =
-            editPersonRole.value;
-
-
-        const team =
-            editPersonTeam.value;
-
-
-        if (
-            !name ||
-            !email ||
-            !role ||
-            !team
-        ) {
-
-            editPersonnelError.textContent =
-                "Please complete all fields.";
-
-            return;
-
-        }
-
-
-        try {
-
-            await updateDoc(
-                doc(
-                    db,
-                    "users",
-                    currentPersonnelId
-                ),
-                {
-
-                    name:
-                        name,
-
-                    email:
-                        email,
-
-                    role:
-                        role,
-
-                    team:
-                        team,
-
-                    updatedAt:
-                        new Date().toISOString()
-
-                }
-            );
-
-
-            closeEditPersonnelModalWindow();
-
-
-            await openPersonnelFile(
-                currentPersonnelId
-            );
-
-
-            await loadPersonnel();
-
-
-        } catch (error) {
-
-            console.error(
-                "UPDATE PERSONNEL ERROR:",
-                error
-            );
-
-
-            editPersonnelError.textContent =
-                "Unable to save personnel changes.";
-
-        }
-
-    }
-);
-
-
-// ==========================================
-// DISABLE / REACTIVATE PERSONNEL
-// ==========================================
-
-disablePersonnelButton.addEventListener(
-    "click",
-    async function () {
-
-        if (
-            !currentPersonnelId
-        ) {
-
-            return;
-
-        }
-
-
-        try {
-
-            const userRef =
-                doc(
-                    db,
-                    "users",
-                    currentPersonnelId
-                );
-
-
-            const snapshot =
-                await getDoc(
-                    userRef
-                );
-
-
-            if (
-                !snapshot.exists()
-            ) {
-
-                return;
-
-            }
-
-
-            const person =
-                snapshot.data();
-
-
-            const isActive =
-                person.active === true;
-
-
-            const confirmed =
-                confirm(
-                    isActive
-                        ? `Are you sure you want to disable ${person.name}?`
-                        : `Are you sure you want to reactivate ${person.name}?`
-                );
-
-
-            if (
-                !confirmed
-            ) {
-
-                return;
-
-            }
-
-
-            await updateDoc(
-                userRef,
-                {
-
-                    active:
-                        !isActive,
-
-                    accountStatus:
-                        isActive
-                            ? "Disabled"
-                            : "Active",
-
-                    statusUpdatedAt:
-                        new Date().toISOString()
-
-                }
-            );
-
-
-            await openPersonnelFile(
-                currentPersonnelId
-            );
-
-
-            await loadPersonnel();
-
-
-        } catch (error) {
-
-            console.error(
-                "PERSONNEL STATUS UPDATE ERROR:",
-                error
-            );
-
-
-            alert(
-                "Unable to update personnel status."
-            );
-
-        }
-
-    }
-);
-
-
-// ==========================================
-// ADD TEAM
-// ==========================================
-
-async function openAddTeamModal() {
-
-    if (!addTeamModal || !addTeamForm) {
-
-        return;
-
-    }
-
-    addTeamForm.reset();
-    addTeamError.textContent = "";
-
-    await loadTeamLeadOptions(
-        null,
-        addTeamLead
-    );
-
-    addTeamModal.classList.remove(
-        "hidden"
-    );
-
-    addTeamModal.style.display =
-        "flex";
-
-    addTeamName.focus();
-
-}
-
-
-function closeAddTeamModalWindow() {
-
-    if (addTeamModal) {
-
-        addTeamModal.classList.add(
-            "hidden"
-        );
-
-        addTeamModal.style.display = "";
-
-    }
-
-    if (addTeamForm) {
-
-        addTeamForm.reset();
-
-    }
-
-    if (addTeamError) {
-
-        addTeamError.textContent = "";
-
-    }
-
-}
-
-
-addTeamButton?.addEventListener(
-    "click",
-    openAddTeamModal
-);
-
-
-closeAddTeamModal?.addEventListener(
-    "click",
-    closeAddTeamModalWindow
-);
-
-
-cancelAddTeamButton?.addEventListener(
-    "click",
-    closeAddTeamModalWindow
-);
-
-
-addTeamModalOverlay?.addEventListener(
-    "click",
-    closeAddTeamModalWindow
-);
-
-
-addTeamForm?.addEventListener(
-    "submit",
-    async function (event) {
-
-        event.preventDefault();
-
-        if (!addTeamForm.checkValidity()) {
-
-            addTeamForm.reportValidity();
-
-            return;
-
-        }
-
-        const user = auth.currentUser;
-
-        if (!user) {
-
-            addTeamError.textContent =
-                "You must be signed in to create a team.";
-
-            return;
-
-        }
-
-        saveAddTeamButton.disabled = true;
-        saveAddTeamButton.textContent =
-            "Creating Team...";
-
-        addTeamError.textContent = "";
-
-        try {
-
-            const userSnapshot = await getDoc(
-                doc(
-                    db,
-                    "users",
-                    user.uid
-                )
-            );
-
-            if (!userSnapshot.exists()) {
-
-                throw new Error(
-                    "Your personnel record could not be found."
-                );
-
-            }
-
-            const permissions =
-                getUserPermissions(
-                    userSnapshot.data().role
-                );
-
-            if (!permissions?.manageTeams) {
-
-                throw new Error(
-                    "You do not have permission to create teams."
-                );
-
-            }
-
-            const teamReference = doc(
-                collection(
-                    db,
-                    "teams"
-                )
-            );
-
-            await setDoc(
-                teamReference,
-                {
-                    name:
-                        addTeamName.value.trim(),
-                    teamType:
-                        addTeamType.value,
-                    teamLeadId:
-                        addTeamLead.value ||
-                        null,
-                    description:
-                        addTeamDescription.value.trim(),
-                    active: true,
-                    createdBy: user.uid,
-                    createdAt:
-                        new Date().toISOString(),
-                    updatedAt:
-                        new Date().toISOString()
-                }
-            );
-
-            closeAddTeamModalWindow();
-
-            await loadTeams();
-
-            await openTeamFile(
-                teamReference.id
-            );
-
-        } catch (error) {
-
-            console.error(
-                "CREATE TEAM ERROR:",
-                error
-            );
-
-            addTeamError.textContent =
-                error.message ||
-                "Unable to create team.";
-
-        } finally {
-
-            saveAddTeamButton.disabled = false;
-            saveAddTeamButton.textContent =
-                "Create Team";
-
-        }
-
-    }
-);
-
 
 // ==========================================
 // LOAD TEAMS
 // ==========================================
 
 async function loadTeams() {
+
+    if (!teamsList) {
+
+        return;
+
+    }
+
 
     teamsList.innerHTML = `
         <p class="loading-message">
@@ -4786,7 +3341,8 @@ async function loadTeams() {
             );
 
 
-        teamsList.innerHTML = "";
+        teamsList.innerHTML =
+            "";
 
 
         if (
@@ -4804,48 +3360,13 @@ async function loadTeams() {
         }
 
 
-        const personnelSnapshot =
-            await getDocs(
-                collection(
-                    db,
-                    "users"
-                )
-            );
-
-
-        const personnel =
-            [];
-
-
-        personnelSnapshot.forEach(
-            function (document) {
-
-                personnel.push({
-
-                    id:
-                        document.id,
-
-                    ...document.data()
-
-                });
-
-            }
-        );
-
-
         snapshot.forEach(
-            function (teamDocument) {
+            function (
+                teamDocument
+            ) {
 
                 const team =
                     teamDocument.data();
-
-
-                const lead =
-                    personnel.find(
-                        person =>
-                            person.id ===
-                            team.teamLeadId
-                    );
 
 
                 const row =
@@ -4855,49 +3376,57 @@ async function loadTeams() {
 
 
                 row.className =
-                    "personnel-row";
+                    "team-row";
+
+
+                row.dataset.teamId =
+                    teamDocument.id;
 
 
                 row.innerHTML = `
 
                     <div>
 
-                        <div class="personnel-name">
-                            ${team.name || "Unnamed Team"}
+                        <div class="team-name">
+                            ${
+                                team.name ||
+                                "Unnamed Team"
+                            }
+                        </div>
+
+                        <div class="team-description">
+                            ${
+                                team.description ||
+                                ""
+                            }
                         </div>
 
                     </div>
 
-                    <div class="personnel-role">
-                        ${team.teamType || "Unknown"}
-                    </div>
-
-                    <div class="personnel-team">
-                        ${lead
-                            ? lead.name
-                            : "Unassigned"}
-                    </div>
-
-                    <div class="personnel-status ${
-                        team.active
-                            ? "status-active"
-                            : "status-inactive"
-                    }">
-
+                    <div class="team-type">
                         ${
-                            team.active
-                                ? "ACTIVE"
-                                : "INACTIVE"
+                            team.type ||
+                            "Unassigned"
                         }
+                    </div>
 
+                    <div class="team-lead">
+                        ${
+                            team.leadName ||
+                            team.lead ||
+                            "Unassigned"
+                        }
+                    </div>
+
+                    <div class="team-status">
+                        ${
+                            team.active === false
+                                ? "INACTIVE"
+                                : "ACTIVE"
+                        }
                     </div>
 
                 `;
-
-
-                teamsList.appendChild(
-                    row
-                );
 
 
                 row.addEventListener(
@@ -4909,6 +3438,11 @@ async function loadTeams() {
                         );
 
                     }
+                );
+
+
+                teamsList.appendChild(
+                    row
                 );
 
             }
@@ -4926,6 +3460,183 @@ async function loadTeams() {
         teamsList.innerHTML = `
             <p class="loading-message">
                 Unable to load teams.
+            </p>
+        `;
+
+    }
+
+}
+
+
+// ==========================================
+// LOAD TEAM MEMBERS
+// ==========================================
+
+async function loadTeamMembers(
+    teamId
+) {
+
+    if (
+        !teamMembersList
+    ) {
+
+        return;
+
+    }
+
+
+    teamMembersList.innerHTML = `
+        <p class="loading-message">
+            Loading team members...
+        </p>
+    `;
+
+
+    try {
+
+        const snapshot =
+            await getDocs(
+                collection(
+                    db,
+                    "users"
+                )
+            );
+
+
+        teamMembersList.innerHTML =
+            "";
+
+
+        let memberCount =
+            0;
+
+
+        snapshot.forEach(
+            function (
+                userDocument
+            ) {
+
+                const person =
+                    userDocument.data();
+
+
+                if (
+                    person.team !==
+                    teamId
+                ) {
+
+                    return;
+
+                }
+
+
+                memberCount++;
+
+
+                const row =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                row.className =
+                    "team-member-row";
+
+
+                row.innerHTML = `
+
+                    <div>
+
+                        <strong>
+                            ${
+                                person.name ||
+                                "Unnamed"
+                            }
+                        </strong>
+
+                        <span>
+                            ${
+                                person.email ||
+                                ""
+                            }
+                        </span>
+
+                    </div>
+
+                    <div>
+                        ${
+                            person.role ||
+                            "Unassigned"
+                        }
+                    </div>
+
+                    <div>
+                        ${
+                            person.active
+                                ? "ACTIVE"
+                                : "INACTIVE"
+                        }
+                    </div>
+
+                `;
+
+
+                row.addEventListener(
+                    "click",
+                    function () {
+
+                        openPersonnelFile(
+                            userDocument.id
+                        );
+
+                    }
+                );
+
+
+                teamMembersList.appendChild(
+                    row
+                );
+
+            }
+        );
+
+
+        if (
+            memberCount ===
+            0
+        ) {
+
+            teamMembersList.innerHTML = `
+                <p class="loading-message">
+                    No personnel are assigned
+                    to this team.
+                </p>
+            `;
+
+        }
+
+
+        if (
+            teamProfileMemberCount
+        ) {
+
+            teamProfileMemberCount.textContent =
+                memberCount;
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "TEAM MEMBERS LOAD ERROR:",
+            error
+        );
+
+
+        teamMembersList.innerHTML = `
+            <p class="loading-message">
+                Unable to load team members.
             </p>
         `;
 
@@ -4962,11 +3673,6 @@ async function openTeamFile(
             !snapshot.exists()
         ) {
 
-            console.error(
-                "TEAM NOT FOUND:",
-                teamId
-            );
-
             return;
 
         }
@@ -4976,73 +3682,100 @@ async function openTeamFile(
             snapshot.data();
 
 
-        teamProfileName.textContent =
-            team.name ||
-            "Unnamed Team";
+        if (
+            teamProfileName
+        ) {
 
+            teamProfileName.textContent =
+                team.name ||
+                "Unnamed Team";
 
-        teamProfileType.textContent =
-            team.teamType ||
-            "Team";
-
-
-        teamProfileTypeField.textContent =
-            team.teamType ||
-            "Unknown";
-
-
-        teamProfileStatus.textContent =
-            team.active
-                ? "ACTIVE"
-                : "INACTIVE";
-
-
-        teamProfileDescription.textContent =
-            team.description ||
-            "No description provided.";
+        }
 
 
         if (
-            team.createdAt
+            teamProfileType
         ) {
 
-            const date =
-                new Date(
+            teamProfileType.textContent =
+                team.type ||
+                "Unassigned";
+
+        }
+
+
+        if (
+            teamProfileStatus
+        ) {
+
+            teamProfileStatus.textContent =
+                team.active === false
+                    ? "INACTIVE"
+                    : "ACTIVE";
+
+        }
+
+
+        if (
+            teamProfileLead
+        ) {
+
+            teamProfileLead.textContent =
+                team.leadName ||
+                team.lead ||
+                "Unassigned";
+
+        }
+
+
+        if (
+            teamProfileDescription
+        ) {
+
+            teamProfileDescription.textContent =
+                team.description ||
+                "No description provided.";
+
+        }
+
+
+        if (
+            teamProfileCreated
+        ) {
+
+            teamProfileCreated.textContent =
+                formatDocumentDate(
                     team.createdAt
                 );
 
+        }
 
-            teamProfileCreated.textContent =
-                isNaN(
-                    date.getTime()
-                )
-                    ? "Unknown"
-                    : date.toLocaleDateString();
 
-        } else {
+        if (
+            teamStatusButton
+        ) {
 
-            teamProfileCreated.textContent =
-                "Unknown";
+            const strong =
+                teamStatusButton.querySelector(
+                    "strong"
+                );
+
+
+            if (strong) {
+
+                strong.textContent =
+                    team.active === false
+                        ? "Activate Team"
+                        : "Deactivate Team";
+
+            }
 
         }
 
 
         await loadTeamMembers(
-            team
+            teamId
         );
-
-
-        await loadTeamLead(
-            team
-        );
-
-
-        teamStatusButton
-            .querySelector("strong")
-            .textContent =
-                team.active
-                    ? "Disable Team"
-                    : "Reactivate Team";
 
 
         showTeamFile();
@@ -5061,217 +3794,289 @@ async function openTeamFile(
 
 
 // ==========================================
-// LOAD TEAM LEAD
+// ADD TEAM MODAL
 // ==========================================
 
-async function loadTeamLead(
-    team
-) {
+function openAddTeamModal() {
 
     if (
-        !team.teamLeadId
+        !addTeamModal
     ) {
-
-        teamProfileLead.textContent =
-            "Unassigned";
 
         return;
 
     }
 
 
+    if (
+        addTeamForm
+    ) {
+
+        addTeamForm.reset();
+
+    }
+
+
+    if (
+        addTeamError
+    ) {
+
+        addTeamError.textContent =
+            "";
+
+    }
+
+
+    addTeamModal.classList.remove(
+        "hidden"
+    );
+
+
+    addTeamModal.style.display =
+        "flex";
+
+}
+
+
+function closeAddTeamModalWindow() {
+
+    if (
+        addTeamModal
+    ) {
+
+        addTeamModal.classList.add(
+            "hidden"
+        );
+
+        addTeamModal.style.display =
+            "";
+
+    }
+
+}
+
+
+// ==========================================
+// SAVE TEAM
+// ==========================================
+
+async function saveNewTeam(
+    event
+) {
+
+    event.preventDefault();
+
+
+    if (
+        !addTeamForm
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        !addTeamForm.checkValidity()
+    ) {
+
+        addTeamForm.reportValidity();
+
+        return;
+
+    }
+
+
+    const user =
+        auth.currentUser;
+
+
+    if (!user) {
+
+        return;
+
+    }
+
+
+    if (
+        addTeamError
+    ) {
+
+        addTeamError.textContent =
+            "";
+
+    }
+
+
+    if (
+        saveAddTeamButton
+    ) {
+
+        saveAddTeamButton.disabled =
+            true;
+
+        saveAddTeamButton.textContent =
+            "Saving...";
+
+    }
+
+
     try {
 
-        const snapshot =
+        const userSnapshot =
             await getDoc(
                 doc(
                     db,
                     "users",
-                    team.teamLeadId
+                    user.uid
                 )
             );
 
 
         if (
-            snapshot.exists()
+            !userSnapshot.exists()
         ) {
 
-            const person =
-                snapshot.data();
-
-
-            teamProfileLead.textContent =
-                person.name ||
-                "Unknown";
-
-        } else {
-
-            teamProfileLead.textContent =
-                "Unassigned";
+            throw new Error(
+                "Your personnel record was not found."
+            );
 
         }
 
-    } catch (error) {
 
-        console.error(
-            "TEAM LEAD LOAD ERROR:",
-            error
-        );
-
-        teamProfileLead.textContent =
-            "Unknown";
-
-    }
-
-}
+        const currentUser =
+            userSnapshot.data();
 
 
-// ==========================================
-// LOAD TEAM MEMBERS
-// ==========================================
-
-async function loadTeamMembers(
-    team
-) {
-
-    teamMembersList.innerHTML = `
-        <p class="loading-message">
-            Loading members...
-        </p>
-    `;
-
-
-    try {
-
-        const snapshot =
-            await getDocs(
-                collection(
-                    db,
-                    "users"
-                )
+        const permissions =
+            getUserPermissions(
+                currentUser.role
             );
 
 
-        const members =
-            [];
-
-
-        snapshot.forEach(
-            function (document) {
-
-                const person =
-                    document.data();
-
-
-                if (
-                    person.team ===
-                    currentTeamId
-                ) {
-
-                    members.push({
-
-                        id:
-                            document.id,
-
-                        ...person
-
-                    });
-
-                }
-
-            }
-        );
-
-
-        teamProfileMemberCount.textContent =
-            members.length;
-
-
-        teamMembersList.innerHTML = "";
-
-
         if (
-            members.length === 0
+            !permissions ||
+            !permissions.manageTeams
         ) {
 
-            teamMembersList.innerHTML = `
-                <p class="loading-message">
-                    No personnel assigned to this team.
-                </p>
-            `;
-
-            return;
+            throw new Error(
+                "You do not have permission to create teams."
+            );
 
         }
 
 
-        members.forEach(
-            function (person) {
-
-                const row =
-                    document.createElement(
-                        "div"
-                    );
+        const teamName =
+            addTeamName.value.trim();
 
 
-                row.className =
-                    "personnel-row";
+        const teamType =
+            addTeamType.value.trim();
 
 
-                row.innerHTML = `
-
-                    <div>
-
-                        <div class="personnel-name">
-                            ${person.name || "Unnamed"}
-                        </div>
-
-                        <div class="personnel-email">
-                            ${person.email || ""}
-                        </div>
-
-                    </div>
-
-                    <div class="personnel-role">
-                        ${person.role || "Unassigned"}
-                    </div>
-
-                    <div class="personnel-team">
-                        ${person.active
-                            ? "ACTIVE"
-                            : "INACTIVE"}
-                    </div>
-
-                    <div class="personnel-status">
-                        ${person.id === teamLeadIdSafe(team)
-                            ? "TEAM LEAD"
-                            : ""}
-                    </div>
-
-                `;
+        const teamLead =
+            addTeamLead.value.trim();
 
 
-                teamMembersList.appendChild(
-                    row
+        const teamDescription =
+            addTeamDescription.value.trim();
+
+
+        const teamId =
+            teamName
+                .toLowerCase()
+                .replace(
+                    /[^a-z0-9]+/g,
+                    "-"
+                )
+                .replace(
+                    /^-+|-+$/g,
+                    ""
                 );
 
+
+        if (!teamId) {
+
+            throw new Error(
+                "Please enter a valid team name."
+            );
+
+        }
+
+
+        await setDoc(
+            doc(
+                db,
+                "teams",
+                teamId
+            ),
+            {
+
+                name:
+                    teamName,
+
+                type:
+                    teamType,
+
+                lead:
+                    teamLead,
+
+                leadName:
+                    teamLead,
+
+                description:
+                    teamDescription,
+
+                active:
+                    true,
+
+                createdBy:
+                    user.uid,
+
+                createdAt:
+                    new Date().toISOString()
+
             }
         );
+
+
+        closeAddTeamModalWindow();
+
+
+        await loadTeams();
 
 
     } catch (error) {
 
         console.error(
-            "TEAM MEMBERS LOAD ERROR:",
+            "ADD TEAM ERROR:",
             error
         );
 
 
-        teamMembersList.innerHTML = `
-            <p class="loading-message">
-                Unable to load team members.
-            </p>
-        `;
+        if (
+            addTeamError
+        ) {
+
+            addTeamError.textContent =
+                error.message ||
+                "Unable to create team.";
+
+        }
+
+    } finally {
+
+        if (
+            saveAddTeamButton
+        ) {
+
+            saveAddTeamButton.disabled =
+                false;
+
+            saveAddTeamButton.textContent =
+                "Save Team";
+
+        }
 
     }
 
@@ -5279,15 +4084,65 @@ async function loadTeamMembers(
 
 
 // ==========================================
-// TEAM LEAD HELPER
+// ADD TEAM EVENT HANDLERS
 // ==========================================
 
-function teamLeadIdSafe(
-    team
+if (
+    addTeamButton
 ) {
 
-    return team.teamLeadId ||
-        null;
+    addTeamButton.addEventListener(
+        "click",
+        openAddTeamModal
+    );
+
+}
+
+
+if (
+    closeAddTeamModal
+) {
+
+    closeAddTeamModal.addEventListener(
+        "click",
+        closeAddTeamModalWindow
+    );
+
+}
+
+
+if (
+    cancelAddTeamButton
+) {
+
+    cancelAddTeamButton.addEventListener(
+        "click",
+        closeAddTeamModalWindow
+    );
+
+}
+
+
+if (
+    addTeamModalOverlay
+) {
+
+    addTeamModalOverlay.addEventListener(
+        "click",
+        closeAddTeamModalWindow
+    );
+
+}
+
+
+if (
+    addTeamForm
+) {
+
+    addTeamForm.addEventListener(
+        "submit",
+        saveNewTeam
+    );
 
 }
 
@@ -5296,30 +4151,29 @@ function teamLeadIdSafe(
 // EDIT TEAM
 // ==========================================
 
-editTeamButton?.addEventListener(
-    "click",
-    async function () {
+function openEditTeamModal() {
 
-        if (
-            !currentTeamId
+    if (
+        !currentTeamId ||
+        !editTeamModal
+    ) {
+
+        return;
+
+    }
+
+
+    getDoc(
+        doc(
+            db,
+            "teams",
+            currentTeamId
+        )
+    )
+    .then(
+        function (
+            snapshot
         ) {
-
-            return;
-
-        }
-
-
-        try {
-
-            const snapshot =
-                await getDoc(
-                    doc(
-                        db,
-                        "teams",
-                        currentTeamId
-                    )
-                );
-
 
             if (
                 !snapshot.exists()
@@ -5334,28 +4188,59 @@ editTeamButton?.addEventListener(
                 snapshot.data();
 
 
-            editTeamName.value =
-                team.name ||
-                "";
+            if (
+                editTeamName
+            ) {
+
+                editTeamName.value =
+                    team.name ||
+                    "";
+
+            }
 
 
-            editTeamType.value =
-                team.teamType ||
-                "Investigation";
+            if (
+                editTeamType
+            ) {
+
+                editTeamType.value =
+                    team.type ||
+                    "";
+
+            }
 
 
-            editTeamDescription.value =
-                team.description ||
-                "";
+            if (
+                editTeamLead
+            ) {
+
+                editTeamLead.value =
+                    team.leadName ||
+                    team.lead ||
+                    "";
+
+            }
 
 
-            await loadTeamLeadOptions(
-                team.teamLeadId
-            );
+            if (
+                editTeamDescription
+            ) {
+
+                editTeamDescription.value =
+                    team.description ||
+                    "";
+
+            }
 
 
-            editTeamError.textContent =
-                "";
+            if (
+                editTeamError
+            ) {
+
+                editTeamError.textContent =
+                    "";
+
+            }
 
 
             editTeamModal.classList.remove(
@@ -5366,8 +4251,12 @@ editTeamButton?.addEventListener(
             editTeamModal.style.display =
                 "flex";
 
-
-        } catch (error) {
+        }
+    )
+    .catch(
+        function (
+            error
+        ) {
 
             console.error(
                 "EDIT TEAM LOAD ERROR:",
@@ -5375,55 +4264,319 @@ editTeamButton?.addEventListener(
             );
 
         }
+    );
+
+}
+
+
+function closeEditTeamModalWindow() {
+
+    if (
+        editTeamModal
+    ) {
+
+        editTeamModal.classList.add(
+            "hidden"
+        );
+
+        editTeamModal.style.display =
+            "";
 
     }
-);
+
+}
 
 
-// ==========================================
-// LOAD TEAM LEAD OPTIONS
-// ==========================================
-
-async function loadTeamLeadOptions(
-    selectedId,
-    selectElement = editTeamLead
+async function saveEditedTeam(
+    event
 ) {
 
-    if (!selectElement) {
+    event.preventDefault();
+
+
+    if (
+        !currentTeamId ||
+        !editTeamForm
+    ) {
 
         return;
 
     }
 
-    selectElement.innerHTML = `
 
-        <option value="">
-            Select Team Lead
-        </option>
+    if (
+        !editTeamForm.checkValidity()
+    ) {
 
-    `;
+        editTeamForm.reportValidity();
+
+        return;
+
+    }
 
 
     try {
 
-        const snapshot =
-            await getDocs(
-                collection(
+        const user =
+            auth.currentUser;
+
+
+        if (!user) {
+
+            throw new Error(
+                "You must be signed in."
+            );
+
+        }
+
+
+        const userSnapshot =
+            await getDoc(
+                doc(
                     db,
-                    "users"
+                    "users",
+                    user.uid
                 )
             );
 
 
-        snapshot.forEach(
-            function (document) {
+        if (
+            !userSnapshot.exists()
+        ) {
 
-                const person =
-                    document.data();
+            throw new Error(
+                "Your personnel record was not found."
+            );
+
+        }
+
+
+        const currentUser =
+            userSnapshot.data();
+
+
+        const permissions =
+            getUserPermissions(
+                currentUser.role
+            );
+
+
+        if (
+            !permissions ||
+            !permissions.manageTeams
+        ) {
+
+            throw new Error(
+                "You do not have permission to edit teams."
+            );
+
+        }
+
+
+        await updateDoc(
+            doc(
+                db,
+                "teams",
+                currentTeamId
+            ),
+            {
+
+                name:
+                    editTeamName.value.trim(),
+
+                type:
+                    editTeamType.value.trim(),
+
+                lead:
+                    editTeamLead.value.trim(),
+
+                leadName:
+                    editTeamLead.value.trim(),
+
+                description:
+                    editTeamDescription.value.trim(),
+
+                updatedAt:
+                    new Date().toISOString()
+
+            }
+        );
+
+
+        closeEditTeamModalWindow();
+
+
+        await loadTeams();
+
+
+        await openTeamFile(
+            currentTeamId
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "EDIT TEAM ERROR:",
+            error
+        );
+
+
+        if (
+            editTeamError
+        ) {
+
+            editTeamError.textContent =
+                error.message ||
+                "Unable to save team.";
+
+        }
+
+    }
+
+}
+
+
+if (
+    editTeamButton
+) {
+
+    editTeamButton.addEventListener(
+        "click",
+        openEditTeamModal
+    );
+
+}
+
+
+if (
+    closeEditTeamModal
+) {
+
+    closeEditTeamModal.addEventListener(
+        "click",
+        closeEditTeamModalWindow
+    );
+
+}
+
+
+if (
+    cancelEditTeamButton
+) {
+
+    cancelEditTeamButton.addEventListener(
+        "click",
+        closeEditTeamModalWindow
+    );
+
+}
+
+
+if (
+    editTeamModalOverlay
+) {
+
+    editTeamModalOverlay.addEventListener(
+        "click",
+        closeEditTeamModalWindow
+    );
+
+}
+
+
+if (
+    editTeamForm
+) {
+
+    editTeamForm.addEventListener(
+        "submit",
+        saveEditedTeam
+    );
+
+}
+
+
+// ==========================================
+// TEAM STATUS
+// ==========================================
+
+if (
+    teamStatusButton
+) {
+
+    teamStatusButton.addEventListener(
+        "click",
+        async function () {
+
+            if (
+                !currentTeamId
+            ) {
+
+                return;
+
+            }
+
+
+            try {
+
+                const user =
+                    auth.currentUser;
+
+
+                if (!user) {
+
+                    return;
+
+                }
+
+
+                const userSnapshot =
+                    await getDoc(
+                        doc(
+                            db,
+                            "users",
+                            user.uid
+                        )
+                    );
+
+
+                const currentUser =
+                    userSnapshot.data();
+
+
+                const permissions =
+                    getUserPermissions(
+                        currentUser.role
+                    );
 
 
                 if (
-                    !person.active
+                    !permissions ||
+                    !permissions.manageTeams
+                ) {
+
+                    alert(
+                        "You do not have permission to change team status."
+                    );
+
+                    return;
+
+                }
+
+
+                const teamSnapshot =
+                    await getDoc(
+                        doc(
+                            db,
+                            "teams",
+                            currentTeamId
+                        )
+                    );
+
+
+                if (
+                    !teamSnapshot.exists()
                 ) {
 
                     return;
@@ -5431,43 +4584,524 @@ async function loadTeamLeadOptions(
                 }
 
 
-                const option =
-                    document.createElement(
-                        "option"
+                const team =
+                    teamSnapshot.data();
+
+
+                await updateDoc(
+                    doc(
+                        db,
+                        "teams",
+                        currentTeamId
+                    ),
+                    {
+
+                        active:
+                            team.active === false,
+
+                        updatedAt:
+                            new Date().toISOString()
+
+                    }
+                );
+
+
+                await openTeamFile(
+                    currentTeamId
+                );
+
+
+                await loadTeams();
+
+
+            } catch (error) {
+
+                console.error(
+                    "TEAM STATUS ERROR:",
+                    error
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// PERSONNEL ADD / EDIT
+// ==========================================
+
+async function canManagePersonnel() {
+
+    const user =
+        auth.currentUser;
+
+
+    if (!user) {
+
+        return false;
+
+    }
+
+
+    const snapshot =
+        await getDoc(
+            doc(
+                db,
+                "users",
+                user.uid
+            )
+        );
+
+
+    if (
+        !snapshot.exists()
+    ) {
+
+        return false;
+
+    }
+
+
+    const userData =
+        snapshot.data();
+
+
+    const permissions =
+        getUserPermissions(
+            userData.role
+        );
+
+
+    return Boolean(
+        permissions &&
+        permissions.manageUsers
+    );
+
+}
+
+
+function openAddPersonnelModal() {
+
+    if (
+        !addPersonnelModal
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        addPersonnelForm
+    ) {
+
+        addPersonnelForm.reset();
+
+    }
+
+
+    if (
+        addPersonnelError
+    ) {
+
+        addPersonnelError.textContent =
+            "";
+
+    }
+
+
+    addPersonnelModal.classList.remove(
+        "hidden"
+    );
+
+
+    addPersonnelModal.style.display =
+        "flex";
+
+}
+
+
+function closeAddPersonnelModal() {
+
+    if (
+        addPersonnelModal
+    ) {
+
+        addPersonnelModal.classList.add(
+            "hidden"
+        );
+
+        addPersonnelModal.style.display =
+            "";
+
+    }
+
+}
+
+
+if (
+    addPersonnelButton
+) {
+
+    addPersonnelButton.addEventListener(
+        "click",
+        openAddPersonnelModal
+    );
+
+}
+
+
+if (
+    closePersonnelModal
+) {
+
+    closePersonnelModal.addEventListener(
+        "click",
+        closeAddPersonnelModal
+    );
+
+}
+
+
+if (
+    cancelPersonnelButton
+) {
+
+    cancelPersonnelButton.addEventListener(
+        "click",
+        closeAddPersonnelModal
+    );
+
+}
+
+
+if (
+    modalOverlay
+) {
+
+    modalOverlay.addEventListener(
+        "click",
+        closeAddPersonnelModal
+    );
+
+}
+
+// ==========================================
+// SAVE NEW PERSONNEL
+// ==========================================
+
+if (
+    addPersonnelForm
+) {
+
+    addPersonnelForm.addEventListener(
+        "submit",
+        async function (
+            event
+        ) {
+
+            event.preventDefault();
+
+
+            if (
+                !addPersonnelForm.checkValidity()
+            ) {
+
+                addPersonnelForm.reportValidity();
+
+                return;
+
+            }
+
+
+            if (
+                addPersonnelError
+            ) {
+
+                addPersonnelError.textContent =
+                    "";
+
+            }
+
+
+            try {
+
+                const allowed =
+                    await canManagePersonnel();
+
+
+                if (!allowed) {
+
+                    throw new Error(
+                        "You do not have permission to add personnel."
                     );
-
-
-                option.value =
-                    document.id;
-
-
-                option.textContent =
-                    `${person.name} — ${person.role}`;
-
-
-                if (
-                    document.id ===
-                    selectedId
-                ) {
-
-                    option.selected =
-                        true;
 
                 }
 
 
-                selectElement.appendChild(
-                    option
+                const nameInput =
+                    document.getElementById(
+                        "personName"
+                    );
+
+
+                const emailInput =
+                    document.getElementById(
+                        "personEmail"
+                    );
+
+
+                const roleInput =
+                    document.getElementById(
+                        "personRole"
+                    );
+
+
+                const teamInput =
+                    document.getElementById(
+                        "personTeam"
+                    );
+
+
+                const uidInput =
+                    document.getElementById(
+                        "personUid"
+                    );
+
+
+                const name =
+                    nameInput
+                        ? nameInput.value.trim()
+                        : "";
+
+
+                const email =
+                    emailInput
+                        ? emailInput.value.trim()
+                        : "";
+
+
+                const role =
+                    roleInput
+                        ? roleInput.value
+                        : "";
+
+
+                const team =
+                    teamInput
+                        ? teamInput.value
+                        : "";
+
+
+                const uid =
+                    uidInput
+                        ? uidInput.value.trim()
+                        : "";
+
+
+                if (!uid) {
+
+                    throw new Error(
+                        "A Firebase Authentication UID is required."
+                    );
+
+                }
+
+
+                await setDoc(
+                    doc(
+                        db,
+                        "users",
+                        uid
+                    ),
+                    {
+
+                        name:
+                            name,
+
+                        email:
+                            email,
+
+                        role:
+                            role,
+
+                        team:
+                            team,
+
+                        active:
+                            true,
+
+                        accountStatus:
+                            "Active",
+
+                        createdAt:
+                            new Date().toISOString()
+
+                    },
+                    {
+                        merge: true
+                    }
                 );
 
+
+                closeAddPersonnelModal();
+
+
+                await loadPersonnel();
+
+
+            } catch (error) {
+
+                console.error(
+                    "ADD PERSONNEL ERROR:",
+                    error
+                );
+
+
+                if (
+                    addPersonnelError
+                ) {
+
+                    addPersonnelError.textContent =
+                        error.message ||
+                        "Unable to create personnel record.";
+
+                }
+
             }
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// OPEN EDIT PERSONNEL
+// ==========================================
+
+async function openEditPersonnel() {
+
+    if (
+        !currentPersonnelId ||
+        !editPersonnelModal
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const allowed =
+            await canManagePersonnel();
+
+
+        if (!allowed) {
+
+            alert(
+                "You do not have permission to edit personnel."
+            );
+
+            return;
+
+        }
+
+
+        const snapshot =
+            await getDoc(
+                doc(
+                    db,
+                    "users",
+                    currentPersonnelId
+                )
+            );
+
+
+        if (
+            !snapshot.exists()
+        ) {
+
+            return;
+
+        }
+
+
+        const person =
+            snapshot.data();
+
+
+        if (
+            editPersonName
+        ) {
+
+            editPersonName.value =
+                person.name ||
+                "";
+
+        }
+
+
+        if (
+            editPersonEmail
+        ) {
+
+            editPersonEmail.value =
+                person.email ||
+                "";
+
+        }
+
+
+        if (
+            editPersonRole
+        ) {
+
+            editPersonRole.value =
+                person.role ||
+                "";
+
+        }
+
+
+        if (
+            editPersonTeam
+        ) {
+
+            editPersonTeam.value =
+                person.team ||
+                "";
+
+        }
+
+
+        if (
+            editPersonnelError
+        ) {
+
+            editPersonnelError.textContent =
+                "";
+
+        }
+
+
+        editPersonnelModal.classList.remove(
+            "hidden"
         );
+
+
+        editPersonnelModal.style.display =
+            "flex";
 
 
     } catch (error) {
 
         console.error(
-            "TEAM LEAD OPTIONS ERROR:",
+            "EDIT PERSONNEL LOAD ERROR:",
             error
         );
 
@@ -5477,937 +5111,47 @@ async function loadTeamLeadOptions(
 
 
 // ==========================================
-// CLOSE EDIT TEAM
+// CLOSE EDIT PERSONNEL
 // ==========================================
 
-function closeEditTeamModalWindow() {
+function closeEditPersonnelModalWindow() {
 
-    editTeamModal.classList.add(
-        "hidden"
-    );
+    if (
+        editPersonnelModal
+    ) {
 
-    editTeamModal.style.display =
-        "";
+        editPersonnelModal.classList.add(
+            "hidden"
+        );
 
-    editTeamForm.reset();
 
-    editTeamError.textContent =
-        "";
+        editPersonnelModal.style.display =
+            "";
+
+    }
 
 }
 
 
-closeEditTeamModal?.addEventListener(
-    "click",
-    closeEditTeamModalWindow
-);
-
-
-cancelEditTeamButton?.addEventListener(
-    "click",
-    closeEditTeamModalWindow
-);
-
-
-editTeamModalOverlay?.addEventListener(
-    "click",
-    closeEditTeamModalWindow
-);
-
-
 // ==========================================
-// SAVE TEAM
-// ==========================================
-
-editTeamForm?.addEventListener(
-    "submit",
-    async function (event) {
-
-        event.preventDefault();
-
-
-        const name =
-            editTeamName.value.trim();
-
-
-        const teamType =
-            editTeamType.value;
-
-
-        const teamLeadId =
-            editTeamLead.value ||
-            null;
-
-
-        const description =
-            editTeamDescription.value.trim();
-
-
-        if (
-            !name ||
-            !teamType
-        ) {
-
-            editTeamError.textContent =
-                "Please complete all required fields.";
-
-            return;
-
-        }
-
-
-        try {
-
-            await updateDoc(
-                doc(
-                    db,
-                    "teams",
-                    currentTeamId
-                ),
-                {
-
-                    name:
-                        name,
-
-                    teamType:
-                        teamType,
-
-                    teamLeadId:
-                        teamLeadId,
-
-                    description:
-                        description,
-
-                    updatedAt:
-                        new Date().toISOString()
-
-                }
-            );
-
-
-            closeEditTeamModalWindow();
-
-
-            await openTeamFile(
-                currentTeamId
-            );
-
-
-            await loadTeams();
-
-
-        } catch (error) {
-
-            console.error(
-                "UPDATE TEAM ERROR:",
-                error
-            );
-
-
-            editTeamError.textContent =
-                "Unable to save team changes.";
-
-        }
-
-    }
-);
-
-
-// ==========================================
-// DISABLE / REACTIVATE TEAM
-// ==========================================
-
-teamStatusButton?.addEventListener(
-    "click",
-    async function () {
-
-        if (
-            !currentTeamId
-        ) {
-
-            return;
-
-        }
-
-
-        try {
-
-            const teamRef =
-                doc(
-                    db,
-                    "teams",
-                    currentTeamId
-                );
-
-
-            const snapshot =
-                await getDoc(
-                    teamRef
-                );
-
-
-            if (
-                !snapshot.exists()
-            ) {
-
-                return;
-
-            }
-
-
-            const team =
-                snapshot.data();
-
-
-            const isActive =
-                team.active === true;
-
-
-            const confirmed =
-                confirm(
-                    isActive
-                        ? `Are you sure you want to disable ${team.name}?`
-                        : `Are you sure you want to reactivate ${team.name}?`
-                );
-
-
-            if (
-                !confirmed
-            ) {
-
-                return;
-
-            }
-
-
-            await updateDoc(
-                teamRef,
-                {
-
-                    active:
-                        !isActive,
-
-                    updatedAt:
-                        new Date().toISOString()
-
-                }
-            );
-
-
-            await openTeamFile(
-                currentTeamId
-            );
-
-
-            await loadTeams();
-
-
-        } catch (error) {
-
-            console.error(
-                "TEAM STATUS UPDATE ERROR:",
-                error
-            );
-
-
-            alert(
-                "Unable to update team status."
-            );
-
-        }
-
-    }
-);
-
-// ==========================================
-// CASE DOCUMENT QUESTIONNAIRES
-// ==========================================
-
-const CASE_DOCUMENT_QUESTIONS = {
-
-    "Investigation Report": [
-
-        {
-            id: "firstName",
-            label: "Your First Name",
-            type: "text",
-            required: true
-        },
-
-        {
-            id: "lastName",
-            label: "Your Last Name",
-            type: "text",
-            required: true
-        },
-
-        {
-            id: "todayDate",
-            label: "Today's Date",
-            type: "date",
-            required: true
-        },
-
-        {
-            id: "locationName",
-            label: "Location Name",
-            type: "text",
-            required: true
-        },
-
-        {
-            id: "locationAddress",
-            label: "Location Address or Coordinates",
-            type: "textarea",
-            required: true
-        },
-
-        {
-            id: "city",
-            label: "City",
-            type: "text",
-            required: true
-        },
-
-        {
-            id: "state",
-            label: "State",
-            type: "text",
-            required: true
-        },
-
-        {
-            id: "dateOfInvestigation",
-            label: "Date of Investigation",
-            type: "date",
-            required: true
-        },
-
-        {
-            id: "startTime",
-            label: "Start Time",
-            type: "time",
-            required: true
-        },
-
-        {
-            id: "endTime",
-            label: "End Time",
-            type: "time",
-            required: true
-        },
-
-        {
-            id: "spiritTypes",
-            label: "Types of Spirit(s) Encountered",
-            type: "checkboxes",
-            required: false,
-            options: [
-                "Ghost",
-                "Demon",
-                "Fallen",
-                "Angel"
-            ]
-        },
-
-        {
-            id: "teamName",
-            label: "Team Name",
-            type: "team",
-            required: true
-        },
-
-        {
-            id: "moonPhase",
-            label: "Moon Phase and Luminance",
-            type: "text",
-            required: true
-        },
-
-        {
-            id: "membersPresent",
-            label: "Members Present",
-            type: "textarea",
-            required: true
-        },
-
-        {
-            id: "detailedReport",
-            label: "Detailed Report of the Investigation",
-            type: "textarea",
-            required: true
-        }
-
-    ],
-
-
-    "Witness Report": [
-
-        {
-            id: "firstName",
-            label: "First Name",
-            type: "text",
-            required: true
-        },
-
-        {
-            id: "lastName",
-            label: "Last Name",
-            type: "text",
-            required: true
-        },
-
-        {
-            id: "todayDate",
-            label: "Today's Date",
-            type: "date",
-            required: true
-        },
-
-        {
-            id: "locationName",
-            label: "Location Name",
-            type: "text",
-            required: true
-        },
-
-        {
-            id: "locationAddress",
-            label: "Location Address or Coordinates",
-            type: "textarea",
-            required: true
-        },
-
-        {
-            id: "city",
-            label: "City",
-            type: "text",
-            required: true
-        },
-
-        {
-            id: "state",
-            label: "State",
-            type: "text",
-            required: true
-        },
-
-        {
-            id: "encounterReport",
-            label: "Detailed Report Over Victim's Encounter",
-            type: "textarea",
-            required: true
-        }
-
-    ],
-
-
-    "Location History": [
-
-        {
-            id: "firstName",
-            label: "First Name",
-            type: "text",
-            required: true
-        },
-
-        {
-            id: "lastName",
-            label: "Last Name",
-            type: "text",
-            required: true
-        },
-
-        {
-            id: "todayDate",
-            label: "Today's Date",
-            type: "date",
-            required: true
-        },
-
-        {
-            id: "locationName",
-            label: "Location Name",
-            type: "text",
-            required: true
-        },
-
-        {
-            id: "locationAddress",
-            label: "Location Address or Coordinates",
-            type: "textarea",
-            required: true
-        },
-
-        {
-            id: "city",
-            label: "City",
-            type: "text",
-            required: true
-        },
-
-        {
-            id: "state",
-            label: "State",
-            type: "text",
-            required: true
-        },
-
-        {
-            id: "historyDescription",
-            label: "Detailed Description of the Location's History",
-            type: "textarea",
-            required: true
-        }
-
-    ],
-
-
-    "IPO": [
-
-        {
-            id: "locationName",
-            label: "Location Name",
-            type: "text",
-            required: true
-        },
-
-        {
-            id: "locationAddress",
-            label: "Location Address or Coordinates",
-            type: "textarea",
-            required: true
-        },
-
-        {
-            id: "city",
-            label: "City",
-            type: "text",
-            required: true
-        },
-
-        {
-            id: "state",
-            label: "State",
-            type: "text",
-            required: true
-        },
-
-        {
-            id: "dateOfInvestigation",
-            label: "Date of Investigation",
-            type: "date",
-            required: true
-        },
-
-        {
-            id: "startTime",
-            label: "Start Time",
-            type: "time",
-            required: true
-        },
-
-        {
-            id: "investigationTeam",
-            label: "Investigation Team",
-            type: "team",
-            required: true
-        },
-
-        {
-            id: "firstName",
-            label: "Your First Name",
-            type: "text",
-            required: true
-        },
-
-        {
-            id: "lastName",
-            label: "Your Last Name",
-            type: "text",
-            required: true
-        },
-
-        {
-            id: "todayDate",
-            label: "Today's Date",
-            type: "date",
-            required: true
-        },
-
-        {
-            id: "preDeployment",
-            label: "Pre-Deployment Procedures (If Any)",
-            type: "textarea",
-            required: true
-        },
-
-        {
-            id: "reconDeployment",
-            label: "Recon and Initial Deployment / Setting Base",
-            type: "textarea",
-            required: true
-        },
-
-        {
-            id: "baselineReadings",
-            label: "Baseline Readings",
-            type: "textarea",
-            required: true
-        },
-
-        {
-            id: "contactingSpirits",
-            label: "Contacting Spirits",
-            type: "textarea",
-            required: true
-        },
-
-        {
-            id: "triggerObjects",
-            label: "Trigger Objects and Experiments",
-            type: "textarea",
-            required: true
-        },
-
-        {
-            id: "liveDocumentation",
-            label: "Live Documentation",
-            type: "textarea",
-            required: true
-        },
-
-        {
-            id: "wrapUp",
-            label: "Wrap Up & Review / Debrief",
-            type: "textarea",
-            required: true
-        }
-
-    ]
-
-};
-
-// ==========================================
-// QUESTIONNAIRE RENDERER
-// ==========================================
-
-const caseDocumentQuestionnaire =
-    document.getElementById(
-        "caseDocumentQuestionnaire"
-    );
-
-
-function renderCaseDocumentQuestionnaire(
-    documentType,
-    existingAnswers = {}
-) {
-
-    if (
-        !caseDocumentQuestionnaire
-    ) {
-
-        return;
-
-    }
-
-
-    const questions =
-        CASE_DOCUMENT_QUESTIONS[
-            documentType
-        ];
-
-
-    if (!questions) {
-
-        caseDocumentQuestionnaire.innerHTML = `
-            <p class="loading-message">
-                Select a document type to begin.
-            </p>
-        `;
-
-        return;
-
-    }
-
-
-    caseDocumentQuestionnaire.innerHTML =
-        "";
-
-
-questions.forEach(
-    function (question) {
-
-        const group =
-            document.createElement(
-                "div"
-            );
-
-
-        group.className =
-            "form-group";
-
-
-        const label =
-            document.createElement(
-                "label"
-            );
-
-
-        label.textContent =
-            question.label;
-
-
-        group.appendChild(
-            label
-        );
-
-
-        // ==================================
-        // CHECKBOX GROUP
-        // ==================================
-
-        if (
-            question.type ===
-            "checkboxes"
-        ) {
-
-            const checkboxContainer =
-                document.createElement(
-                    "div"
-                );
-
-
-            checkboxContainer.className =
-                "case-document-checkboxes";
-
-
-            question.options.forEach(
-                function (option) {
-
-                    const wrapper =
-                        document.createElement(
-                            "label"
-                        );
-
-
-                    wrapper.className =
-                        "case-document-checkbox";
-
-
-                    const checkbox =
-                        document.createElement(
-                            "input"
-                        );
-
-
-                    checkbox.type =
-                        "checkbox";
-
-
-                    checkbox.name =
-                        question.id;
-
-
-                    checkbox.value =
-                        option;
-
-
-                    const savedValues =
-                        Array.isArray(
-                            existingAnswers[
-                                question.id
-                            ]
-                        )
-                            ? existingAnswers[
-                                question.id
-                            ]
-                            : [];
-
-
-                    checkbox.checked =
-                        savedValues.includes(
-                            option
-                        );
-
-
-                    wrapper.appendChild(
-                        checkbox
-                    );
-
-
-                    const text =
-                        document.createTextNode(
-                            ` ${option}`
-                        );
-
-
-                    wrapper.appendChild(
-                        text
-                    );
-
-
-                    checkboxContainer.appendChild(
-                        wrapper
-                    );
-
-                }
-            );
-
-
-            group.appendChild(
-                checkboxContainer
-            );
-
-
-            caseDocumentQuestionnaire.appendChild(
-                group
-            );
-
-
-            return;
-
-        }
-
-
-        // ==================================
-        // TEAM SELECT
-        // ==================================
-
-        if (
-            question.type ===
-            "team"
-        ) {
-
-            const select =
-                document.createElement(
-                    "select"
-                );
-
-
-            select.id =
-                `caseDoc_${question.id}`;
-
-
-            select.required =
-                question.required;
-
-
-            select.innerHTML = `
-                <option value="">
-                    Select Team
-                </option>
-            `;
-
-
-            loadCaseDocumentTeams(
-                select,
-                existingAnswers[
-                    question.id
-                ] || ""
-            );
-
-
-            group.appendChild(
-                select
-            );
-
-
-            caseDocumentQuestionnaire.appendChild(
-                group
-            );
-
-
-            return;
-
-        }
-
-
-        // ==================================
-        // NORMAL INPUT
-        // ==================================
-
-        let input;
-
-
-        if (
-            question.type ===
-            "textarea"
-        ) {
-
-            input =
-                document.createElement(
-                    "textarea"
-                );
-
-
-            input.rows =
-                6;
-
-        } else {
-
-            input =
-                document.createElement(
-                    "input"
-                );
-
-
-            input.type =
-                question.type;
-
-        }
-
-
-        input.id =
-            `caseDoc_${question.id}`;
-
-
-        input.required =
-            question.required;
-
-
-        input.value =
-            existingAnswers[
-                question.id
-            ] || "";
-
-
-        group.appendChild(
-            input
-        );
-
-
-        caseDocumentQuestionnaire.appendChild(
-            group
-        );
-
-    }
-);
-
-
-// ==========================================
-// DOCUMENT TYPE CHANGE
+// SAVE EDITED PERSONNEL
 // ==========================================
 
 if (
-    caseDocumentType
+    editPersonnelForm
 ) {
 
-    caseDocumentType.addEventListener(
-        "change",
-        async function () {
+    editPersonnelForm.addEventListener(
+        "submit",
+        async function (
+            event
+        ) {
 
-            renderCaseDocumentQuestionnaire(
-                caseDocumentType.value
-            
-                }
-            );
-
-        }
+            event.preventDefault();
 
 
             if (
-                !caseDocumentType.value
+                !currentPersonnelId
             ) {
 
                 return;
@@ -6415,11 +5159,173 @@ if (
             }
 
 
-            const user =
-                auth.currentUser;
+            if (
+                !editPersonnelForm.checkValidity()
+            ) {
+
+                editPersonnelForm.reportValidity();
+
+                return;
+
+            }
 
 
-            if (!user) {
+            if (
+                editPersonnelError
+            ) {
+
+                editPersonnelError.textContent =
+                    "";
+
+            }
+
+
+            try {
+
+                const allowed =
+                    await canManagePersonnel();
+
+
+                if (!allowed) {
+
+                    throw new Error(
+                        "You do not have permission to edit personnel."
+                    );
+
+                }
+
+
+                await updateDoc(
+                    doc(
+                        db,
+                        "users",
+                        currentPersonnelId
+                    ),
+                    {
+
+                        name:
+                            editPersonName.value.trim(),
+
+                        email:
+                            editPersonEmail.value.trim(),
+
+                        role:
+                            editPersonRole.value,
+
+                        team:
+                            editPersonTeam.value,
+
+                        updatedAt:
+                            new Date().toISOString()
+
+                    }
+                );
+
+
+                closeEditPersonnelModalWindow();
+
+
+                await openPersonnelFile(
+                    currentPersonnelId
+                );
+
+
+                await loadPersonnel();
+
+
+            } catch (error) {
+
+                console.error(
+                    "EDIT PERSONNEL SAVE ERROR:",
+                    error
+                );
+
+
+                if (
+                    editPersonnelError
+                ) {
+
+                    editPersonnelError.textContent =
+                        error.message ||
+                        "Unable to update personnel.";
+
+                }
+
+            }
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// EDIT PERSONNEL BUTTONS
+// ==========================================
+
+if (
+    editPersonnelButton
+) {
+
+    editPersonnelButton.addEventListener(
+        "click",
+        openEditPersonnel
+    );
+
+}
+
+
+if (
+    closeEditPersonnelModal
+) {
+
+    closeEditPersonnelModal.addEventListener(
+        "click",
+        closeEditPersonnelModalWindow
+    );
+
+}
+
+
+if (
+    cancelEditPersonnelButton
+) {
+
+    cancelEditPersonnelButton.addEventListener(
+        "click",
+        closeEditPersonnelModalWindow
+    );
+
+}
+
+
+if (
+    editModalOverlay
+) {
+
+    editModalOverlay.addEventListener(
+        "click",
+        closeEditPersonnelModalWindow
+    );
+
+}
+
+
+// ==========================================
+// ENABLE / DISABLE PERSONNEL
+// ==========================================
+
+if (
+    disablePersonnelButton
+) {
+
+    disablePersonnelButton.addEventListener(
+        "click",
+        async function () {
+
+            if (
+                !currentPersonnelId
+            ) {
 
                 return;
 
@@ -6428,16 +5334,29 @@ if (
 
             try {
 
+                const allowed =
+                    await canManagePersonnel();
+
+
+                if (!allowed) {
+
+                    alert(
+                        "You do not have permission to change personnel status."
+                    );
+
+                    return;
+
+                }
+
+
                 const snapshot =
                     await getDoc(
                         doc(
                             db,
                             "users",
-                            user.uid
+                            currentPersonnelId
                         )
                     );
-
-            }
 
 
                 if (
@@ -6449,90 +5368,51 @@ if (
                 }
 
 
-                const userData =
+                const person =
                     snapshot.data();
 
 
-                const nameParts =
-                    (
-                        userData.name ||
-                        ""
-                    )
-                    .trim()
-                    .split(/\s+/);
-
-
-                const firstName =
-                    nameParts[0] ||
-                    "";
-
-
-                const lastName =
-                    nameParts
-                        .slice(1)
-                        .join(" ");
-
-
-                const firstNameInput =
-                    document.getElementById(
-                        "caseDoc_firstName"
+                const newStatus =
+                    !Boolean(
+                        person.active
                     );
 
 
-                const lastNameInput =
-                    document.getElementById(
-                        "caseDoc_lastName"
-                    );
+                await updateDoc(
+                    doc(
+                        db,
+                        "users",
+                        currentPersonnelId
+                    ),
+                    {
+
+                        active:
+                            newStatus,
+
+                        accountStatus:
+                            newStatus
+                                ? "Active"
+                                : "Disabled",
+
+                        updatedAt:
+                            new Date().toISOString()
+
+                    }
+                );
 
 
-                const todayInput =
-                    document.getElementById(
-                        "caseDoc_todayDate"
-                    );
+                await openPersonnelFile(
+                    currentPersonnelId
+                );
 
 
-                const today =
-                    new Date()
-                        .toISOString()
-                        .split("T")[0];
+                await loadPersonnel();
 
-
-                if (
-                    firstNameInput &&
-                    !firstNameInput.value
-                ) {
-
-                    firstNameInput.value =
-                        firstName;
-
-                }
-
-
-                if (
-                    lastNameInput &&
-                    !lastNameInput.value
-                ) {
-
-                    lastNameInput.value =
-                        lastName;
-
-                }
-
-
-                if (
-                    todayInput &&
-                    !todayInput.value
-                ) {
-
-                    todayInput.value =
-                        today;
-
-                }
 
             } catch (error) {
 
                 console.error(
-                    "CASE DOCUMENT PREFILL ERROR:",
+                    "PERSONNEL STATUS ERROR:",
                     error
                 );
 
@@ -6542,11 +5422,1396 @@ if (
     );
 
 }
-    
-async function loadCaseDocumentTeams(
-    selectElement,
-    selectedTeam = ""
+
+
+// ==========================================
+// DASHBOARD PLACEHOLDER BUTTONS
+// ==========================================
+
+if (
+    evidenceButton
 ) {
+
+    evidenceButton.addEventListener(
+        "click",
+        function () {
+
+            alert(
+                "Evidence Management will be built in a later phase."
+            );
+
+        }
+    );
+
+}
+
+
+if (
+    reportsButton
+) {
+
+    reportsButton.addEventListener(
+        "click",
+        function () {
+
+            alert(
+                "Reports will be available through individual case files."
+            );
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// CASE DOCUMENT QUESTION DEFINITIONS
+// ==========================================
+
+const CASE_DOCUMENT_QUESTIONS = {
+
+    "Investigation Report": [
+
+        {
+            id:
+                "caseNumber",
+
+            label:
+                "Case Number",
+
+            type:
+                "text",
+
+            required:
+                true
+        },
+
+
+        {
+            id:
+                "locationName",
+
+            label:
+                "Location",
+
+            type:
+                "text",
+
+            required:
+                true
+        },
+
+
+        {
+            id:
+                "investigationDate",
+
+            label:
+                "Investigation Date",
+
+            type:
+                "date",
+
+            required:
+                true
+        },
+
+
+        {
+            id:
+                "team",
+
+            label:
+                "Investigating Team",
+
+            type:
+                "team",
+
+            required:
+                true
+        },
+
+
+        {
+            id:
+                "investigators",
+
+            label:
+                "Investigators",
+
+            type:
+                "textarea",
+
+            required:
+                true
+        },
+
+
+        {
+            id:
+                "clientReport",
+
+            label:
+                "Client Report / Initial Claims",
+
+            type:
+                "textarea",
+
+            required:
+                true
+        },
+
+
+        {
+            id:
+                "environmentalConditions",
+
+            label:
+                "Environmental Conditions",
+
+            type:
+                "textarea",
+
+            required:
+                false
+        },
+
+
+        {
+            id:
+                "equipmentUsed",
+
+            label:
+                "Equipment Used",
+
+            type:
+                "textarea",
+
+            required:
+                false
+        },
+
+
+        {
+            id:
+                "observations",
+
+            label:
+                "Investigator Observations",
+
+            type:
+                "textarea",
+
+            required:
+                true
+        },
+
+
+        {
+            id:
+                "evidenceSummary",
+
+            label:
+                "Evidence Summary",
+
+            type:
+                "textarea",
+
+            required:
+                true
+        },
+
+
+        {
+            id:
+                "conclusion",
+
+            label:
+                "Conclusion",
+
+            type:
+                "textarea",
+
+            required:
+                true
+        }
+
+    ],
+
+
+    "Witness Report": [
+
+        {
+            id:
+                "witnessName",
+
+            label:
+                "Witness Name",
+
+            type:
+                "text",
+
+            required:
+                true
+        },
+
+
+        {
+            id:
+                "witnessContact",
+
+            label:
+                "Witness Contact Information",
+
+            type:
+                "text",
+
+            required:
+                false
+        },
+
+
+        {
+            id:
+                "locationName",
+
+            label:
+                "Location",
+
+            type:
+                "text",
+
+            required:
+                true
+        },
+
+
+        {
+            id:
+                "incidentDate",
+
+            label:
+                "Date of Incident",
+
+            type:
+                "date",
+
+            required:
+                true
+        },
+
+
+        {
+            id:
+                "incidentTime",
+
+            label:
+                "Approximate Time",
+
+            type:
+                "time",
+
+            required:
+                false
+        },
+
+
+        {
+            id:
+                "witnessAccount",
+
+            label:
+                "Witness Account",
+
+            type:
+                "textarea",
+
+            required:
+                true
+        },
+
+
+        {
+            id:
+                "peoplePresent",
+
+            label:
+                "Other People Present",
+
+            type:
+                "textarea",
+
+            required:
+                false
+        },
+
+
+        {
+            id:
+                "physicalEffects",
+
+            label:
+                "Physical Effects / Environmental Changes",
+
+            type:
+                "textarea",
+
+            required:
+                false
+        },
+
+
+        {
+            id:
+                "additionalInformation",
+
+            label:
+                "Additional Information",
+
+            type:
+                "textarea",
+
+            required:
+                false
+        }
+
+    ],
+
+
+    "Location History": [
+
+        {
+            id:
+                "locationName",
+
+            label:
+                "Location Name",
+
+            type:
+                "text",
+
+            required:
+                true
+        },
+
+
+        {
+            id:
+                "address",
+
+            label:
+                "Address",
+
+            type:
+                "text",
+
+            required:
+                true
+        },
+
+
+        {
+            id:
+                "dateOpened",
+
+            label:
+                "Date / Year Established",
+
+            type:
+                "text",
+
+            required:
+                false
+        },
+
+
+        {
+            id:
+                "originalPurpose",
+
+            label:
+                "Original Purpose",
+
+            type:
+                "textarea",
+
+            required:
+                false
+        },
+
+
+        {
+            id:
+                "ownershipHistory",
+
+            label:
+                "Ownership / Occupancy History",
+
+            type:
+                "textarea",
+
+            required:
+                false
+        },
+
+
+        {
+            id:
+                "knownEvents",
+
+            label:
+                "Known Historical Events",
+
+            type:
+                "textarea",
+
+            required:
+                false
+        },
+
+
+        {
+            id:
+                "reportedDeaths",
+
+            label:
+                "Reported Deaths",
+
+            type:
+                "textarea",
+
+            required:
+                false
+        },
+
+
+        {
+            id:
+                "reportedCrimes",
+
+            label:
+                "Reported Crimes / Incidents",
+
+            type:
+                "textarea",
+
+            required:
+                false
+        },
+
+
+        {
+            id:
+                "reportedHauntings",
+
+            label:
+                "Reported Paranormal Activity",
+
+            type:
+                "textarea",
+
+            required:
+                false
+        },
+
+
+        {
+            id:
+                "sources",
+
+            label:
+                "Sources / References",
+
+            type:
+                "textarea",
+
+            required:
+                false
+        }
+
+    ],
+
+
+    "IPO": [
+
+        {
+            id:
+                "caseNumber",
+
+            label:
+                "Case Number",
+
+            type:
+                "text",
+
+            required:
+                true
+        },
+
+
+        {
+            id:
+                "locationName",
+
+            label:
+                "Location",
+
+            type:
+                "text",
+
+            required:
+                true
+        },
+
+
+        {
+            id:
+                "investigationDate",
+
+            label:
+                "Investigation Date",
+
+            type:
+                "date",
+
+            required:
+                true
+        },
+
+
+        {
+            id:
+                "team",
+
+            label:
+                "Investigating Team",
+
+            type:
+                "team",
+
+            required:
+                true
+        },
+
+
+        {
+            id:
+                "incidentSummary",
+
+            label:
+                "Incident Summary",
+
+            type:
+                "textarea",
+
+            required:
+                true
+        },
+
+
+        {
+            id:
+                "phenomenaObserved",
+
+            label:
+                "Phenomena Observed",
+
+            type:
+                "textarea",
+
+            required:
+                true
+        },
+
+
+        {
+            id:
+                "evidenceCollected",
+
+            label:
+                "Evidence Collected",
+
+            type:
+                "textarea",
+
+            required:
+                true
+        },
+
+
+        {
+            id:
+                "analysis",
+
+            label:
+                "Analysis",
+
+            type:
+                "textarea",
+
+            required:
+                true
+        },
+
+
+        {
+            id:
+                "alternativeExplanations",
+
+            label:
+                "Alternative Explanations Considered",
+
+            type:
+                "textarea",
+
+            required:
+                true
+        },
+
+
+        {
+            id:
+                "investigatorConclusion",
+
+            label:
+                "Investigator Conclusion",
+
+            type:
+                "textarea",
+
+            required:
+                true
+        }
+
+    ]
+
+};
+
+
+// ==========================================
+// RENDER CASE DOCUMENT QUESTIONNAIRE
+// ==========================================
+
+function renderCaseDocumentQuestionnaire(
+    documentType,
+    existingAnswers = {}
+) {
+
+    const questionnaire =
+        document.getElementById(
+            "caseDocumentQuestionnaire"
+        );
+
+
+    if (
+        !questionnaire
+    ) {
+
+        return;
+
+    }
+
+
+    questionnaire.innerHTML =
+        "";
+
+
+    const questions =
+        CASE_DOCUMENT_QUESTIONS[
+            documentType
+        ] || [];
+
+
+    questions.forEach(
+        function (
+            question
+        ) {
+
+            const group =
+                document.createElement(
+                    "div"
+                );
+
+
+            group.className =
+                "form-group";
+
+
+            const label =
+                document.createElement(
+                    "label"
+                );
+
+
+            label.textContent =
+                question.label;
+
+
+            group.appendChild(
+                label
+            );
+
+
+            // ==================================
+            // CHECKBOXES
+            // ==================================
+
+            if (
+                question.type ===
+                "checkboxes"
+            ) {
+
+                const checkboxContainer =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                checkboxContainer.className =
+                    "case-document-checkboxes";
+
+
+                const savedValues =
+                    Array.isArray(
+                        existingAnswers[
+                            question.id
+                        ]
+                    )
+                        ? existingAnswers[
+                            question.id
+                        ]
+                        : [];
+
+
+                question.options.forEach(
+                    function (
+                        option
+                    ) {
+
+                        const wrapper =
+                            document.createElement(
+                                "label"
+                            );
+
+
+                        wrapper.className =
+                            "case-document-checkbox";
+
+
+                        const checkbox =
+                            document.createElement(
+                                "input"
+                            );
+
+
+                        checkbox.type =
+                            "checkbox";
+
+
+                        checkbox.name =
+                            question.id;
+
+
+                        checkbox.value =
+                            option;
+
+
+                        checkbox.checked =
+                            savedValues.includes(
+                                option
+                            );
+
+
+                        wrapper.appendChild(
+                            checkbox
+                        );
+
+
+                        wrapper.appendChild(
+                            document.createTextNode(
+                                ` ${option}`
+                            )
+                        );
+
+
+                        checkboxContainer.appendChild(
+                            wrapper
+                        );
+
+                    }
+                );
+
+
+                group.appendChild(
+                    checkboxContainer
+                );
+
+
+                questionnaire.appendChild(
+                    group
+                );
+
+
+                return;
+
+            }
+
+
+            // ==================================
+            // TEAM SELECT
+            // ==================================
+
+            if (
+                question.type ===
+                "team"
+            ) {
+
+                const select =
+                    document.createElement(
+                        "select"
+                    );
+
+
+                select.id =
+                    `caseDoc_${question.id}`;
+
+
+                select.required =
+                    Boolean(
+                        question.required
+                    );
+
+
+                select.innerHTML = `
+                    <option value="">
+                        Select Team
+                    </option>
+                `;
+
+
+                questionnaire.appendChild(
+                    group
+                );
+
+
+                group.appendChild(
+                    select
+                );
+
+
+                loadCaseDocumentTeams(
+                    select,
+                    existingAnswers[
+                        question.id
+                    ] || ""
+                );
+
+
+                return;
+
+            }
+
+
+            // ==================================
+            // NORMAL INPUT
+            // ==================================
+
+            let input;
+
+
+            if (
+                question.type ===
+                "textarea"
+            ) {
+
+                input =
+                    document.createElement(
+                        "textarea"
+                    );
+
+
+                input.rows =
+                    6;
+
+            } else {
+
+                input =
+                    document.createElement(
+                        "input"
+                    );
+
+
+                input.type =
+                    question.type;
+
+            }
+
+
+            input.id =
+                `caseDoc_${question.id}`;
+
+
+            input.required =
+                Boolean(
+                    question.required
+                );
+
+
+            input.value =
+                existingAnswers[
+                    question.id
+                ] || "";
+
+
+            group.appendChild(
+                input
+            );
+
+
+            questionnaire.appendChild(
+                group
+            );
+
+        }
+    );
+
+}
+
+// ==========================================
+// CASE MANAGEMENT — LOAD CASES
+// ==========================================
+
+async function loadCases() {
+
+    if (
+        !casesList
+    ) {
+
+        return;
+
+    }
+
+
+    casesList.innerHTML = `
+        <p class="loading-message">
+            Loading cases...
+        </p>
+    `;
+
+
+    try {
+
+        const snapshot =
+            await getDocs(
+                collection(
+                    db,
+                    "cases"
+                )
+            );
+
+
+        allCases =
+            [];
+
+
+        snapshot.forEach(
+            function (
+                caseDocument
+            ) {
+
+                allCases.push({
+
+                    id:
+                        caseDocument.id,
+
+                    ...caseDocument.data()
+
+                });
+
+            }
+        );
+
+
+        allCases.sort(
+            function (
+                a,
+                b
+            ) {
+
+                return (
+                    new Date(
+                        b.updatedAt ||
+                        b.createdAt ||
+                        0
+                    ) -
+                    new Date(
+                        a.updatedAt ||
+                        a.createdAt ||
+                        0
+                    )
+                );
+
+            }
+        );
+
+
+        renderCases();
+
+
+        updateCaseStatistics();
+
+
+    } catch (error) {
+
+        console.error(
+            "CASES LOAD ERROR:",
+            error
+        );
+
+
+        casesList.innerHTML = `
+            <p class="loading-message">
+                Unable to load cases.
+            </p>
+        `;
+
+    }
+
+}
+
+
+// ==========================================
+// RENDER CASES
+// ==========================================
+
+function renderCases() {
+
+    if (
+        !casesList
+    ) {
+
+        return;
+
+    }
+
+
+    casesList.innerHTML =
+        "";
+
+
+    const searchTerm =
+        caseSearch
+            ? caseSearch.value
+                .toLowerCase()
+                .trim()
+            : "";
+
+
+    const statusFilter =
+        caseStatusFilter
+            ? caseStatusFilter.value
+            : "all";
+
+
+    const teamFilter =
+        caseTeamFilter
+            ? caseTeamFilter.value
+            : "all";
+
+
+    const filteredCases =
+        allCases.filter(
+            function (
+                caseData
+            ) {
+
+                const searchableText =
+                    `
+                        ${
+                            caseData.caseNumber ||
+                            ""
+                        }
+
+                        ${
+                            caseData.name ||
+                            ""
+                        }
+
+                        ${
+                            caseData.location ||
+                            ""
+                        }
+
+                        ${
+                            caseData.client ||
+                            ""
+                        }
+                    `
+                    .toLowerCase();
+
+
+                const matchesSearch =
+                    !searchTerm ||
+                    searchableText.includes(
+                        searchTerm
+                    );
+
+
+                const matchesStatus =
+                    statusFilter ===
+                    "all" ||
+                    caseData.status ===
+                    statusFilter;
+
+
+                const matchesTeam =
+                    teamFilter ===
+                    "all" ||
+                    caseData.team ===
+                    teamFilter;
+
+
+                return (
+                    matchesSearch &&
+                    matchesStatus &&
+                    matchesTeam
+                );
+
+            }
+        );
+
+
+    if (
+        filteredCases.length ===
+        0
+    ) {
+
+        casesList.innerHTML = `
+            <p class="loading-message">
+                No cases match your search.
+            </p>
+        `;
+
+        return;
+
+    }
+
+
+    filteredCases.forEach(
+        function (
+            caseData
+        ) {
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+
+            row.className =
+                "case-row";
+
+
+            row.dataset.caseId =
+                caseData.id;
+
+
+            const statusClass =
+                String(
+                    caseData.status ||
+                    ""
+                )
+                .toLowerCase()
+                .replace(
+                    /\s+/g,
+                    "-"
+                );
+
+
+            row.innerHTML = `
+
+                <div>
+
+                    <div class="case-name">
+                        ${
+                            caseData.name ||
+                            "Untitled Case"
+                        }
+                    </div>
+
+                    <div class="case-number">
+                        ${
+                            caseData.caseNumber ||
+                            caseData.id
+                        }
+                    </div>
+
+                </div>
+
+
+                <div class="case-location">
+                    ${
+                        caseData.location ||
+                        "Unknown Location"
+                    }
+                </div>
+
+
+                <div class="case-team">
+                    ${
+                        getTeamDisplayName(
+                            caseData.team
+                        )
+                    }
+                </div>
+
+
+                <div
+                    class="case-status ${statusClass}"
+                >
+                    ${
+                        caseData.status ||
+                        "Unknown"
+                    }
+                </div>
+
+            `;
+
+
+            row.addEventListener(
+                "click",
+                function () {
+
+                    openCaseFile(
+                        caseData.id
+                    );
+
+                }
+            );
+
+
+            casesList.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// CASE STATISTICS
+// ==========================================
+
+function updateCaseStatistics() {
+
+    const activeCount =
+        allCases.filter(
+            function (
+                caseData
+            ) {
+
+                return (
+                    caseData.status ===
+                    "Active"
+                );
+
+            }
+        ).length;
+
+
+    const completedCount =
+        allCases.filter(
+            function (
+                caseData
+            ) {
+
+                return (
+                    caseData.status ===
+                    "Completed"
+                );
+
+            }
+        ).length;
+
+
+    if (
+        activeCaseCount
+    ) {
+
+        activeCaseCount.textContent =
+            activeCount;
+
+    }
+
+
+    if (
+        completedCaseCount
+    ) {
+
+        completedCaseCount.textContent =
+            completedCount;
+
+    }
+
+}
+
+
+// ==========================================
+// CASE SEARCH / FILTERS
+// ==========================================
+
+if (
+    caseSearch
+) {
+
+    caseSearch.addEventListener(
+        "input",
+        renderCases
+    );
+
+}
+
+
+if (
+    caseStatusFilter
+) {
+
+    caseStatusFilter.addEventListener(
+        "change",
+        renderCases
+    );
+
+}
+
+
+if (
+    caseTeamFilter
+) {
+
+    caseTeamFilter.addEventListener(
+        "change",
+        renderCases
+    );
+
+}
+
+
+// ==========================================
+// LOAD TEAM FILTER OPTIONS
+// ==========================================
+
+async function loadCaseTeamOptions() {
+
+    if (
+        !caseTeamFilter
+    ) {
+
+        return;
+
+    }
+
 
     try {
 
@@ -6557,11 +6822,23 @@ async function loadCaseDocumentTeams(
                     "teams"
                 )
             );
-    }
+
+
+        const currentValue =
+            caseTeamFilter.value;
+
+
+        caseTeamFilter.innerHTML = `
+            <option value="all">
+                All Teams
+            </option>
+        `;
 
 
         snapshot.forEach(
-            function (teamDocument) {
+            function (
+                teamDocument
+            ) {
 
                 const team =
                     teamDocument.data();
@@ -6574,7 +6851,814 @@ async function loadCaseDocumentTeams(
 
 
                 option.value =
+                    teamDocument.id;
+
+
+                option.textContent =
                     team.name ||
+                    teamDocument.id;
+
+
+                caseTeamFilter.appendChild(
+                    option
+                );
+
+            }
+        );
+
+
+        if (
+            currentValue
+        ) {
+
+            caseTeamFilter.value =
+                currentValue;
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "CASE TEAM FILTER ERROR:",
+            error
+        );
+
+    }
+
+}
+
+
+// ==========================================
+// OPEN CASE FILE
+// ==========================================
+
+async function openCaseFile(
+    caseId
+) {
+
+    currentCaseId =
+        caseId;
+
+
+    try {
+
+        const snapshot =
+            await getDoc(
+                doc(
+                    db,
+                    "cases",
+                    caseId
+                )
+            );
+
+
+        if (
+            !snapshot.exists()
+        ) {
+
+            alert(
+                "Case could not be found."
+            );
+
+            return;
+
+        }
+
+
+        const caseData =
+            snapshot.data();
+
+
+        const caseFileName =
+            document.getElementById(
+                "caseFileName"
+            );
+
+
+        const caseFileNumber =
+            document.getElementById(
+                "caseFileNumber"
+            );
+
+
+        const caseFileStatus =
+            document.getElementById(
+                "caseFileStatus"
+            );
+
+
+        const caseFileLocation =
+            document.getElementById(
+                "caseFileLocation"
+            );
+
+
+        const caseFileTeam =
+            document.getElementById(
+                "caseFileTeam"
+            );
+
+
+        const caseFileClient =
+            document.getElementById(
+                "caseFileClient"
+            );
+
+
+        const caseFileDescription =
+            document.getElementById(
+                "caseFileDescription"
+            );
+
+
+        const caseFileDate =
+            document.getElementById(
+                "caseFileDate"
+            );
+
+
+        if (
+            caseFileName
+        ) {
+
+            caseFileName.textContent =
+                caseData.name ||
+                "Untitled Case";
+
+        }
+
+
+        if (
+            caseFileNumber
+        ) {
+
+            caseFileNumber.textContent =
+                caseData.caseNumber ||
+                caseId;
+
+        }
+
+
+        if (
+            caseFileStatus
+        ) {
+
+            caseFileStatus.textContent =
+                caseData.status ||
+                "Unknown";
+
+        }
+
+
+        if (
+            caseFileLocation
+        ) {
+
+            caseFileLocation.textContent =
+                caseData.location ||
+                "Unknown Location";
+
+        }
+
+
+        if (
+            caseFileTeam
+        ) {
+
+            caseFileTeam.textContent =
+                getTeamDisplayName(
+                    caseData.team
+                );
+
+        }
+
+
+        if (
+            caseFileClient
+        ) {
+
+            caseFileClient.textContent =
+                caseData.client ||
+                "Not provided";
+
+        }
+
+
+        if (
+            caseFileDescription
+        ) {
+
+            caseFileDescription.textContent =
+                caseData.description ||
+                "No description provided.";
+
+        }
+
+
+        if (
+            caseFileDate
+        ) {
+
+            caseFileDate.textContent =
+                caseData.investigationDate ||
+                "Not scheduled";
+
+        }
+
+
+        showCaseFile();
+
+
+        await loadCaseDocuments();
+
+
+    } catch (error) {
+
+        console.error(
+            "CASE FILE ERROR:",
+            error
+        );
+
+
+        alert(
+            "Unable to open case."
+        );
+
+    }
+
+}
+
+
+// ==========================================
+// CASE NAVIGATION
+// ==========================================
+
+if (
+    casesButton
+) {
+
+    casesButton.addEventListener(
+        "click",
+        function () {
+
+            showCases();
+
+        }
+    );
+
+}
+
+
+if (
+    casesBackButton
+) {
+
+    casesBackButton.addEventListener(
+        "click",
+        function () {
+
+            showDashboard();
+
+        }
+    );
+
+}
+
+
+if (
+    caseFileBackButton
+) {
+
+    caseFileBackButton.addEventListener(
+        "click",
+        function () {
+
+            showCases();
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// NEW CASE PLACEHOLDER
+// ==========================================
+
+if (
+    newCaseButton
+) {
+
+    newCaseButton.addEventListener(
+        "click",
+        function () {
+
+            showCases();
+
+        }
+    );
+
+}
+
+
+if (
+    newCaseListButton
+) {
+
+    newCaseListButton.addEventListener(
+        "click",
+        function () {
+
+            alert(
+                "New Case creation is handled through the case management system."
+            );
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// EDIT CASE
+// ==========================================
+
+async function openEditCaseModal() {
+
+    if (
+        !currentCaseId ||
+        !editCaseModal
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const snapshot =
+            await getDoc(
+                doc(
+                    db,
+                    "cases",
+                    currentCaseId
+                )
+            );
+
+
+        if (
+            !snapshot.exists()
+        ) {
+
+            return;
+
+        }
+
+
+        const caseData =
+            snapshot.data();
+
+
+        if (
+            editCaseName
+        ) {
+
+            editCaseName.value =
+                caseData.name ||
+                "";
+
+        }
+
+
+        if (
+            editCaseType
+        ) {
+
+            editCaseType.value =
+                caseData.type ||
+                "";
+
+        }
+
+
+        if (
+            editCasePriority
+        ) {
+
+            editCasePriority.value =
+                caseData.priority ||
+                "";
+
+        }
+
+
+        if (
+            editCaseStatus
+        ) {
+
+            editCaseStatus.value =
+                caseData.status ||
+                "";
+
+        }
+
+
+        if (
+            editCaseClient
+        ) {
+
+            editCaseClient.value =
+                caseData.client ||
+                "";
+
+        }
+
+
+        if (
+            editCaseLocation
+        ) {
+
+            editCaseLocation.value =
+                caseData.location ||
+                "";
+
+        }
+
+
+        if (
+            editCaseTeam
+        ) {
+
+            editCaseTeam.value =
+                caseData.team ||
+                "";
+
+        }
+
+
+        if (
+            editCaseInvestigationDate
+        ) {
+
+            editCaseInvestigationDate.value =
+                caseData.investigationDate ||
+                "";
+
+        }
+
+
+        if (
+            editCaseDescription
+        ) {
+
+            editCaseDescription.value =
+                caseData.description ||
+                "";
+
+        }
+
+
+        if (
+            editCaseError
+        ) {
+
+            editCaseError.textContent =
+                "";
+
+        }
+
+
+        editCaseModal.classList.remove(
+            "hidden"
+        );
+
+
+        editCaseModal.style.display =
+            "flex";
+
+
+    } catch (error) {
+
+        console.error(
+            "EDIT CASE LOAD ERROR:",
+            error
+        );
+
+    }
+
+}
+
+
+// ==========================================
+// CLOSE EDIT CASE
+// ==========================================
+
+function closeEditCaseModalWindow() {
+
+    if (
+        editCaseModal
+    ) {
+
+        editCaseModal.classList.add(
+            "hidden"
+        );
+
+
+        editCaseModal.style.display =
+            "";
+
+    }
+
+}
+
+
+// ==========================================
+// SAVE EDITED CASE
+// ==========================================
+
+if (
+    editCaseForm
+) {
+
+    editCaseForm.addEventListener(
+        "submit",
+        async function (
+            event
+        ) {
+
+            event.preventDefault();
+
+
+            if (
+                !currentCaseId
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                !editCaseForm.checkValidity()
+            ) {
+
+                editCaseForm.reportValidity();
+
+                return;
+
+            }
+
+
+            try {
+
+                const user =
+                    auth.currentUser;
+
+
+                if (!user) {
+
+                    throw new Error(
+                        "You must be signed in."
+                    );
+
+                }
+
+
+                const userSnapshot =
+                    await getDoc(
+                        doc(
+                            db,
+                            "users",
+                            user.uid
+                        )
+                    );
+
+
+                const userData =
+                    userSnapshot.data();
+
+
+                const permissions =
+                    getUserPermissions(
+                        userData.role
+                    );
+
+
+                if (
+                    !permissions ||
+                    !permissions.createCases
+                ) {
+
+                    throw new Error(
+                        "You do not have permission to edit cases."
+                    );
+
+                }
+
+
+                await updateDoc(
+                    doc(
+                        db,
+                        "cases",
+                        currentCaseId
+                    ),
+                    {
+
+                        name:
+                            editCaseName.value.trim(),
+
+                        type:
+                            editCaseType.value,
+
+                        priority:
+                            editCasePriority.value,
+
+                        status:
+                            editCaseStatus.value,
+
+                        client:
+                            editCaseClient.value.trim(),
+
+                        location:
+                            editCaseLocation.value.trim(),
+
+                        team:
+                            editCaseTeam.value,
+
+                        investigationDate:
+                            editCaseInvestigationDate.value,
+
+                        description:
+                            editCaseDescription.value.trim(),
+
+                        updatedAt:
+                            new Date().toISOString()
+
+                    }
+                );
+
+
+                closeEditCaseModalWindow();
+
+
+                await loadCases();
+
+
+                await openCaseFile(
+                    currentCaseId
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "EDIT CASE SAVE ERROR:",
+                    error
+                );
+
+
+                if (
+                    editCaseError
+                ) {
+
+                    editCaseError.textContent =
+                        error.message ||
+                        "Unable to update case.";
+
+                }
+
+            }
+
+        }
+    );
+
+}
+
+
+if (
+    editCaseButton
+) {
+
+    editCaseButton.addEventListener(
+        "click",
+        openEditCaseModal
+    );
+
+}
+
+
+if (
+    closeEditCaseModal
+) {
+
+    closeEditCaseModal.addEventListener(
+        "click",
+        closeEditCaseModalWindow
+    );
+
+}
+
+
+if (
+    cancelEditCaseButton
+) {
+
+    cancelEditCaseButton.addEventListener(
+        "click",
+        closeEditCaseModalWindow
+    );
+
+}
+
+
+if (
+    editCaseModalOverlay
+) {
+
+    editCaseModalOverlay.addEventListener(
+        "click",
+        closeEditCaseModalWindow
+    );
+
+}
+
+
+// ==========================================
+// CASE DOCUMENT TYPE CHANGE
+// ==========================================
+
+if (
+    caseDocumentType
+) {
+
+    caseDocumentType.addEventListener(
+        "change",
+        function () {
+
+            renderCaseDocumentQuestionnaire(
+                caseDocumentType.value
+            );
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// CASE DOCUMENT TEAMS
+// ==========================================
+
+async function loadCaseDocumentTeams(
+    select,
+    selectedValue = ""
+) {
+
+    if (
+        !select
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const snapshot =
+            await getDocs(
+                collection(
+                    db,
+                    "teams"
+                )
+            );
+
+
+        select.innerHTML = `
+            <option value="">
+                Select Team
+            </option>
+        `;
+
+
+        snapshot.forEach(
+            function (
+                teamDocument
+            ) {
+
+                const team =
+                    teamDocument.data();
+
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
                     teamDocument.id;
 
 
@@ -6584,8 +7668,8 @@ async function loadCaseDocumentTeams(
 
 
                 if (
-                    option.value ===
-                    selectedTeam
+                    selectedValue ===
+                    teamDocument.id
                 ) {
 
                     option.selected =
@@ -6594,7 +7678,7 @@ async function loadCaseDocumentTeams(
                 }
 
 
-                selectElement.appendChild(
+                select.appendChild(
                     option
                 );
 
@@ -6609,31 +7693,195 @@ async function loadCaseDocumentTeams(
             error
         );
 
-
-        // Fallback to a normal text-like option
-        const option =
-            document.createElement(
-                "option"
-            );
-
-
-        option.value =
-            selectedTeam;
-
-
-        option.textContent =
-            selectedTeam ||
-            "Unable to load teams";
-
-
-        option.selected =
-            true;
-
-
-        selectElement.appendChild(
-            option
-        );
-
     }
 
 }
+
+// ==========================================
+// DASHBOARD BUTTONS — SAFE FALLBACKS
+// ==========================================
+
+if (
+    teamsButton &&
+    !teamsButton.dataset.bound
+) {
+
+    teamsButton.dataset.bound =
+        "true";
+
+}
+
+
+if (
+    personnelButton &&
+    !personnelButton.dataset.bound
+) {
+
+    personnelButton.dataset.bound =
+        "true";
+
+}
+
+
+// ==========================================
+// CASE DOCUMENT INITIALIZATION
+// ==========================================
+
+// Make sure the questionnaire is empty
+// when the application first loads.
+
+if (
+    caseDocumentType
+) {
+
+    renderCaseDocumentQuestionnaire(
+        caseDocumentType.value || ""
+    );
+
+}
+
+
+// ==========================================
+// ESCAPE KEY — CLOSE MODALS
+// ==========================================
+
+document.addEventListener(
+    "keydown",
+    function (
+        event
+    ) {
+
+        if (
+            event.key !==
+            "Escape"
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            caseDocumentModal &&
+            !caseDocumentModal.classList.contains(
+                "hidden"
+            )
+        ) {
+
+            closeCaseDocument();
+
+            return;
+
+        }
+
+
+        if (
+            caseDocumentReaderModal &&
+            !caseDocumentReaderModal.classList.contains(
+                "hidden"
+            )
+        ) {
+
+            closeCaseDocumentReaderWindow();
+
+            return;
+
+        }
+
+
+        if (
+            editPersonnelModal &&
+            !editPersonnelModal.classList.contains(
+                "hidden"
+            )
+        ) {
+
+            closeEditPersonnelModalWindow();
+
+            return;
+
+        }
+
+
+        if (
+            addPersonnelModal &&
+            !addPersonnelModal.classList.contains(
+                "hidden"
+            )
+        ) {
+
+            closeAddPersonnelModal();
+
+            return;
+
+        }
+
+
+        if (
+            editTeamModal &&
+            !editTeamModal.classList.contains(
+                "hidden"
+            )
+        ) {
+
+            closeEditTeamModalWindow();
+
+            return;
+
+        }
+
+
+        if (
+            addTeamModal &&
+            !addTeamModal.classList.contains(
+                "hidden"
+            )
+        ) {
+
+            closeAddTeamModalWindow();
+
+            return;
+
+        }
+
+
+        if (
+            editCaseModal &&
+            !editCaseModal.classList.contains(
+                "hidden"
+            )
+        ) {
+
+            closeEditCaseModalWindow();
+
+        }
+
+    }
+);
+
+
+// ==========================================
+// INITIAL SCREEN
+// ==========================================
+
+hideAllScreens();
+
+
+if (
+    loginScreen
+) {
+
+    loginScreen.classList.remove(
+        "hidden"
+    );
+
+}
+
+
+// ==========================================
+// APPLICATION READY
+// ==========================================
+
+console.log(
+    "New Horizon Case Manager initialized."
+);
