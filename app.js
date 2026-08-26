@@ -6401,6 +6401,8 @@ if (
                 caseDocumentType.value
             );
 
+        }
+
 
             if (
                 !caseDocumentType.value
