@@ -228,8 +228,95 @@ function openNewCaseDocument() {
         null;
 
 
-    caseDocumentForm.reset();
+caseDocumentForm.reset();
 
+
+const today =
+    new Date()
+        .toISOString()
+        .split("T")[0];
+
+
+const user =
+    auth.currentUser;
+
+
+let firstName = "";
+let lastName = "";
+
+
+if (user) {
+
+    try {
+
+        const userSnapshot =
+            await getDoc(
+                doc(
+                    db,
+                    "users",
+                    user.uid
+                )
+            );
+
+
+        if (
+            userSnapshot.exists()
+        ) {
+
+            const userData =
+                userSnapshot.data();
+
+
+            const fullName =
+                userData.name ||
+                "";
+
+
+            const nameParts =
+                fullName
+                    .trim()
+                    .split(/\s+/);
+
+
+            firstName =
+                nameParts[0] ||
+                "";
+
+
+            lastName =
+                nameParts
+                    .slice(1)
+                    .join(" ");
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "DOCUMENT USER PREFILL ERROR:",
+            error
+        );
+
+    }
+
+}
+
+
+caseDocumentModalTitle.textContent =
+    "New Case Document";
+
+
+caseDocumentError.textContent =
+    "";
+
+
+caseDocumentModal.classList.remove(
+    "hidden"
+);
+
+
+caseDocumentModal.style.display =
+    "flex";
 
     caseDocumentModalTitle.textContent =
         "New Case Document";
@@ -246,6 +333,9 @@ function openNewCaseDocument() {
     caseDocumentModal.style.display =
         "flex";
 
+    renderCaseDocumentQuestionnaire(
+    caseDocumentType.value
+);
 
     caseDocumentType.focus();
 
