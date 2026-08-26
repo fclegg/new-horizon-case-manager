@@ -6305,11 +6305,142 @@ if (
 
     caseDocumentType.addEventListener(
         "change",
-        function () {
+        async function () {
 
             renderCaseDocumentQuestionnaire(
                 caseDocumentType.value
             );
+
+
+            if (
+                !caseDocumentType.value
+            ) {
+
+                return;
+
+            }
+
+
+            const user =
+                auth.currentUser;
+
+
+            if (!user) {
+
+                return;
+
+            }
+
+
+            try {
+
+                const snapshot =
+                    await getDoc(
+                        doc(
+                            db,
+                            "users",
+                            user.uid
+                        )
+                    );
+
+
+                if (
+                    !snapshot.exists()
+                ) {
+
+                    return;
+
+                }
+
+
+                const userData =
+                    snapshot.data();
+
+
+                const nameParts =
+                    (
+                        userData.name ||
+                        ""
+                    )
+                    .trim()
+                    .split(/\s+/);
+
+
+                const firstName =
+                    nameParts[0] ||
+                    "";
+
+
+                const lastName =
+                    nameParts
+                        .slice(1)
+                        .join(" ");
+
+
+                const firstNameInput =
+                    document.getElementById(
+                        "caseDoc_firstName"
+                    );
+
+
+                const lastNameInput =
+                    document.getElementById(
+                        "caseDoc_lastName"
+                    );
+
+
+                const todayInput =
+                    document.getElementById(
+                        "caseDoc_todayDate"
+                    );
+
+
+                const today =
+                    new Date()
+                        .toISOString()
+                        .split("T")[0];
+
+
+                if (
+                    firstNameInput &&
+                    !firstNameInput.value
+                ) {
+
+                    firstNameInput.value =
+                        firstName;
+
+                }
+
+
+                if (
+                    lastNameInput &&
+                    !lastNameInput.value
+                ) {
+
+                    lastNameInput.value =
+                        lastName;
+
+                }
+
+
+                if (
+                    todayInput &&
+                    !todayInput.value
+                ) {
+
+                    todayInput.value =
+                        today;
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "CASE DOCUMENT PREFILL ERROR:",
+                    error
+                );
+
+            }
 
         }
     );
