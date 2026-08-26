@@ -6437,6 +6437,8 @@ if (
                         )
                     );
 
+            }
+
 
                 if (
                     !snapshot.exists()
@@ -6555,6 +6557,7 @@ async function loadCaseDocumentTeams(
                     "teams"
                 )
             );
+    }
 
 
         snapshot.forEach(
